@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Button buttonFunction4 = (Button) findViewById(R.id.button4);
 
         buttonFunction1.setOnClickListener(click -> {
-            Intent nextPage = new Intent(this, Function1.class);
+            Intent nextPage = new Intent(this, NasaImageOfTheDay.class);
             startActivity(nextPage);
         });
         buttonFunction2.setOnClickListener(click -> {
