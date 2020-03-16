@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".nasaImage.FavouriteImages">
+
+    <TextView
+        android:id="@+id/favourites_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:text="Nasa Image if The Day"/>
+
+    <FrameLayout
+        android:id="@+id/viewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/favourites_top"
+        android:layout_margin="6dp"/>
+
+
+    <ListView
+        android:id="@+id/imageList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/viewContainer"/>
+
+
+</RelativeLayout>

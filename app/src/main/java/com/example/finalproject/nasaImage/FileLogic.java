@@ -8,18 +8,8 @@ import java.net.URL;
 
 public class FileLogic {
 
-    void startConnection(String requestedUrl){
-        try {
-            URL url = new URL(requestedUrl);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream response = urlConnection.getInputStream();
-        }
-        catch (MalformedURLException ex){
+    static void startConnection(String requestedUrl){
 
-        }
-        catch (IOException ex){
-
-        }
 
     }
 
@@ -27,7 +17,7 @@ public class FileLogic {
 
     }
 
-    boolean existOnDisk(String file){
+    static boolean existOnDisk(String file){
         return false;
     }
 
