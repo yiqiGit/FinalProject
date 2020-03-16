@@ -1,6 +1,8 @@
 package com.example.finalproject.nasaImage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 
 import android.content.res.Resources;
@@ -11,12 +13,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalproject.R;
 
@@ -25,10 +29,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouriteImages extends AppCompatActivity {
+public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
-    private SQLiteDatabase db;
+    /*some resources were adapted from:
+    * https://www.tutlane.com/tutorial/android/android-popup-menu-with-examples
+    * */
+    private static SQLiteDatabase db;
     private List<NasaImage> images;
+    private long itemId;
+    private ImageAdapter imageAdapter;
+    private int itemPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +49,41 @@ public class FavouriteImages extends AppCompatActivity {
         images = new ArrayList<>();
 
         loadDataFromDatabase();
-        ChatAdapter chatAdapter = new ChatAdapter();
-        myList.setAdapter( chatAdapter);
+        imageAdapter = new ImageAdapter();
+        myList.setAdapter( imageAdapter);
+
+        myList.setOnItemClickListener(( parent, v,position, id) -> {
+                itemId = id;
+                itemPosition = position;
+                PopupMenu popup = new PopupMenu(FavouriteImages.this, v);
+                popup.setOnMenuItemClickListener(FavouriteImages.this);
+                popup.getMenuInflater().inflate(R.menu.options, popup.getMenu());
+
+                popup.show();
+
+        });
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.share:
+
+                break;
+            case R.id.delete:
+                if(deleteFromDb(itemId))
+                    Toast.makeText(this, "Item deleted from database!", Toast.LENGTH_LONG).show();
+                images.remove(itemPosition);
+                imageAdapter.notifyDataSetChanged();
+                break;
+            case R.id.open:
+
+                break;
+
+        }
+        return false;
+    }
+
 
     private void loadDataFromDatabase()
     {
@@ -85,6 +127,17 @@ public class FavouriteImages extends AppCompatActivity {
 
     }
 
+    private static boolean deleteFromDb(long id){
+
+        try {
+            db.delete(DbOpener.TABLE_NAME, DbOpener.COL_ID + "=?", new String[]{Long.toString(id)});
+
+        }
+
+        catch (Exception e){return false;}
+        return true;
+    }
+
     private Bitmap loadFile(String fileName){
         FileInputStream fis = null;
         try {
@@ -97,7 +150,9 @@ public class FavouriteImages extends AppCompatActivity {
 
     }
 
-    private class ChatAdapter extends BaseAdapter {
+
+
+    private class ImageAdapter extends BaseAdapter {
 
         @Override
         public int getCount(){

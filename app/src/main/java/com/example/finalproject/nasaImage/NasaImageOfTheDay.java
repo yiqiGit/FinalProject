@@ -3,6 +3,8 @@ package com.example.finalproject.nasaImage;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import android.app.DatePickerDialog;
 
 import android.content.ContentValues;
@@ -13,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -23,9 +26,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.finalproject.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +55,8 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
     private EditText dateBox;
     private TextView imageTitleText;
     private TextView imageDescriptionText;
+    private TextView urlText;
+    private TextView hdUrlLink;
     private DatePickerDialog datePicker;
     private Button searchBtn;
     private Button saveButton;
@@ -77,6 +84,8 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         favoritesButton = (Button) findViewById(R.id.goToFavBtn);
         imageTitleText = (TextView) findViewById(R.id.imageTitle);
         imageDescriptionText = (TextView) findViewById(R.id.description);
+        urlText = (TextView) findViewById(R.id.url);
+        hdUrlLink = (TextView) findViewById(R.id.hd_url);
         imageView = (ImageView) findViewById(R.id.preview);
         imagesArray = new ArrayList<NasaImage>();
         dateBox = findViewById(R.id.dateBox);
@@ -90,17 +99,44 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             ImageQuery imageQuery = new ImageQuery();
             imageQuery.execute(URL_PATH+getSelectedDate());
         });
+
+        hdUrlLink.setOnClickListener(click->{
+            if(myImage.getHdImageUrl()!=null) {
+                Intent browserIntent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(myImage.getHdImageUrl()));
+                startActivity(browserIntent);
+            }
+            else{
+                Toast.makeText(this, "HD url not available.", Toast.LENGTH_LONG).show();
+            }
+        });
+
         clearButton.setOnClickListener(click->{
             dateBox.setText("");
             imageTitleText.setText("");
             imageDescriptionText.setText("");
             imageView.setImageBitmap(null);
+            urlText.setText("");
         });
         saveButton.setOnClickListener(click->{
             try {
 
                 long id = insertIntoDb(myImage);
                 saveImage();
+
+
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.myLayout), "Image added to your favorites!", Snackbar.LENGTH_LONG)
+                        .setAction("View", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent goToFavorites = new Intent(NasaImageOfTheDay.this,FavouriteImages.class );
+                                startActivity(goToFavorites);
+                            }
+                        });
+
+                snackbar.show();
             }
             catch (IOException ex){
                 Log.e("IO Exception", "onCreate: error saving image file." );
@@ -137,16 +173,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         return newId;
     }
 
-    private static boolean deleteFromDb(long id, boolean isTablet){
 
-        try {
-            db.delete(DbOpener.TABLE_NAME, DbOpener.COL_ID + "=?", new String[]{Long.toString(id)});
-
-        }
-
-        catch (Exception e){return false;}
-        return true;
-    }
     private void saveImage() throws IOException{
         //This is where the Bitmap file is saved to disk
         FileOutputStream outputStream = openFileOutput(myImage.getFileName(), Context.MODE_PRIVATE);
@@ -200,7 +227,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 String date = nasaImage.getString("date");
                 String explanation = nasaImage.getString("explanation");
                 String title = nasaImage.getString("title");
-                String fileName = getTitle()+".jpg";
+                String fileName = title +".jpg";
                 String imageUrl = nasaImage.getString("url");
                 String hdImageUrl = nasaImage.getString("hdurl");
                 myImage = new NasaImage(1, date, explanation, title, fileName, imageUrl, hdImageUrl);
@@ -244,6 +271,8 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             imageView.setImageBitmap(image);
             imageDescriptionText.setText(myImage.getDescription());
             imageTitleText.setText(myImage.getTitle());
+            urlText.setText(("Url: "+ myImage.getImageUrl()));
+
         }
 
         private HttpURLConnection startConnection(String requestedUrl) throws IOException {
