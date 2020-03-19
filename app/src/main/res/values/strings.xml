@@ -5,5 +5,18 @@
     <string name="button3">button 3</string>
     <string name="button4">button 4</string>
 
+    <!-- Strings for nasa image of the day app -->
     <string name="datePicker">Select a date</string>
+    <string name="popUpMessage">Do you really want to delete this item?</string>
+    <string name="deleted_true">Record deleted successfully!</string>
+    <string name="deleted_false">Operation failed</string>
+    <string name="saveConfirmation">Image added to your favorites!</string>
+    <string name="duplicatedFile">Image already exists in your favorites!</string>
+    <string name="nullImage">No image to save</string>
+    <string name="nullHDUrl">HD url not available</string>
+    <string name="welcomeMessage">Welcome to Nasa Image of the Day! Your last login was on</string>
+    <string name="appPref" translatable="false">NasaAppPrefs</string>
+    <string name="dateKey" translatable="false">dateKey</string>
+    <string name="info" >To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+
 </resources>

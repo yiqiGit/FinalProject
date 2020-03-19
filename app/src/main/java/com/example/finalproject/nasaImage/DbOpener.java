@@ -8,8 +8,8 @@ public class DbOpener extends SQLiteOpenHelper{
 
 
     protected final static String DATABASE_NAME = "ImagesDB";
-    protected final static int VERSION_NUM = 1;
-    public final static String TABLE_NAME = "MESSAGES";
+    protected final static int VERSION_NUM = 2;
+    public final static String TABLE_NAME = "IMAGES";
     public final static String COL_DATE = "date";
     public final static String COL_DESCRIPTION = "description";
     public final static String COL_TITLE = "title";

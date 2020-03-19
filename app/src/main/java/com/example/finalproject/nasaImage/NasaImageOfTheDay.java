@@ -2,14 +2,23 @@ package com.example.finalproject.nasaImage;
 
 
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
 
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,16 +29,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.finalproject.R;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -47,10 +61,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClickListener{
+public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     private EditText dateBox;
     private TextView imageTitleText;
@@ -63,31 +82,43 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
     private Button clearButton;
     private Button favoritesButton;
     private ImageView imageView;
-    private static final String FILE_NAME = "FILE_NAME";
-    private static final String FILE_PATH = "FILE_PATH";
+    public static final String DESCRIPTION_KEY = "description";
+    public static final String URL_KEY = "url";
+    public static final String HD_URL_KEY = "hdUrl";
+    public static final String TITLE_KEY = "title";
+    public static final String FILE_PATH = "filePath";
     private static final String URL_PATH =
             "https://api.nasa.gov/planetary/apod?api_key=3tB4vqPWVWSdjGS4yOaRaDFMu8m4YUHgrhcRqXII&date=";
-    private List<NasaImage> imagesArray;
+    //private List<NasaImage> imagesArray;
     private String selectedDate;
     private NasaImage myImage;
     private Bitmap image;
     private static SQLiteDatabase db;
-
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMMM yyyy", Locale.CANADA);
+    private SharedPreferences preferences;
+    private ItemFragment dFragment;
+    private FragmentManager fm = getSupportFragmentManager();
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nasa_layout);
 
+        preferences = getSharedPreferences(getString(R.string.appPref), Context.MODE_PRIVATE);
+        String pref = preferences.getString(getString(R.string.dateKey),"");
+        if(pref!=null) welcomeDialog(pref);
+        saveSharedPreferences(DATE_FORMAT.format(new Date()));
+
         searchBtn = (Button) findViewById(R.id.searchBtn);
         saveButton = (Button) findViewById(R.id.saveBtn);
         clearButton = (Button) findViewById(R.id.clearBtn);
         favoritesButton = (Button) findViewById(R.id.goToFavBtn);
-        imageTitleText = (TextView) findViewById(R.id.imageTitle);
-        imageDescriptionText = (TextView) findViewById(R.id.description);
-        urlText = (TextView) findViewById(R.id.url);
-        hdUrlLink = (TextView) findViewById(R.id.hd_url);
-        imageView = (ImageView) findViewById(R.id.preview);
-        imagesArray = new ArrayList<NasaImage>();
+
+
+
+        Toolbar myToolbar = (Toolbar)findViewById(R.id.menuBar);
+        setSupportActionBar(myToolbar);
+
+        //imagesArray = new ArrayList<NasaImage>();
         dateBox = findViewById(R.id.dateBox);
         db = new DbOpener(this).getWritableDatabase();
 
@@ -96,65 +127,134 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         searchBtn = findViewById(R.id.searchBtn);
         /*This button will make the app connect and download the image*/
         searchBtn.setOnClickListener(click->{
+            myImage = null;
             ImageQuery imageQuery = new ImageQuery();
             imageQuery.execute(URL_PATH+getSelectedDate());
+
         });
 
-        hdUrlLink.setOnClickListener(click->{
-            if(myImage.getHdImageUrl()!=null) {
-                Intent browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(myImage.getHdImageUrl()));
-                startActivity(browserIntent);
-            }
-            else{
-                Toast.makeText(this, "HD url not available.", Toast.LENGTH_LONG).show();
-            }
-        });
+
 
         clearButton.setOnClickListener(click->{
-            dateBox.setText("");
-            imageTitleText.setText("");
-            imageDescriptionText.setText("");
-            imageView.setImageBitmap(null);
-            urlText.setText("");
+
+                Fragment frag = fm.findFragmentById(R.id.itemContainer);
+                dFragment.getFragmentManager().beginTransaction().remove(frag);
+                dateBox.setText("");
+                findViewById(R.id.itemContainer).setVisibility(View.INVISIBLE);
+                myImage=null;
+                if(queryForImageFile(myImage.getFileName())==null)
+                    new File(myImage.getFileName()).delete();
+
         });
         saveButton.setOnClickListener(click->{
-            try {
+            if(myImage!=null) {
+                try {
+                    //This makes sure there's no duplicates in the Db already.
 
-                long id = insertIntoDb(myImage);
-                saveImage();
+                    if (queryForImageFile(myImage.getFileName())== null) {
+                        insertIntoDb(myImage);
+                        saveImage();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.myLayout), R.string.saveConfirmation, Snackbar.LENGTH_LONG)
+                                .setAction("View", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent goToFavorites = new Intent(NasaImageOfTheDay.this, FavouriteImages.class);
+                                        startActivity(goToFavorites);
+                                    }
+                                });
 
+                        snackbar.show();
+                    } else {
+                        Toast.makeText(this, R.string.duplicatedFile, Toast.LENGTH_LONG).show();
+                    }
 
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.myLayout), "Image added to your favorites!", Snackbar.LENGTH_LONG)
-                        .setAction("View", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent goToFavorites = new Intent(NasaImageOfTheDay.this,FavouriteImages.class );
-                                startActivity(goToFavorites);
-                            }
-                        });
-
-                snackbar.show();
+                } catch (IOException ex) {
+                    Log.e("IO Exception", "onCreate: error saving image file.");
+                }
             }
-            catch (IOException ex){
-                Log.e("IO Exception", "onCreate: error saving image file." );
-            }
+            else Toast.makeText(this, R.string.nullImage, Toast.LENGTH_LONG).show();
         });
         favoritesButton.setOnClickListener(click->{
             Intent goToFavorites = new Intent(this,FavouriteImages.class );
             startActivity(goToFavorites);
 
         });
+    }
 
-
-
-
-
+    private Cursor queryForImageFile(String fname){
+        return db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like "
+                + "\"" + fname + "\"", null, null, null, null, null);
 
     }
 
+    private void printCursor(Cursor c){
+
+        int titleInd = c.getColumnIndex(DbOpener.COL_TITLE);
+        int fileInd = c.getColumnIndex((DbOpener.COL_FILE_NAME));
+        int idInd = c.getColumnIndex(DbOpener.COL_ID);
+
+
+        if (c.getCount()>0) {
+            c.moveToFirst();
+
+            do {
+
+                Log.i("id, file, Title", c.getLong(idInd) + ", \"" + c.getString(titleInd) + "\", " + c.getString(fileInd));
+
+            } while (c.moveToNext());
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.tools_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.help:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                String message = getString(R.string.info);
+                dialog.setTitle("Dialog").setMessage(message)
+                        .setPositiveButton("Ok", (c, arg) -> {
+                        })
+                        .create().show();
+                break;
+        }
+
+        return true;
+    }
+
+    private boolean saveSharedPreferences(String s){
+        //creates a SharedPreference object, referring to the file contained in the Strings file_key, using the mode MODE_PRIVATE
+        //source of help: https://stackoverflow.com/questions/4531396/get-value-of-a-edit-text-field
+
+        if(!s.equals("")) {
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(getString(R.string.dateKey), s);
+            editor.commit();
+            return true;
+        }
+        else return false;
+
+    }
+
+    private void welcomeDialog(String date){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        String message = getString(R.string.welcomeMessage) + " " + date;
+        dialog.setTitle("Dialog").setMessage(message)
+                .setPositiveButton("Ok", (c, arg) -> {
+
+                })
+                .create().show();
+    }
     private static long insertIntoDb(NasaImage image){
         //add to the database and get the new ID
         ContentValues newRowValues = new ContentValues();
@@ -169,8 +269,8 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         newRowValues.put(DbOpener.COL_HD_URL, image.getHdImageUrl());
 
         //Now insert in the database:
-        long newId = db.insert(DbOpener.TABLE_NAME,DbOpener.COL_HD_URL, newRowValues);
-        return newId;
+        return db.insert(DbOpener.TABLE_NAME,DbOpener.COL_HD_URL, newRowValues);
+
     }
 
 
@@ -209,11 +309,30 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         datePicker.show();
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        /*Cursor c = db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like "
+                + "\"" + myImage.getFileName() + "\"", null, null, null, null, null);
+        if (c == null) {
+            File imgFile = new File(myImage.getFileName());
+            imgFile.delete();
+        }*/
+
+    }
+
     public class ImageQuery extends AsyncTask<String, Integer, String> {
 
 
         private HttpURLConnection connection;
         private InputStream response;
+        private ProgressBar progBar = findViewById(R.id.progressBar);
 
 
 
@@ -222,6 +341,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             try {
                 connection = startConnection(url[0]);
                 response = connection.getInputStream();
+                publishProgress(20);
 
                 JSONObject nasaImage = getJsonObject();
                 String date = nasaImage.getString("date");
@@ -230,20 +350,15 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 String fileName = title +".jpg";
                 String imageUrl = nasaImage.getString("url");
                 String hdImageUrl = nasaImage.getString("hdurl");
+                publishProgress(70);
                 myImage = new NasaImage(1, date, explanation, title, fileName, imageUrl, hdImageUrl);
 
-                if(existOnDisk(fileName)) {
-
-                    loadFile(fileName);
-                    publishProgress(100);
-                }
-                else{
+                if(!existOnDisk(fileName)) {
 
                     downloadFile(imageUrl);
+                    saveImage();
                     publishProgress(100);
                 }
-
-
 
             }
             catch (MalformedURLException ex){
@@ -261,17 +376,37 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
+
+            progBar.setVisibility(View.VISIBLE);
+            progBar.setProgress(values[0]);
         }
+
 
         @Override
         protected void onPostExecute(String s) {
             //super.onPostExecute(s);
-
-            imageView.setImageBitmap(image);
+            progBar.setVisibility(View.INVISIBLE);
+            /*imageView.setImageBitmap(image);
+            imageView.setVisibility(View.VISIBLE);
             imageDescriptionText.setText(myImage.getDescription());
             imageTitleText.setText(myImage.getTitle());
-            urlText.setText(("Url: "+ myImage.getImageUrl()));
+            urlText.setText(("Url: "+ myImage.getImageUrl()));*/
+
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(DESCRIPTION_KEY, myImage.getDescription());
+            dataToPass.putString(TITLE_KEY, myImage.getTitle());
+            dataToPass.putString(URL_KEY, myImage.getImageUrl());
+            dataToPass.putString(HD_URL_KEY, myImage.getHdImageUrl());
+            dataToPass.putString(FILE_PATH,myImage.getFileName());
+
+            printCursor(queryForImageFile(myImage.getFileName()));
+            dFragment = ItemFragment.newInstance();
+            dFragment.setArguments( dataToPass );
+
+                    fm.beginTransaction()
+                    .replace(R.id.itemContainer, dFragment) //Add the fragment in FrameLayout
+                    .commit(); //actually load the fragment.
+
 
         }
 
@@ -297,7 +432,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
 
 
-        private void loadFile(String fileName){
+        /*private void loadFile(String fileName){
             FileInputStream fis = null;
             try {
                 fis = openFileInput(fileName);
@@ -306,7 +441,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             }
             image = BitmapFactory.decodeStream(fis);
             Log.i("doInBackground: ", "Image " + fileName + " found on disk.");
-        }
+        }*/
 
         private boolean existOnDisk(String fileName){
             File file = getBaseContext().getFileStreamPath(fileName);
@@ -323,6 +458,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 sb.append(line + "\n");
             }
             String result = sb.toString();
+            publishProgress(40);
             return new JSONObject(result);
         }
 

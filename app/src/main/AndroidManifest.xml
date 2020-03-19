@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".nasaImage.FavouriteImages"></activity>
+        <activity android:name=".nasaImage.EmptyActivity"></activity>
+        <activity android:name=".nasaImage.FavouriteImages" />
         <activity android:name=".Function4" />
         <activity android:name=".Function3" />
         <activity android:name=".Function2" />

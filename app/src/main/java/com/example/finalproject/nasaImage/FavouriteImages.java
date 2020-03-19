@@ -1,10 +1,12 @@
 package com.example.finalproject.nasaImage;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -71,13 +73,20 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
 
                 break;
             case R.id.delete:
-                if(deleteFromDb(itemId))
-                    Toast.makeText(this, "Item deleted from database!", Toast.LENGTH_LONG).show();
-                images.remove(itemPosition);
-                imageAdapter.notifyDataSetChanged();
+                deleteItemDialog();
                 break;
             case R.id.open:
+                Bundle dataToPass = new Bundle();
+                dataToPass.putString(NasaImageOfTheDay.DESCRIPTION_KEY, images.get(itemPosition).getDescription());
+                dataToPass.putString(NasaImageOfTheDay.TITLE_KEY, images.get(itemPosition).getTitle());
+                dataToPass.putString(NasaImageOfTheDay.URL_KEY, images.get(itemPosition).getImageUrl());
+                dataToPass.putString(NasaImageOfTheDay.HD_URL_KEY, images.get(itemPosition).getHdImageUrl());
+                dataToPass.putString(NasaImageOfTheDay.FILE_PATH, images.get(itemPosition).getFileName());
 
+
+                Intent nextActivity = new Intent(FavouriteImages.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivity(nextActivity); //make the transition
                 break;
 
         }
@@ -126,14 +135,31 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
 
 
     }
+    private void deleteItemDialog(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        String message = getString(R.string.popUpMessage);
+        dialog.setTitle("Dialog").setMessage(message)
+                .setPositiveButton("Ok", (c, arg) -> {
+
+                    String toastMessage;
+                    if (deleteFromDb(itemId))
+                        toastMessage = getString(R.string.deleted_true);
+                    else
+                        toastMessage = getString(R.string.deleted_false);
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+                    images.remove(itemPosition);
+                    imageAdapter.notifyDataSetChanged();
+                })
+                .setNegativeButton("Cancel", (c, arg) -> {
+                })
+                .create().show();
+    }
 
     private static boolean deleteFromDb(long id){
-
         try {
             db.delete(DbOpener.TABLE_NAME, DbOpener.COL_ID + "=?", new String[]{Long.toString(id)});
 
         }
-
         catch (Exception e){return false;}
         return true;
     }
@@ -151,7 +177,7 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
     }
 
 
-
+    /*Class ImageAdapter handles the items in the ListView*/
     private class ImageAdapter extends BaseAdapter {
 
         @Override
