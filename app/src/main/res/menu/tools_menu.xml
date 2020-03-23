@@ -11,10 +11,12 @@
         android:title="search"
         android:visible="false"/>
 
-    <!--app:actionViewClass="android.widget.SearchView"-->
+
 
     <item android:id="@+id/help"
         android:orderInCategory="20"
         app:showAsAction="never"
-        android:title="Help"/>
+        android:title="Help"
+        android:iconTint="@color/white"
+        />
 </menu>

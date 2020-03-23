@@ -16,5 +16,13 @@
     <string name="nullHDUrl">Url HD indisponivel</string>
     <string name="welcomeMessage">Bem vindo a Nasa Imagem do Dia! Seu ultimo login foi dia</string>
     <string name="info" >To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+    <string name="header">Nasa Imagem do Dia</string>
+    <string name="searchBtn">Search</string>
+    <string name="hdUrlLink">Abrir imagem HD no navegador</string>
+    <string name="saveBtn">Salvar</string>
+    <string name="clearBtn">Limpar</string>
+    <string name="favBtn">Ver Favoritos</string>
+    <string name="close">Fechar</string>
+    <string name="back">Voltar para inicio</string>
 
 </resources>

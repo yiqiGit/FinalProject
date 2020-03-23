@@ -18,5 +18,14 @@
     <string name="appPref" translatable="false">NasaAppPrefs</string>
     <string name="dateKey" translatable="false">dateKey</string>
     <string name="info" >To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+    <string name="header">Nasa Image of the Day</string>
+    <string name="searchBtn">Search</string>
+    <string name="hdUrlLink">Open HD image on browser</string>
+    <string name="saveBtn">Save</string>
+    <string name="clearBtn">Clear</string>
+    <string name="favBtn">See Favourites</string>
+    <string name="close">Close</string>
+    <string name="back">Back to Main</string>
+    <string name="open" translatable="false">open</string>
 
 </resources>

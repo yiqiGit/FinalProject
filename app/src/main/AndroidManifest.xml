@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".nasaImage.EmptyActivity"></activity>
         <activity android:name=".nasaImage.FavouriteImages" />
-        <activity android:name=".Function4" />
+        <activity android:name=".ImageSearch" />
         <activity android:name=".Function3" />
         <activity android:name=".Function2" />
         <activity android:name=".nasaImage.NasaImageOfTheDay" />

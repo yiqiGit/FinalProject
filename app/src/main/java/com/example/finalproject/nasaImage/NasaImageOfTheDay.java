@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,16 +74,11 @@ import java.util.Locale;
 public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     private EditText dateBox;
-    private TextView imageTitleText;
-    private TextView imageDescriptionText;
-    private TextView urlText;
-    private TextView hdUrlLink;
     private DatePickerDialog datePicker;
     private Button searchBtn;
     private Button saveButton;
     private Button clearButton;
     private Button favoritesButton;
-    private ImageView imageView;
     public static final String DESCRIPTION_KEY = "description";
     public static final String URL_KEY = "url";
     public static final String HD_URL_KEY = "hdUrl";
@@ -98,6 +95,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
     private SharedPreferences preferences;
     private ItemFragment dFragment;
     private FragmentManager fm = getSupportFragmentManager();
+    private TextView imageTitle;
+    private TextView urlLink;
+    private ImageView imagePreview;
+    private RelativeLayout results;
+    private ImageView nasaLogo;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -112,7 +114,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         saveButton = (Button) findViewById(R.id.saveBtn);
         clearButton = (Button) findViewById(R.id.clearBtn);
         favoritesButton = (Button) findViewById(R.id.goToFavBtn);
-
+        imageTitle = (TextView) findViewById(R.id.imageTitle);
+        urlLink = (TextView) findViewById(R.id.hd_url) ;
+        imagePreview = (ImageView) findViewById(R.id.preview);
+        results = (RelativeLayout) findViewById(R.id.resultsContainer);
+        nasaLogo = (ImageView) findViewById(R.id.nasaLogo);
 
 
         Toolbar myToolbar = (Toolbar)findViewById(R.id.menuBar);
@@ -136,22 +142,26 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
 
         clearButton.setOnClickListener(click->{
+            dateBox.setText("");
+            if(myImage!=null) {
 
-                Fragment frag = fm.findFragmentById(R.id.itemContainer);
-                dFragment.getFragmentManager().beginTransaction().remove(frag);
-                dateBox.setText("");
-                findViewById(R.id.itemContainer).setVisibility(View.INVISIBLE);
-                myImage=null;
-                if(queryForImageFile(myImage.getFileName())==null)
-                    new File(myImage.getFileName()).delete();
+                imageTitle.setText("");
+                imagePreview.setImageBitmap(null);
+                myImage = null;
+                image = null;
+                results.setVisibility(View.INVISIBLE);
+                nasaLogo.setVisibility(View.VISIBLE);
 
+            }
         });
+
         saveButton.setOnClickListener(click->{
             if(myImage!=null) {
                 try {
                     //This makes sure there's no duplicates in the Db already.
-
-                    if (queryForImageFile(myImage.getFileName())== null) {
+                    Cursor cursor = queryForImageFile(myImage.getFileName());
+                    if (cursor.getCount() == 0) {
+                        printCursor(cursor);
                         insertIntoDb(myImage);
                         saveImage();
                         Snackbar snackbar = Snackbar
@@ -162,6 +172,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                                         Intent goToFavorites = new Intent(NasaImageOfTheDay.this, FavouriteImages.class);
                                         startActivity(goToFavorites);
                                     }
+
                                 });
 
                         snackbar.show();
@@ -175,6 +186,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             }
             else Toast.makeText(this, R.string.nullImage, Toast.LENGTH_LONG).show();
         });
+
         favoritesButton.setOnClickListener(click->{
             Intent goToFavorites = new Intent(this,FavouriteImages.class );
             startActivity(goToFavorites);
@@ -182,9 +194,9 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         });
     }
 
-    private Cursor queryForImageFile(String fname){
-        return db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like "
-                + "\"" + fname + "\"", null, null, null, null, null);
+    private Cursor queryForImageFile(String fName){
+        return db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like ?",
+                new String[]{fName}, null, null, null, null);
 
     }
 
@@ -314,18 +326,6 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         return false;
     }
 
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-        /*Cursor c = db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like "
-                + "\"" + myImage.getFileName() + "\"", null, null, null, null, null);
-        if (c == null) {
-            File imgFile = new File(myImage.getFileName());
-            imgFile.delete();
-        }*/
-
-    }
 
     public class ImageQuery extends AsyncTask<String, Integer, String> {
 
@@ -356,9 +356,9 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 if(!existOnDisk(fileName)) {
 
                     downloadFile(imageUrl);
-                    saveImage();
                     publishProgress(100);
                 }
+                else loadFile(fileName);
 
             }
             catch (MalformedURLException ex){
@@ -386,27 +386,10 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         protected void onPostExecute(String s) {
             //super.onPostExecute(s);
             progBar.setVisibility(View.INVISIBLE);
-            /*imageView.setImageBitmap(image);
-            imageView.setVisibility(View.VISIBLE);
-            imageDescriptionText.setText(myImage.getDescription());
-            imageTitleText.setText(myImage.getTitle());
-            urlText.setText(("Url: "+ myImage.getImageUrl()));*/
-
-            Bundle dataToPass = new Bundle();
-            dataToPass.putString(DESCRIPTION_KEY, myImage.getDescription());
-            dataToPass.putString(TITLE_KEY, myImage.getTitle());
-            dataToPass.putString(URL_KEY, myImage.getImageUrl());
-            dataToPass.putString(HD_URL_KEY, myImage.getHdImageUrl());
-            dataToPass.putString(FILE_PATH,myImage.getFileName());
-
-            printCursor(queryForImageFile(myImage.getFileName()));
-            dFragment = ItemFragment.newInstance();
-            dFragment.setArguments( dataToPass );
-
-                    fm.beginTransaction()
-                    .replace(R.id.itemContainer, dFragment) //Add the fragment in FrameLayout
-                    .commit(); //actually load the fragment.
-
+            imageTitle.setText(myImage.getTitle());
+            imagePreview.setImageBitmap(image);
+            results.setVisibility(View.VISIBLE);
+            nasaLogo.setVisibility(View.INVISIBLE);
 
         }
 
@@ -426,13 +409,9 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 image = BitmapFactory.decodeStream(connection.getInputStream());
 
             }
-
-
         }
 
-
-
-        /*private void loadFile(String fileName){
+        private void loadFile(String fileName){
             FileInputStream fis = null;
             try {
                 fis = openFileInput(fileName);
@@ -441,7 +420,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             }
             image = BitmapFactory.decodeStream(fis);
             Log.i("doInBackground: ", "Image " + fileName + " found on disk.");
-        }*/
+        }
 
         private boolean existOnDisk(String fileName){
             File file = getBaseContext().getFileStreamPath(fileName);

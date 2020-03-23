@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class ItemFragment extends Fragment {
     private AppCompatActivity parentActivity;
     private Bitmap image;
 
+
     public static ItemFragment newInstance() {
         return new ItemFragment();
     }
@@ -41,8 +43,16 @@ public class ItemFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+
+
         dataFromResults = getArguments();
         View detailView = inflater.inflate(R.layout.item_fragment, container, false);
+        Button goBackBtn = (Button) detailView.findViewById(R.id.close) ;
+        goBackBtn.setOnClickListener(click-> {
+            parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+            parentActivity.finish();
+
+        });
         TextView imageTitleText = (TextView) detailView.findViewById(R.id.imageTitle);
         TextView imageDescriptionText = (TextView) detailView.findViewById(R.id.description);
         TextView urlText = (TextView) detailView.findViewById(R.id.url);
@@ -90,6 +100,14 @@ public class ItemFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        //context will either be FragmentExample for a tablet, or EmptyActivity for phone
+        parentActivity = (AppCompatActivity)context;
     }
 
 }

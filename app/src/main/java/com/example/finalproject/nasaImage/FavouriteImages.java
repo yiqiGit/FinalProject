@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +50,8 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         Resources res = this.getResources();
         ListView myList = findViewById(R.id.imageList);
         images = new ArrayList<>();
+        Button goBackBtn = (Button) findViewById(R.id.goBack) ;
+        goBackBtn.setOnClickListener(click-> finish());
 
         loadDataFromDatabase();
         imageAdapter = new ImageAdapter();
