@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.finalproject.yiqiFunction.ImageSearch;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextPage);
         });
         buttonFunction3.setOnClickListener(click -> {
-            Intent nextPage = new Intent(this, Function3.class);
+            Intent nextPage = new Intent(this, ImageSearch.class);
             startActivity(nextPage);
         });
         buttonFunction4.setOnClickListener(click -> {
