@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">FinalProject</string>
+    <string name="button1">button 1</string>
+    <string name="button2">button 2</string>
+    <string name="button3">button 3</string>
+    <string name="button4">button 4</string>
+
+    <!-- Strings for nasa image of the day app -->
+    <string name="datePicker">Selecione uma data</string>
+    <string name="popUpMessage">Voce realmente deseja apagar este item?</string>
+    <string name="deleted_true">Registro apagado com sucesso!</string>
+    <string name="deleted_false">Operacao falhou</string>
+    <string name="saveConfirmation">Imagem salva nos favoritos!</string>
+    <string name="duplicatedFile">Image ja existe nos favoritos!</string>
+    <string name="nullImage">Nenhum arquivo de imagem</string>
+    <string name="nullHDUrl">Url HD indisponivel</string>
+    <string name="welcomeMessage">Bem vindo a Nasa Imagem do Dia! Seu ultimo login foi dia</string>
+    <string name="info" >To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+    <string name="header">Nasa Imagem do Dia</string>
+    <string name="searchBtn">Search</string>
+    <string name="hdUrlLink">Abrir imagem HD no navegador</string>
+    <string name="saveBtn">Salvar</string>
+    <string name="clearBtn">Limpar</string>
+    <string name="favBtn">Ver Favoritos</string>
+    <string name="close">Fechar</string>
+    <string name="back">Voltar para inicio</string>
+
+</resources>
