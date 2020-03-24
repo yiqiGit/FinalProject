@@ -11,11 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".nasaImage.EmptyActivity"></activity>
-        <activity android:name=".nasaImage.FavouriteImages" />
         <activity android:name=".ImageSearch" />
         <activity android:name=".Function3" />
-        <activity android:name=".Function2" />
+        <activity android:name=".BBCNews.DetailsFragment" />
+        <activity android:name=".BBCNews.EmptyActivity" />
+        <activity android:name=".BBCNews.BbcNews" />
+        <activity android:name=".nasaImage.EmptyActivity" />
+        <activity android:name=".nasaImage.FavouriteImages" />
         <activity android:name=".nasaImage.NasaImageOfTheDay" />
         <activity android:name=".MainActivity">
             <intent-filter>
