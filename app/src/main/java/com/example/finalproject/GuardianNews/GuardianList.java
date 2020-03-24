@@ -1,7 +1,6 @@
 package com.example.finalproject.GuardianNews;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,6 +25,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import android.os.Bundle;
+
+import com.example.finalproject.R;
 
 public class GuardianList extends AppCompatActivity {
     ArrayList<String> webTitles = new ArrayList<>();

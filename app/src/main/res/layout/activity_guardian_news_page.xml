@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GuardianNewsPage">
+    tools:context=".GuardianNews.GuardianNewsPage">
+
 
     <TextView
         android:id="@+id/newsPTitle"
@@ -22,20 +23,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="5dp"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:text="Click on the following link to access the news:"/>
     <TextView
         android:id="@+id/newsPUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:text="URL"/>
 
     //Section Name
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
         android:text="Article section:"/>
@@ -44,6 +45,7 @@
         android:id="@+id/newsPSN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15dp"
         android:text="Section Name"/>
 
 </LinearLayout>

@@ -10,6 +10,8 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
+import com.example.finalproject.R;
+
 public class GuardianNewsPage extends AppCompatActivity {
 
     TextView titleTV;

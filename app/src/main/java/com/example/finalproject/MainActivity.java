@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextPage);
         });
         buttonFunction4.setOnClickListener(click -> {
-            Intent nextPage = new Intent(this, Function4.class);
+            Intent nextPage = new Intent(this, GuardianMainActivity.class);
             startActivity(nextPage);
         });
     }

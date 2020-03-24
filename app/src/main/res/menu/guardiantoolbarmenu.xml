@@ -8,19 +8,19 @@
         android:orderInCategory="1"/>
 
     <item android:id="@+id/questionIcon"
-        android:icon="@drawable/question"
+        android:icon="@drawable/guardian_question"
         android:title="Choice 1"
         app:showAsAction="always"
         android:orderInCategory="2"/>
 
     <item android:id="@+id/infoIcon"
-        android:icon="@drawable/info"
+        android:icon="@drawable/guardian_info"
         android:title="Choice 2"
         app:showAsAction="always"
         android:orderInCategory="3"/>
 
     <item android:id="@+id/checkIcon"
-        android:icon="@drawable/check"
+        android:icon="@drawable/guardian_check"
         android:title="Choice 3"
         app:showAsAction="always"
         android:orderInCategory="4"/>
