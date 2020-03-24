@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -40,12 +41,45 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class bbcnews extends AppCompatActivity {
+/**
+ * This class is the main activity class for BBC News.
+ *
+ *@author Xiaoting Kong
+ *@version 1.0
+ */
+public class BbcNews extends AppCompatActivity {
+    /**
+     * An ArrayList of News representing news.
+     */
     List<News> newsList;
-    List<News> favourite;
+
+    /**
+     * An ArrayList of News representing favourite news.
+     */
+    List<News> favouriteList;
+
+    /**
+     * A ProgressBar representing progress bar.
+     */
     ProgressBar progressBar;
+
+    /**
+     * SQL database.
+     */
     SQLiteDatabase db;
+
+    /**
+     * Value representing "item information".
+     *
+     * {@value #ITEM_INFORMATION}
+     */
     public static final String ITEM_INFORMATION = "INFORMATION";
+
+    /**
+     * Value representing "item link".
+     *
+     * {@value #ITEM_LINK}
+     */
     public static final String ITEM_LINK = "LINK";
 
     @Override
@@ -55,41 +89,41 @@ public class bbcnews extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.ProgressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        CatchNews catchNews = new CatchNews();
+        DownloadNews downloadNews = new DownloadNews();
 
-        Toolbar myToolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        //Do AsyncTask work
-        catchNews.execute();
-        newsList = catchNews.getNewsList();
+        // Do AsyncTask work
+        downloadNews.execute();
+        newsList = downloadNews.getNewsList();
 
-        //Set the whole list in MyListAdapter
-        MyListAdapter myListAdapter = new MyListAdapter(this,newsList);
+        // Set the whole list in MyListAdapter
+        MyListAdapter myListAdapter = new MyListAdapter(this, newsList);
         ListView theList = findViewById(R.id.news_list);
-        theList.setAdapter( myListAdapter );
-
+        theList.setAdapter(myListAdapter);
 
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle dataToPass = new Bundle();
                 dataToPass.putString(ITEM_INFORMATION, newsList.get(position).toString());
                 dataToPass.putString(ITEM_LINK, newsList.get(position).getLink());
 
-                Intent nextActivity = new Intent(bbcnews.this, EmptyActivity.class);
-                nextActivity.putExtras(dataToPass); //send data to next activity
-                startActivity(nextActivity); //make the transition
+                Intent nextActivity = new Intent(BbcNews.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); // send data to next activity
+                startActivity(nextActivity); // make the transition
             }
         });
+
 //        theList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 //            @Override
 //            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder (bbcnews.this);
-//                alertDialogBuilder.setTitle((bbcnews.this).getResources().getString(R.string.title));
-//                alertDialogBuilder.setMessage((bbcnews.this).getResources().getString(R.string.message1) + position
-//                        +"\n"+ (bbcnews.this).getResources().getString(R.string.message2)+ id+"\n"+ newsList.get(position).getIsFavourite());
-//                alertDialogBuilder.setPositiveButton((bbcnews.this).getResources().getString(R.string.back), new DialogInterface.OnClickListener() {
+//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder (BbcNews.this);
+//                alertDialogBuilder.setTitle((BbcNews.this).getResources().getString(R.string.title));
+//                alertDialogBuilder.setMessage((BbcNews.this).getResources().getString(R.string.message1) + position
+//                        +"\n"+ (BbcNews.this).getResources().getString(R.string.message2)+ id+"\n"+ newsList.get(position).getIsFavourite());
+//                alertDialogBuilder.setPositiveButton((BbcNews.this).getResources().getString(R.string.back), new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
 //                        dialog.dismiss();
@@ -99,35 +133,40 @@ public class bbcnews extends AppCompatActivity {
 //                return true;
 //            }
 //        });
-
     }
 
-
-
-    private class MyListAdapter extends BaseAdapter implements View.OnClickListener{
+    /**
+     * This inner class is the class to set listView adapter.
+     */
+    private class MyListAdapter extends BaseAdapter implements View.OnClickListener {
         private Context context;
         private List<News> lists;
-        boolean is_Fourite;
+        boolean isFavorite;
+
         public MyListAdapter(Context context, List<News> lists) {
             super();
             this.context = context;
             this.lists = lists;
         }
 
-        public int getCount() { return lists.size();} //This function tells how many objects to show
+        public int getCount() {
+            return lists.size();
+        } //This function tells how many objects to show
 
-        public Object getItem(int position) { return lists.get(position);}  //This returns the string at position p
+        public Object getItem(int position) {
+            return lists.get(position);
+        }  //This returns the string at position p
 
-        public long getItemId(int p) { return lists.get(p).getId();} //This returns the database id of the item at position p
+        public long getItemId(int p) {
+            return lists.get(p).getId();
+        } //This returns the database id of the item at position p
 
-        public View getView(int p, View recycled, ViewGroup parent)
-        {
-
+        public View getView(int p, View recycled, ViewGroup parent) {
             TextView bnews;
             LayoutInflater inflater = getLayoutInflater();
             View newView = recycled;
-                newView = inflater.inflate(R.layout.bbc_for_list,parent,false);
-            bnews=(TextView) newView.findViewById(R.id.news);
+            newView = inflater.inflate(R.layout.bbc_for_list, parent, false);
+            bnews = (TextView) newView.findViewById(R.id.news);
 
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mBtn = (ImageButton) newView.findViewById(R.id.add);
@@ -136,36 +175,35 @@ public class bbcnews extends AppCompatActivity {
             viewHolder.mBtn.setTag(p);
             bnews.setText(lists.get(p).getTitle());
 
-            if(lists.get(p).getIsFavourite()){
+            if (lists.get(p).getIsFavourite()) {
                 viewHolder.mBtn.setImageResource(R.drawable.bbc_heart2);
             }
 
             return newView;
         }
 
-//        int count = 0;
+        // int count = 0;
         @Override
         public void onClick(View v) {
             int i = (int) v.getTag();
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mBtn = (ImageButton) v.findViewById(R.id.add);
 //            if(v.getId()==R.id.add && count % 2 ==0){
-            if(v.getId()==R.id.add){
+            if (v.getId() == R.id.add) {
                 Snackbar.make(viewHolder.mBtn, "Added to favourite list", Snackbar.LENGTH_SHORT).show();
                 viewHolder.mBtn.setImageResource(R.drawable.bbc_heart2);
-                is_Fourite=true;
+                isFavorite = true;
                 newsList.get(i).setIsFavourite(true);
             }
 //            else if(v.getId()==R.id.add && count % 2 ==1){
 //                Snackbar.make(viewHolder.mBtn, "Moved  from favourite list", Snackbar.LENGTH_INDEFINITE).show();
 //                viewHolder.mBtn.setImageResource(R.drawable.bbc_heart1);
-//                is_Fourite=false;
+//                isFavorite = false;
 //                newsList.get(i).setIsFavourite(false);
 //            }
 //            count= count +1;
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -174,19 +212,19 @@ public class bbcnews extends AppCompatActivity {
         inflater.inflate(R.menu.bbc_favourite_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         String message = null;
-        //Look at your menu XML file. Put a case for every id in that file:
-        switch(item.getItemId())
-        {
-            //what to do when the menu item is selected:
+
+        switch (item.getItemId()) {
+            // what to do when the menu item is selected:
             case R.id.item1:
 //                message = "Introduction for this page";
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder (bbcnews.this);
-                alertDialogBuilder.setTitle((bbcnews.this).getResources().getString(R.string.bbc_title));
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BbcNews.this);
+                alertDialogBuilder.setTitle((BbcNews.this).getResources().getString(R.string.bbc_title));
                 alertDialogBuilder.setMessage("Introduction for this page,todo....");
-                alertDialogBuilder.setPositiveButton((bbcnews.this).getResources().getString(R.string.bbc_back), new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton((BbcNews.this).getResources().getString(R.string.bbc_back), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -196,6 +234,7 @@ public class bbcnews extends AppCompatActivity {
                 break;
             case R.id.item2:
                 message = "Home page";
+                startActivity(new Intent(BbcNews.this, MainActivity.class));
                 break;
             case R.id.item3:
                 message = "Favourite list";
@@ -205,22 +244,22 @@ public class bbcnews extends AppCompatActivity {
                 message = "Refresh";
                 break;
         }
+
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         ImageButton mBtn;
     }
 
-    private void loadDataFromDatabase()
-    {
-        //get a database connection:
+    private void loadDataFromDatabase() {
+        // get a database connection
         DbHandler dbOpener = new DbHandler(this);
         db = dbOpener.getWritableDatabase();
 
-        String [] columns = {DbHandler.COL_ID, DbHandler.COL_TITLE , DbHandler.COL_DESCRIPTION,
-                DbHandler.COL_DATE,  DbHandler.COL_LINK, DbHandler.COL_FAVOURITE};
+        String[] columns = {DbHandler.COL_ID, DbHandler.COL_TITLE, DbHandler.COL_DESCRIPTION,
+                DbHandler.COL_DATE, DbHandler.COL_LINK, DbHandler.COL_FAVOURITE};
         Cursor results = db.query(false, DbHandler.TABLE_NAME, columns, null, null, null,
                 null, null, null);
         int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
@@ -232,29 +271,32 @@ public class bbcnews extends AppCompatActivity {
 //        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
 
         //iterate over the results, return true if there is a next item:
-        while(results.moveToNext())
-        {    Boolean IsFavourite;
+        while (results.moveToNext()) {
+            Boolean IsFavourite;
             long id = results.getLong(idColIndex);
             String title0 = results.getString(Title_ColIndex);
             String description0 = results.getString(Description_ColIndex);
             String date0 = results.getString(Date_ColIndex);
             String link0 = results.getString(Link_ColIndex);
             String IsFavourite0 = results.getString(IsFavourite_ColIndex);
-            if(IsFavourite0.equals("true")){
+            if (IsFavourite0.equals("true")) {
                 IsFavourite = true;
-            }else IsFavourite = false;
+            } else IsFavourite = false;
 
 //            long id = results.getLong(idColIndex);
-            //add the new Contact to the array list:
-            newsList.add(new News(id,title0,description0,date0,link0,IsFavourite));
+            // add the news to the array list:
+            newsList.add(new News(id, title0, description0, date0, link0, IsFavourite));
         }
-
     }
 
-
-    public class CatchNews extends AsyncTask<String, Integer, List<News>> {
-
-        private List<News> newsList= new ArrayList<>();
+    /**
+     * This inner class is the class to download BBC news.
+     */
+    public class DownloadNews extends AsyncTask<String, Integer, List<News>> {
+        /**
+         * An ArrayList of News representing news.
+         */
+        private List<News> newsList = new ArrayList<>();
 
         @Override
         protected List<News> doInBackground(String... params) {
@@ -265,24 +307,26 @@ public class bbcnews extends AppCompatActivity {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream inStream = urlConnection.getInputStream();
 
-                //Set up the XML parser:
+                // Set up the XML parser
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(false);
                 XmlPullParser xpp = factory.newPullParser();
                 xpp.setInput(inStream, "UTF-8");
 
-
-                //Iterate over the XML tags:
+                // Iterate over the XML tags
                 boolean inItem = false;
                 int EVENT_TYPE;
-                String title = null;String description =null;String date=null; String link = null;
-                //While not the end of the document:
+                String title = null;
+                String description = null;
+                String date = null;
+                String link = null;
+                // While not the end of the document
                 while ((EVENT_TYPE = xpp.getEventType()) != XmlPullParser.END_DOCUMENT) {
                     if (EVENT_TYPE == XmlPullParser.START_TAG) {
                         if (xpp.getName().equalsIgnoreCase("item")) {
                             inItem = true;
                         } else if (xpp.getName().equalsIgnoreCase("title")) {
-                            if (inItem){
+                            if (inItem) {
                                 title = xpp.nextText();
                                 publishProgress(20);
                             }
@@ -291,12 +335,12 @@ public class bbcnews extends AppCompatActivity {
                                 description = xpp.nextText();
                                 publishProgress(40);
                             }
-                        }else if (xpp.getName().equalsIgnoreCase("link")) {
+                        } else if (xpp.getName().equalsIgnoreCase("link")) {
                             if (inItem) {
                                 link = xpp.nextText();
                                 publishProgress(60);
                             }
-                        }else if (xpp.getName().equalsIgnoreCase("pubDate")) {
+                        } else if (xpp.getName().equalsIgnoreCase("pubDate")) {
                             if (inItem) {
                                 date = xpp.nextText();
                                 publishProgress(80);
@@ -304,7 +348,7 @@ public class bbcnews extends AppCompatActivity {
                         }
                     } else if (EVENT_TYPE == XmlPullParser.END_TAG && xpp.getName().equalsIgnoreCase("item")) {
                         inItem = false;
-                        newsList.add(new News(0,title,description,date,link,false));
+                        newsList.add(new News(0, title, description, date, link, false));
                         publishProgress(100);
                     }
 
@@ -322,14 +366,13 @@ public class bbcnews extends AppCompatActivity {
             return null;
         }
 
-        protected void onProgressUpdate(Integer... values){
+        protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(values[0]);
         }
 
-
-        protected void onPostExecute(List<News> s){
+        protected void onPostExecute(List<News> s) {
             super.onPostExecute(s);
             progressBar.setVisibility(View.VISIBLE);
 //            progressBar.setVisibility(View.INVISIBLE);

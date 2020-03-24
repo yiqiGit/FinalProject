@@ -13,6 +13,12 @@ import android.widget.TextView;
 
 import com.example.finalproject.R;
 
+/**
+ * This class is details fragment class.
+ *
+ *@author Xiaoting Kong
+ *@version 1.0
+ */
 public class DetailsFragment extends Fragment {
 
     private Bundle dataFromActivity;
@@ -23,35 +29,33 @@ public class DetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.bbc_activity_details_fragment, container, false);
         dataFromActivity = getArguments();
 
-        String information_f = dataFromActivity.getString(bbcnews.ITEM_INFORMATION);
-        String link_f = dataFromActivity.getString(bbcnews.ITEM_LINK);
-        TextView message = (TextView)result.findViewById(R.id.TextView_f_1);
+        String information_f = dataFromActivity.getString(BbcNews.ITEM_INFORMATION);
+        String link_f = dataFromActivity.getString(BbcNews.ITEM_LINK);
+        TextView message = (TextView) result.findViewById(R.id.TextView_f_1);
 //        TextView link = (TextView)result.findViewById(R.id.TextView_f_2);
         message.setText(information_f);
 //        link.setText(link_f);
 
-        Button finishButton = (Button)result.findViewById(R.id.hide_button);
-        finishButton.setOnClickListener( clk -> {
+        Button finishButton = (Button) result.findViewById(R.id.hide_button);
+        finishButton.setOnClickListener(clk -> {
             //Tell the parent activity to remove
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
-                parentActivity.finish();
+            parentActivity.finish();
         });
         return result;
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         //context will either be FragmentExample for a tablet, or EmptyActivity for phone
-        parentActivity = (AppCompatActivity)context;
+        parentActivity = (AppCompatActivity) context;
     }
 }
