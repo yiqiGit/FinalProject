@@ -4,4 +4,10 @@
     <string name="button2">button 2</string>
     <string name="button3">button 3</string>
     <string name="button4">button 4</string>
+
+    <string name="bbc_title">Help menu</string>
+    <string name="bbc_message1">The selected row is: </string>
+    <string name="bbc_message2">The database id:</string>
+    <string name="bbc_back">Back to front</string>
+
 </resources>

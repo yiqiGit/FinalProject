@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.finalproject.BBCNews.bbcnews;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextPage);
         });
         buttonFunction2.setOnClickListener(click -> {
-            Intent nextPage = new Intent(this, Function2.class);
+            Intent nextPage = new Intent(this, bbcnews.class);
             startActivity(nextPage);
         });
         buttonFunction3.setOnClickListener(click -> {
@@ -36,13 +38,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
     }
 
     @Override
