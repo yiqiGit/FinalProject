@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:id="@+id/bbc"
+        android:orderInCategory="10"
+        app:showAsAction="always"
+        android:icon="@drawable/bbc"
+        android:title="BBC News"
+
+        />
+    <item android:id="@+id/earth"
+        android:orderInCategory="30"
+        app:showAsAction="always"
+        android:icon="@drawable/earth"
+        android:title="Nasa Earth Imagery"
+
+        />
+    <item android:id="@+id/guardian"
+        android:orderInCategory="40"
+        app:showAsAction="always"
+        android:icon="@drawable/the_guardian_icon"
+        android:title="The Guardian News"
+
+        />
+
+
+    <item android:id="@+id/nasaImage"
+        android:orderInCategory="20"
+        app:showAsAction="always"
+        android:icon="@drawable/nasa_logo"
+        android:title="Nasa Image of the Day"
+
+        />
+</menu>

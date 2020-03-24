@@ -64,18 +64,8 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
             searchText = search.getText().toString();
 
 
-//            if (fetchNews != null) {
-//                fetchNews.cancel(true);
-//            }
-//            fetchNews = new MyHTTPRequest();
-//            fetchNews.execute();
-
-
             Intent intent1 = new Intent(this, GuardianList.class);
             intent1.putExtra("searchWord", searchText);
-//            intent1.putStringArrayListExtra("WebsiteTitles", webTitle);
-//            intent1.putStringArrayListExtra("WebsiteUrls", webUrl);
-//            intent1.putStringArrayListExtra("SectionNames", sectionName);
 
             startActivity(intent1);
         });
