@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Function3 extends AppCompatActivity {
+public class Bbbnews extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
