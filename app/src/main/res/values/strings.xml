@@ -38,4 +38,8 @@
     <string name="searchButtonChang">Search</string>
     <string name="addToFavoriteButtonChang">Add to Favorite</string>
     <string name="showFavoriteButtonChang">Show Favorite List</string>
+
+    //Guardian string
+    <string name="guardian_open">open</string>
+    <string name="guardian_close">close</string>
 </resources>

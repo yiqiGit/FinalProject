@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, BbcNews.class));
                 break;
             case R.id.guardian:
-                startActivity(new Intent(MainActivity.this, Function4.class));
+                startActivity(new Intent(MainActivity.this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
                 startActivity(new Intent(MainActivity.this, ImageSearch.class));
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, BbcNews.class));
                 break;
             case R.id.guardian:
-                startActivity(new Intent(MainActivity.this, Function4.class));
+                startActivity(new Intent(MainActivity.this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
                 startActivity(new Intent(MainActivity.this, ImageSearch.class));
