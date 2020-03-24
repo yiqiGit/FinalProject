@@ -1,14 +1,16 @@
-package com.example.finalproject;
+package com.example.finalproject.yiqiFunction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Function4 extends AppCompatActivity {
+import com.example.finalproject.R;
+
+public class FavouriteList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_function4);
+        setContentView(R.layout.activity_favourite_list);
     }
 }

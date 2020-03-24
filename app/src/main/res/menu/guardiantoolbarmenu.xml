@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/overflowMenu"
+        android:title="Overflow Menu"
+        app:showAsAction="never"
+        android:orderInCategory="1"/>
+
+    <item android:id="@+id/questionIcon"
+        android:icon="@drawable/guardian_question"
+        android:title="Choice 1"
+        app:showAsAction="always"
+        android:orderInCategory="2"/>
+
+    <item android:id="@+id/infoIcon"
+        android:icon="@drawable/guardian_info"
+        android:title="Choice 2"
+        app:showAsAction="always"
+        android:orderInCategory="3"/>
+
+    <item android:id="@+id/checkIcon"
+        android:icon="@drawable/guardian_check"
+        android:title="Choice 3"
+        app:showAsAction="always"
+        android:orderInCategory="4"/>
+
+</menu>
