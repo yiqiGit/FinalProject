@@ -17,7 +17,7 @@
     <string name="welcomeMessage">Welcome to Nasa Image of the Day! Your last login was on</string>
     <string name="appPref" translatable="false">NasaAppPrefs</string>
     <string name="dateKey" translatable="false">dateKey</string>
-    <string name="info" >To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+    <string name="info">To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
     <string name="header">Nasa Image of the Day</string>
     <string name="searchBtn">Search</string>
     <string name="hdUrlLink">Open HD image on browser</string>
@@ -32,4 +32,10 @@
     <string name="bbc_message1">The selected row is: </string>
     <string name="bbc_message2">The database id:</string>
     <string name="bbc_back">Back to front</string>
+
+    <string name="lonTextChang">type lon info</string>
+    <string name="latTextChang">type lat info</string>
+    <string name="searchButtonChang">Search</string>
+    <string name="addToFavoriteButtonChang">Add to Favorite</string>
+    <string name="showFavoriteButtonChang">Show Favorite List</string>
 </resources>
