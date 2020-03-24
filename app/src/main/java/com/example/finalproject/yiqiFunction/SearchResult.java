@@ -4,22 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,15 +33,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import static org.xmlpull.v1.XmlPullParser.END_TAG;
-import static org.xmlpull.v1.XmlPullParser.START_TAG;
-import static org.xmlpull.v1.XmlPullParser.TEXT;
+import java.util.ArrayList;
 
 public class SearchResult extends AppCompatActivity {
     AsyncTask<String, Integer, String> fetchImage;
+    ProgressBar progressBar;
     String lonInfo;
     String latInfo;
+
+    private ArrayList<ImageInfo> elements = new ArrayList<>();
+ //   private MyListAdapter myAdapter;
+    SQLiteDatabase db;
+
+    public static final String ITEM_SELECTED = "ITEM";
+    public static final String ITEM_POSITION = "POSITION";
+    public static final String ITEM_ID = "ID";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +64,27 @@ public class SearchResult extends AppCompatActivity {
         lonInformation.setText("lon: "+ lonInfo);
         latInformation.setText("lat: "+ latInfo);
 
+        progressBar = findViewById(R.id.simpleProgressBarChang);
+        progressBar.setVisibility(View.VISIBLE);
+
         if (fetchImage != null) {
             fetchImage.cancel(true);
         }
         fetchImage = new ImageQuery();
         fetchImage.execute();
+
+        Button addToFavourite = (Button)findViewById(R.id.addToFavoriteBtnChang);
+        addToFavourite.setOnClickListener(click -> {
+
+        });
+
+        Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
+        showFavourite.setOnClickListener(click -> {
+            Intent nextPage = new Intent(this, FavouriteList.class);
+            startActivity(nextPage);
+        });
+
+
     }
     private class ImageQuery extends AsyncTask<String, Integer, String> {
 
@@ -147,6 +171,8 @@ public class SearchResult extends AppCompatActivity {
         }
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgress(values[0]);
         }
 
         protected void onPostExecute(String sentFromDoInBackground) {
@@ -168,7 +194,7 @@ public class SearchResult extends AppCompatActivity {
             TextView serviceVersionInformation = findViewById(R.id.serviceInfoChang);
             serviceVersionInformation.setText("Service Version: " + imageServiceVersion);
 
-
+            progressBar.setVisibility(View.INVISIBLE);
 
 
         }

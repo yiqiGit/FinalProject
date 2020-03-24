@@ -51,4 +51,10 @@
         android:id="@+id/showFavoriteBtnChang"
         android:text="@string/showFavoriteButtonChang"/>
 
+    <ProgressBar
+        android:id="@+id/simpleProgressBarChang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
 </LinearLayout>
