@@ -72,13 +72,33 @@ import java.util.List;
 import java.util.Locale;
 
 public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
-
+    /**
+     * When this EditText view is clicked, a popup calendar will show, allowing the user to pick a date.
+     */
     private EditText dateBox;
+    /**
+     * This is the actual date picker element that will pop up.
+     */
     private DatePickerDialog datePicker;
+    /**
+     * Button that triggers the url inquiry.
+     */
     private Button searchBtn;
+    /**
+     * Button that calls methods to save the image to file, and the data itself to database
+     */
     private Button saveButton;
+    /**
+     * Button that clears all the data from the screen, resetting to initial state.
+     */
     private Button clearButton;
+    /**
+     * Button that takes to the favourites page.
+     */
     private Button favoritesButton;
+    /**
+     *
+     */
     public static final String DESCRIPTION_KEY = "description";
     public static final String URL_KEY = "url";
     public static final String HD_URL_KEY = "hdUrl";
@@ -134,6 +154,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         /*This button will make the app connect and download the image*/
         searchBtn.setOnClickListener(click->{
             myImage = null;
+            nasaLogo.setVisibility(View.INVISIBLE);
             ImageQuery imageQuery = new ImageQuery();
             imageQuery.execute(URL_PATH+getSelectedDate());
 
@@ -384,12 +405,12 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPostExecute(String s) {
-            //super.onPostExecute(s);
+
             progBar.setVisibility(View.INVISIBLE);
             imageTitle.setText(myImage.getTitle());
             imagePreview.setImageBitmap(image);
             results.setVisibility(View.VISIBLE);
-            nasaLogo.setVisibility(View.INVISIBLE);
+            //nasaLogo.setVisibility(View.INVISIBLE);
 
         }
 
