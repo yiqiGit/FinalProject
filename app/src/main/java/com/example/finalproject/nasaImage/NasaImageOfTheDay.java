@@ -73,32 +73,95 @@ import java.util.Locale;
 
 public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
+    /**
+     * When this EditText view is clicked, a popup calendar will show, allowing the user to pick a date.
+     */
     private EditText dateBox;
+    /**
+     * This is the actual date picker element that will pop up.
+     */
     private DatePickerDialog datePicker;
+    /**
+     * Button that triggers the url inquiry.
+     */
     private Button searchBtn;
+    /**
+     * Button that calls methods to save the image to file, and the data itself to database
+     */
     private Button saveButton;
+    /**
+     * Button that clears all the data from the screen, resetting to initial state.
+     */
     private Button clearButton;
+    /**
+     * Button that takes to the favourites page.
+     */
     private Button favoritesButton;
+    /**
+     *This field is used as a key for the item description when adding information on {@link Bundle} to other activities
+     */
     public static final String DESCRIPTION_KEY = "description";
+    /**
+     *This field is used as a key for the item url when adding information on {@link Bundle} to other activities
+     */
     public static final String URL_KEY = "url";
+    /**
+     *This field is used as a key for the item's hd url when adding information on {@link Bundle} to other activities
+     */
     public static final String HD_URL_KEY = "hdUrl";
+    /**
+     *This field is used as a key for the item's title when adding information on {@link Bundle} to other activities
+     */
     public static final String TITLE_KEY = "title";
+    /**
+     *This field is used as a key for the image's path url when adding information on {@link Bundle} to other activities
+     */
     public static final String FILE_PATH = "filePath";
+    /**
+     * This is the root url used to access the nasaImages API. Simply concatenate the date string at the end.
+     */
     private static final String URL_PATH =
             "https://api.nasa.gov/planetary/apod?api_key=3tB4vqPWVWSdjGS4yOaRaDFMu8m4YUHgrhcRqXII&date=";
-    //private List<NasaImage> imagesArray;
+    /**
+     *This variable holds the selected date as a String.
+     */
     private String selectedDate;
+    /**
+     * This Class holds the information about each image that is downloaded and saved.
+     */
     private NasaImage myImage;
+    /**
+     * This is where the {@link Bitmap} image file is stored during program execution
+     */
     private Bitmap image;
+    /**
+     * This is a helper object to access {@link SQLiteDatabase} methods.
+     */
     private static SQLiteDatabase db;
+    /**
+     * This is a format for the date that holds the last login date information.
+     */
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMMM yyyy", Locale.CANADA);
+    /**
+     * Shared preferences object to help store last login date.
+     */
     private SharedPreferences preferences;
-    private ItemFragment dFragment;
-    private FragmentManager fm = getSupportFragmentManager();
+    /**
+     * This is where the image's title is displayed after downloaded.
+     */
     private TextView imageTitle;
+    /**
+     * This is where the actual image is displayed after downloaded.
+     */
     private TextView urlLink;
     private ImageView imagePreview;
+    /**
+     * This object holds the other elements that display image data. Its purpose is simply to turn the visibility on or off
+     */
     private RelativeLayout results;
+    /**
+     * This object holds the main page Nasa logo
+     */
     private ImageView nasaLogo;
 
     public void onCreate(Bundle savedInstanceState){
@@ -120,7 +183,17 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         results = (RelativeLayout) findViewById(R.id.resultsContainer);
         nasaLogo = (ImageView) findViewById(R.id.nasaLogo);
 
-
+        urlLink.setOnClickListener(click->{
+            if(myImage.getHdImageUrl()!=null) {
+                Intent browserIntent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(myImage.getHdImageUrl()));
+                startActivity(browserIntent);
+            }
+            else{
+                Toast.makeText(this, "HD url not available.", Toast.LENGTH_LONG).show();
+            }
+        });
         Toolbar myToolbar = (Toolbar)findViewById(R.id.menuBar);
         setSupportActionBar(myToolbar);
 
@@ -134,6 +207,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         /*This button will make the app connect and download the image*/
         searchBtn.setOnClickListener(click->{
             myImage = null;
+            nasaLogo.setVisibility(View.INVISIBLE);
             ImageQuery imageQuery = new ImageQuery();
             imageQuery.execute(URL_PATH+getSelectedDate());
 
@@ -194,12 +268,21 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         });
     }
 
+    /**
+     * This method queries the database for the image's filename, and returns a cursor with the results, if any.
+     * @param fName the file name that is being searched for
+     * @return Cursor object holding the results
+     */
     private Cursor queryForImageFile(String fName){
         return db.query(true, DbOpener.TABLE_NAME, new String[]{DbOpener.COL_ID}, DbOpener.COL_FILE_NAME + " like ?",
                 new String[]{fName}, null, null, null, null);
 
     }
 
+    /**
+     * This method logs the information about the image file, which is contained in the {@link Cursor} object.
+     * @param c Cursor object holding the results from the query for image file name.
+     */
     private void printCursor(Cursor c){
 
         int titleInd = c.getColumnIndex(DbOpener.COL_TITLE);
@@ -243,6 +326,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         return true;
     }
 
+    /**
+     * This method saves a string to the project's {@link SharedPreferences}
+     * @param s String to be saved in the SharedPreferences
+     * @return true if successful, or false otherwise.
+     */
     private boolean saveSharedPreferences(String s){
         //creates a SharedPreference object, referring to the file contained in the Strings file_key, using the mode MODE_PRIVATE
         //source of help: https://stackoverflow.com/questions/4531396/get-value-of-a-edit-text-field
@@ -258,6 +346,10 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
     }
 
+    /**
+     * This method displays a welcome message informing the last login date.
+     * @param date last login date.
+     */
     private void welcomeDialog(String date){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         String message = getString(R.string.welcomeMessage) + " " + date;
@@ -267,6 +359,12 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 })
                 .create().show();
     }
+
+    /**
+     * Inserts the information contained in the NasaImage object to the database
+     * @param image NasaImage object
+     * @return long variable with the id generated for this last inserted row
+     */
     private static long insertIntoDb(NasaImage image){
         //add to the database and get the new ID
         ContentValues newRowValues = new ContentValues();
@@ -285,7 +383,10 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
     }
 
-
+    /**
+     * Saves the {@link Bitmap} image file to disk
+     * @throws IOException
+     */
     private void saveImage() throws IOException{
         //This is where the Bitmap file is saved to disk
         FileOutputStream outputStream = openFileOutput(myImage.getFileName(), Context.MODE_PRIVATE);
@@ -384,15 +485,20 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPostExecute(String s) {
-            //super.onPostExecute(s);
             progBar.setVisibility(View.INVISIBLE);
             imageTitle.setText(myImage.getTitle());
             imagePreview.setImageBitmap(image);
             results.setVisibility(View.VISIBLE);
-            nasaLogo.setVisibility(View.INVISIBLE);
+
 
         }
 
+        /**
+         * Establishes a {@link HttpURLConnection} for the requested url
+         * @param requestedUrl the url to be accessed
+         * @return a connection object of type HttpURLConnection
+         * @throws IOException
+         */
         private HttpURLConnection startConnection(String requestedUrl) throws IOException {
 
             URL url = new URL(requestedUrl);
@@ -400,6 +506,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         }
 
+        /**
+         * downloads the image file from the requested url
+         * @param url the url for the image
+         * @throws IOException
+         */
         private void downloadFile(String url) throws IOException{
             connection = startConnection(url);
             connection.connect();
@@ -411,6 +522,10 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             }
         }
 
+        /**
+         * Loads the image file with name <fileName> from disk into the field image
+         * @param fileName image fileName
+         */
         private void loadFile(String fileName){
             FileInputStream fis = null;
             try {
@@ -422,11 +537,23 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             Log.i("doInBackground: ", "Image " + fileName + " found on disk.");
         }
 
+        /**
+         * Checks if the given fileName exists on disk
+         * @param fileName
+         * @return true if exists or false if it doesn't
+         */
         private boolean existOnDisk(String fileName){
             File file = getBaseContext().getFileStreamPath(fileName);
             return file.exists();
         }
 
+        /**
+         * Creates a {@link BufferedReader} to store the data from the InputStream. Creates a {@link StringBuilder} to
+         * append the data read from the BufferedReader into a single String. Creates and return a {@link JSONObject} using this newly formed String.
+         * @return JSONObject
+         * @throws IOException
+         * @throws JSONException
+         */
         private JSONObject getJsonObject() throws IOException, JSONException {
             BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
