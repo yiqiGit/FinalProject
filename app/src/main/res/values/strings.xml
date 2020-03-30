@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">FinalProject</string>
-    <string name="button1">button 1</string>
-    <string name="button2">button 2</string>
-    <string name="button3">button 3</string>
-    <string name="button4">button 4</string>
 
     <!-- Strings for nasa image of the day app -->
     <string name="datePicker">Select a date</string>
@@ -28,10 +24,22 @@
     <string name="back">Back to Main</string>
     <string name="open" translatable="false">open</string>
 
+     //bbcnews
     <string name="bbc_title">Help menu</string>
     <string name="bbc_message1">The selected row is: </string>
     <string name="bbc_message2">The database id:</string>
     <string name="bbc_back">Back to front</string>
+    <string name="bbc_yes">Yes</string>
+    <string name="bbc_no">No</string>
+    <string name="bbc_checkinfo">Check information</string>
+    <string name="bbc_intro">Introduction for this page: </string>
+    <string name="bbc_homepage">Home page</string>
+    <string name="bbc_favouriteList">Favourite list</string>
+    <string name="bbc_refresh">Refresh</string>
+    <string name="bbc_delete">Do you want to delete? </string>
+    <string name="bbc_addToFavour">Added to favourite list</string>
+    <string name="bbc_search">Search</string>
+    <string name="bbc_type">Type here </string>
 
     <string name="lonTextChang">type lon info</string>
     <string name="latTextChang">type lat info</string>
