@@ -38,9 +38,9 @@ public class DetailsFragment extends Fragment {
         String information_f = dataFromActivity.getString(BbcNews.ITEM_INFORMATION);
         String link_f = dataFromActivity.getString(BbcNews.ITEM_LINK);
         TextView message = (TextView) result.findViewById(R.id.TextView_f_1);
-//        TextView link = (TextView)result.findViewById(R.id.TextView_f_2);
+        TextView link = (TextView)result.findViewById(R.id.TextView_f_2);
         message.setText(information_f);
-//        link.setText(link_f);
+        link.setText("Click here : "+link_f);
 
         Button finishButton = (Button) result.findViewById(R.id.hide_button);
         finishButton.setOnClickListener(clk -> {
