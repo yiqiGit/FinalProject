@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //bbc news
+    <string name="bbc_title">帮助菜单</string>
+    <string name="bbc_message1">选中行： </string>
+    <string name="bbc_message2">数据库ID:</string>
+    <string name="bbc_back">返回</string>
+    <string name="bbc_yes">是</string>
+    <string name="bbc_no">否</string>
+    <string name="bbc_checkinfo">查看</string>
+    <string name="bbc_intro">页面使用介绍</string>
+    <string name="bbc_homepage">主页</string>
+    <string name="bbc_favouriteList">收藏夹</string>
+    <string name="bbc_refresh">刷新</string>
+    <string name="bbc_delete">确认删除？ </string>
+    <string name="bbc_addToFavour">加入收藏</string>
+    <string name="bbc_search">搜索</string>
+    <string name="bbc_type">输入</string>
+</resources>
