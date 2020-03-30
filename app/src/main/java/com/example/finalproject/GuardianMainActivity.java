@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.finalproject.GuardianNews.GuardianFavoriteList;
 import com.example.finalproject.GuardianNews.GuardianList;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -111,8 +112,8 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
                         .create().show();
                 break;
             case R.id.checkIcon:
-                Snackbar.make(findViewById(R.id.checkIcon), "You clicked on check icon",Snackbar.LENGTH_SHORT).show();
-                message = "You clicked on check icon";
+                Intent intent = new Intent (this, GuardianFavoriteList.class);
+                startActivity(intent);
                 break;
         }
 

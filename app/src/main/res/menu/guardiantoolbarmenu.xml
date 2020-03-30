@@ -20,7 +20,7 @@
         android:orderInCategory="3"/>
 
     <item android:id="@+id/checkIcon"
-        android:icon="@drawable/guardian_check"
+        android:icon="@drawable/guardian_fav"
         android:title="Choice 3"
         app:showAsAction="always"
         android:orderInCategory="4"/>

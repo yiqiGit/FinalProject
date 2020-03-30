@@ -3,14 +3,20 @@ package com.example.finalproject.GuardianNews;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.yiqiFunction.MyOpener;
 
 public class GuardianNewsPage extends AppCompatActivity {
 
@@ -21,6 +27,10 @@ public class GuardianNewsPage extends AppCompatActivity {
     String webTitle;
     String webUrl;
     String sectionName;
+
+ GuardianOpener dbHelper;
+ SQLiteDatabase db;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -49,6 +59,35 @@ public class GuardianNewsPage extends AppCompatActivity {
         urlTV.setText(Html.fromHtml(link));
 
 
+        //Button add favorite
+
+        Button favButton = findViewById(R.id.favButton);
+        favButton.setOnClickListener((click) -> {
+
+//            // intent send info to GuardianFavoriteList
+//            Intent intent2 = new Intent (this, GuardianFavoriteList.class);
+//            intent2.putExtra("favTitle", webTitle);
+//            intent2.putExtra("favUrl", webUrl);
+//            intent2.putExtra("favSectionName", sectionName);
+
+            // put info into database
+         dbHelper = new GuardianOpener(getApplicationContext());
+         db = dbHelper.getWritableDatabase();
+
+        ContentValues newRowValues = new ContentValues();
+        newRowValues.put (GuardianOpener.COL_TITLE, webTitle);
+        newRowValues.put (GuardianOpener.COL_URL, webUrl);
+        newRowValues.put (GuardianOpener.COL_SECTIONNAME, sectionName);
+
+        long newId = db.insert(GuardianOpener.TABLE_NAME, null, newRowValues);
+
+
+            Toast.makeText(this, "This page has been added to Favorite", Toast.LENGTH_SHORT).show();
+
+
+        });
 
     }
+
+
 }

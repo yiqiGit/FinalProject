@@ -42,4 +42,19 @@
     //Guardian string
     <string name="guardian_open">open</string>
     <string name="guardian_close">close</string>
+
+    <string name="G_MainTitle">The Guardian News</string>
+    <string name="G_MainHint">Enter key word without space</string>
+    <string name="G_Search">Search</string>
+    <string name="G_UrlTitle">Click on the following link to access the news: </string>
+    <string name="G_SectionTitle">Section Name of this article: </string>
+    <string name="G_AddToFav">Add to Favorite</string>
+    <string name="G_FavTitle">Favorite List</string>
+    <string name="G_DrawerHeader">Welcome to The Guardian News</string>
+
+
+
+
+
+
 </resources>

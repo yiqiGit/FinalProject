@@ -1,6 +1,8 @@
 package com.example.finalproject.GuardianNews;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,10 +37,12 @@ public class GuardianList extends AppCompatActivity {
     ArrayList<String> webTitles = new ArrayList<>();
     ArrayList<String> webUrls = new ArrayList<>();
     ArrayList<String> sectionNames = new ArrayList<>();
+
     ListView newslv;
     String jsonResult;
     private ArrayList<GuardianNews> elements = new ArrayList<>();
 
+    //database and adapter
     SQLiteDatabase db = null;
     NewsAdaptor na;
 
@@ -61,15 +66,18 @@ public class GuardianList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guardian_list);
+
         //ListView
+        newslv = findViewById(R.id.guardianListView);
         Intent getInfo = getIntent();
-//        webTitles = getInfo.getStringArrayListExtra("WebsiteTitles");
-//        webUrls = getInfo.getStringArrayListExtra("WebsiteUrls");
-//        sectionNames = getInfo.getStringArrayListExtra("SectionNames");
         searchText = getInfo.getStringExtra("searchWord");
-        //Internet connection + Progress bar
+
         mProgressBar = findViewById(R.id.progressBar);
         //mProgressBar.setVisibility(View.VISIBLE);
+
+        // Fragment
+        FrameLayout fl = findViewById(R.id.fragmentLocation);
+        Boolean isTablet= findViewById(R.id.fragmentLocation) != null;
 
         //Internet Connection
 
@@ -112,7 +120,6 @@ public class GuardianList extends AppCompatActivity {
         // ListView Adaptor
         na = new NewsAdaptor();
 
-        newslv = findViewById(R.id.guardianListView);
         newslv.setAdapter(na);
 
         //ListView onclickListener
@@ -126,6 +133,20 @@ public class GuardianList extends AppCompatActivity {
                 intent.putExtra("section", sectionNames.get(position));
                 startActivity(intent);
             }
+        });
+
+        //Fragment onLongclick
+        newslv.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (isTablet) {
+                Fragment fg2 = getSupportFragmentManager().findFragmentById(R.id.fragmentLocation);
+
+                if (fg2 != null){
+                    getSupportFragmentManager().beginTransaction().remove(fg2).commit();
+                }
+
+            }
+            return true;
+
         });
 
 
@@ -239,7 +260,6 @@ public class GuardianList extends AppCompatActivity {
 //            TextView t  = findViewById(R.id.temp);
 //            t.setText(baseURL+searchText);
 
-            mProgressBar.setVisibility(View.VISIBLE);
 
         }
     }

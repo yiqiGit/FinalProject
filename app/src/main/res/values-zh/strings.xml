@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="G_MainTitle">卫报</string>
+    <string name="G_MainHint">请输入关键字</string>
+    <string name="G_Search">搜索</string>
+    <string name="G_UrlTitle">请点击以下链接阅读新闻： </string>
+    <string name="G_SectionTitle">文章类别： </string>
+    <string name="G_AddToFav">加入收藏</string>
+    <string name="G_FavTitle">收藏列表</string>
+    <string name="G_DrawerHeader">欢迎来到卫报阅读器</string>
+
+
+
+
+</resources>
