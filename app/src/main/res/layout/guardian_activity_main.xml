@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The Guardian News"
+                android:text="@string/G_MainTitle"
                 android:textSize="50dp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -44,13 +44,13 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:layout_marginTop="50dp"
-                android:hint="Enter key word without space"/>
+                android:hint="@string/G_MainHint"/>
 
             <Button
                 android:id="@+id/searchB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search"/>
+                android:text="@string/G_Search"/>
 
         </LinearLayout>
         <com.google.android.material.navigation.NavigationView

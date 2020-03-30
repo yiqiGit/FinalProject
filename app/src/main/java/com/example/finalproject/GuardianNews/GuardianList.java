@@ -1,6 +1,8 @@
 package com.example.finalproject.GuardianNews;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,46 +33,117 @@ import android.os.Bundle;
 
 import com.example.finalproject.R;
 
+/**
+ * This is list of news found with the key word entered in the GuardianMainActivity.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
+
+
 public class GuardianList extends AppCompatActivity {
+
+    /**
+     * ArrayList of String which stores the titles of news.
+     */
     ArrayList<String> webTitles = new ArrayList<>();
+
+    /**
+     * ArrayList of String which stores the urls of news.
+     */
     ArrayList<String> webUrls = new ArrayList<>();
+
+    /**
+     * ArrayList of String which stores the section names of news.
+     */
     ArrayList<String> sectionNames = new ArrayList<>();
+
+    /**
+     * ListView that display all news.
+     */
     ListView newslv;
+
+    /**
+     * jsonResult is the string that combine base url of The Guardian with the user input key word.
+     */
     String jsonResult;
+
+    /**
+     * ArrayList of GuardianNews called elements.
+     */
     private ArrayList<GuardianNews> elements = new ArrayList<>();
 
+    //database and adapter
+    /**
+     * db is the database
+     */
     SQLiteDatabase db = null;
+
+    /**
+     * na is a NewsAdaptor.
+     */
     NewsAdaptor na;
 
 
     //internet connection + bundle
+
+    /**
+     * jsonStr is the string that put the fetched result into one string.
+     */
     String jsonStr;
+    /**
+     * This is an array of JSON objects.
+     */
     JSONArray resultArray;
+
+    /**
+     * ArrayList of JSONobject which stores the fetched JSON objects.
+     */
     ArrayList<JSONObject> news = new ArrayList<>();
 
 
-
+    /**
+     * The API url for The Guardian news.
+     */
     String baseURL = "https://content.guardianapis.com/search?api-key=1fb36b70-1588-4259-b703-2570ea1fac6a&q=";
+
+    /**
+     * User input get from GuardianMainActivity.
+     */
     String searchText;
 
     //Progress bar + AsyncTask
+    /**
+     * The progress bar that shows the progress of data fetching.
+     */
     ProgressBar mProgressBar;
+
+    /**
+     * AsyncTask for internet connection and data fetching.
+     */
     AsyncTask<String, Integer, String> fetchNews;
 
 
+    /**
+     * onCreate method of GuardianList which displays the title, and contains
+     * functionality of progress bar and list view with onclickListener.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guardian_list);
+
         //ListView
+        newslv = findViewById(R.id.guardianListView);
         Intent getInfo = getIntent();
-//        webTitles = getInfo.getStringArrayListExtra("WebsiteTitles");
-//        webUrls = getInfo.getStringArrayListExtra("WebsiteUrls");
-//        sectionNames = getInfo.getStringArrayListExtra("SectionNames");
         searchText = getInfo.getStringExtra("searchWord");
-        //Internet connection + Progress bar
+
         mProgressBar = findViewById(R.id.progressBar);
         //mProgressBar.setVisibility(View.VISIBLE);
+
+        // Fragment
+        FrameLayout fl = findViewById(R.id.fragmentLocation);
+        Boolean isTablet= findViewById(R.id.fragmentLocation) != null;
 
         //Internet Connection
 
@@ -112,7 +186,6 @@ public class GuardianList extends AppCompatActivity {
         // ListView Adaptor
         na = new NewsAdaptor();
 
-        newslv = findViewById(R.id.guardianListView);
         newslv.setAdapter(na);
 
         //ListView onclickListener
@@ -128,9 +201,26 @@ public class GuardianList extends AppCompatActivity {
             }
         });
 
+        //Fragment onLongclick
+        newslv.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (isTablet) {
+                Fragment fg2 = getSupportFragmentManager().findFragmentById(R.id.fragmentLocation);
+
+                if (fg2 != null){
+                    getSupportFragmentManager().beginTransaction().remove(fg2).commit();
+                }
+
+            }
+            return true;
+
+        });
+
 
     }
 
+    /**
+     * Adaptor class for the list view to display each row with guardianrow layout.
+     */
 
     private class NewsAdaptor extends BaseAdapter {
 
@@ -173,8 +263,17 @@ public class GuardianList extends AppCompatActivity {
 
     }
 
+    /**
+     * HTTPRequest class which extends from AsyncTask for internet connection.
+     */
+
     private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
-        //Type3                Type1
+
+        /**
+         * doInBackground returns the string item of AsyncTask
+         */
+
+        //Type1
         public String doInBackground(String... args) {
             try {
 
@@ -210,9 +309,8 @@ public class GuardianList extends AppCompatActivity {
                     }
                     jsonStr = sb.toString(); //result is the whole string
 
-                    publishProgress(75);
                 }
-
+                publishProgress(75);
 
             } catch (Exception e) {
                 Log.e("AsyncError", e.getMessage());
@@ -222,15 +320,20 @@ public class GuardianList extends AppCompatActivity {
             return jsonStr;
 
         }
-
+        /**
+         * onProgressUpdate returns the integer item of AsyncTask
+         */
         //Type 2
         public void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //Update GUI stuff only:
             mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setProgress(values[0]);
+           // mProgressBar.setProgress(values[0]);
         }
 
+        /**
+         * onPostExecute returns the last string item of AsyncTask
+         */
         //Type3
         public void onPostExecute(String fromDoInBackground) {
             //Log.i("HTTP", fromDoInBackground);
@@ -239,7 +342,6 @@ public class GuardianList extends AppCompatActivity {
 //            TextView t  = findViewById(R.id.temp);
 //            t.setText(baseURL+searchText);
 
-            mProgressBar.setVisibility(View.VISIBLE);
 
         }
     }

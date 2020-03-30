@@ -16,4 +16,27 @@
     <string name="bbc_addToFavour">加入收藏</string>
     <string name="bbc_search">搜索</string>
     <string name="bbc_type">输入</string>
+
+    //Guardian News
+    <string name="G_MainTitle">卫报</string>
+    <string name="G_MainHint">请输入关键字</string>
+    <string name="G_Search">搜索</string>
+    <string name="G_UrlTitle">请点击以下链接阅读新闻： </string>
+    <string name="G_SectionTitle">文章类别： </string>
+    <string name="G_AddToFav">加入收藏</string>
+    <string name="G_FavTitle">收藏列表</string>
+    <string name="G_DrawerHeader">欢迎来到卫报阅读器</string>
+
+    <string name="G_OverFlowMenu">点击浮云</string>
+    <string name="G_QuestionIcon">点击问号</string>
+    <string name="G_Instruction1">1. 搜寻想要查询的信息</string>
+    <string name="G_Instruction2">2. 在新闻列表点击查看全部</string>
+    <string name="G_Instruction3">3. 在新闻详细内容，点击链接看新闻，点击加入收藏来收藏</string>
+    <string name="G_Instruction4">4. 主页面有个小心心，点击查看收藏</string>
+    <string name="G_Instruction5">5. 收藏页面快击查看新闻，长按选择删除</string>
+
+    <string name="G_Yes">是</string>
+    <string name="G_No">否</string>
+    <string name="G_Dismiss">取消</string>
+
 </resources>

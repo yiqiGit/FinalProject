@@ -50,4 +50,32 @@
     //Guardian string
     <string name="guardian_open">open</string>
     <string name="guardian_close">close</string>
+
+    <string name="G_MainTitle">The Guardian News</string>
+    <string name="G_MainHint">Enter key word without space</string>
+    <string name="G_Search">Search</string>
+    <string name="G_UrlTitle">Click on the following link to access the news: </string>
+    <string name="G_SectionTitle">Section Name of this article: </string>
+    <string name="G_AddToFav">Add to Favorite</string>
+    <string name="G_FavTitle">Favorite List</string>
+    <string name="G_DrawerHeader">Welcome to The Guardian News</string>
+
+    <string name="G_OverFlowMenu">You clicked on the overflow menu</string>
+    <string name="G_QuestionIcon">You clicked on question icon</string>
+    <string name="G_Instruction1">1. Enter a key word in the search area, then click on "Search" button to search for news with the key words.</string>
+    <string name="G_Instruction2">2. In the News list, click on one item to see details about a news.</string>
+    <string name="G_Instruction3">3. In the detailed news page, click on the Url to read the news. Click on "Add to Favorite" to add this news to the favorite list.</string>
+    <string name="G_Instruction4">4. In the main menu, there is a favorite button on the toolbar, click on it to see the list of favorite news.</string>
+    <string name="G_Instruction5">5. In the Favorite list, short click to see details about the news, and long click to delete the news from favorite list.</string>
+
+    <string name="G_Yes">Yes</string>
+    <string name="G_No">No</string>
+    <string name="G_Dismiss">Dismiss</string>
+
+
+
+
+
+
+
 </resources>
