@@ -15,18 +15,34 @@ import android.widget.TextView;
 
 import com.example.finalproject.GuardianNews.GuardianList;
 
-public class GuardianDetailsFragment extends Fragment {
+/**
+ * This is the class to define the fragment layout for tablet.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
 
+public class GuardianDetailsFragment extends Fragment {
     private AppCompatActivity parentActivity;
+
+    /**
+     * This is the bundle of information from parent activity.
+     */
     private Bundle dataFromActivity;
 
 
-
+    /**
+     * Required empty public constructor
+     */
     public GuardianDetailsFragment() {
-        // Required empty public constructor
+
     }
 
 
+    /**
+     * onCreateView method which defines the fragment_guardian_details view with
+     * the message to me displayed and the hide button.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,6 +63,10 @@ public class GuardianDetailsFragment extends Fragment {
         return result;
 
     }
+
+    /**
+     * The required onAttach method for Fragment class.
+     */
 
     @Override
     public void onAttach(Context context) {

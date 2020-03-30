@@ -22,18 +22,51 @@ import com.example.finalproject.R;
 
 import java.util.ArrayList;
 
+/**
+ * This is the favorite list of news with delete and read in details functions.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
+
 public class GuardianFavoriteList extends AppCompatActivity {
 
+    /**
+     * ArrayList of Long which stores the id of favorite news.
+     */
     protected static ArrayList<Long> favId = new ArrayList<>();
+    /**
+     * ArrayList of String which stores the titles of favorite news.
+     */
     protected static ArrayList<String> favWebTitles = new ArrayList<>();
+    /**
+     * ArrayList of String which stores the urls of favorite news.
+     */
     protected static ArrayList<String> favWebUrls = new ArrayList<>();
+    /**
+     * ArrayList of String which stores the section names of favorite news.
+     */
     protected static ArrayList<String> favSectionNames = new ArrayList<>();
 
+    /**
+     * ListView that display all favorite news.
+     */
     ListView favoritelv;
+
+    /**
+     * fa is a FavAdaptor.
+     */
     protected static FavAdaptor fa;
+    /**
+     * db is the database.
+     */
 
     SQLiteDatabase db = null;
 
+    /**
+     * onCreate method of GuardianList which displays the title, and contains
+     * functionality of list view with onclickListener.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +134,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
 
     }
 
+    /**
+     * This method load data from the database.
+     */
 
     private void LoadDataFromDatabase(){
 
@@ -136,6 +172,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
         results.close();
 
     }
+    /**
+     * Print the cursor for the database row.
+     */
 
     private void printCursor (Cursor c, int version){
 
@@ -163,11 +202,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
     }
 
 
-
-
-
-
-
+    /**
+     * Adaptor class for the list view to display each row with guardianrow layout.
+     */
 
     protected class FavAdaptor extends BaseAdapter {
 
@@ -213,6 +250,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
 
     }
 
+    /**
+     * Clear data from the listView when going to another activity.
+     */
     @Override
     protected void onPause(){
         super.onPause();
@@ -225,6 +265,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
 
     }
 
+    /**
+     * Clear data from the listView when this activity is stopped.
+     */
     @Override
     protected void onStop(){
         super.onStop();
@@ -235,6 +278,9 @@ public class GuardianFavoriteList extends AppCompatActivity {
 
     }
 
+    /**
+     * Clear data from the listView when this activity is destroyed.
+     */
     @Override
     protected void onDestroy(){
        super.onDestroy();

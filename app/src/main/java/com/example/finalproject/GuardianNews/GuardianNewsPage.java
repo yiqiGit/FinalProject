@@ -18,21 +18,58 @@ import android.widget.Toast;
 import com.example.finalproject.R;
 import com.example.finalproject.yiqiFunction.MyOpener;
 
+/**
+ * This is the page which display details about one news with "add to favorite" button
+ * which will send this news to the favorite list for future reading.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
+
 public class GuardianNewsPage extends AppCompatActivity {
 
+    /**
+     * The TextView to display the news' title.
+     */
     TextView titleTV;
+    /**
+     * The TextView to display the news' url.
+     */
     TextView urlTV;
+    /**
+     * The TextView to display the news' section name.
+     */
     TextView sectionNameTV;
 
+    /**
+     * The string that stores the title of the news passed from GuardianList or GuardianFavoriteList
+     */
     String webTitle;
+    /**
+     * The string that stores the url of the news passed from GuardianList or GuardianFavoriteList
+     */
     String webUrl;
+    /**
+     * The string that stores the section name of the news passed from GuardianList or GuardianFavoriteList
+     */
     String sectionName;
-
- GuardianOpener dbHelper;
- SQLiteDatabase db;
+    /**
+     * The database opener.
+     */
+    GuardianOpener dbHelper;
+    /**
+     * The database.
+     */
+    SQLiteDatabase db;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+
+    /**
+     * This onCreate method gets strings from GuardianList and GuardianFavoriteList,
+     * then store them in local variables. If user click on "Save to Favorite" button,
+     * the stored local variables will be send to GuardianFavoriteList.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +100,6 @@ public class GuardianNewsPage extends AppCompatActivity {
 
         Button favButton = findViewById(R.id.favButton);
         favButton.setOnClickListener((click) -> {
-
-//            // intent send info to GuardianFavoriteList
-//            Intent intent2 = new Intent (this, GuardianFavoriteList.class);
-//            intent2.putExtra("favTitle", webTitle);
-//            intent2.putExtra("favUrl", webUrl);
-//            intent2.putExtra("favSectionName", sectionName);
 
             // put info into database
          dbHelper = new GuardianOpener(getApplicationContext());

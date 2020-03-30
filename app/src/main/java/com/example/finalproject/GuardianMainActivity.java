@@ -22,11 +22,30 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import android.os.Bundle;
 
+/**
+ * This is the main activity for The Guardian News app.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
+
+
 public class GuardianMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    /**
+     * The searchButton is a Button when clicked, the content in the EditText will be sent to the GuardianList activity, and go to GuardianList.
+     */
     Button searchButton;
+
+    /**
+     * searchText is the user input that is typed into the EditText field.
+     */
     String searchText = "";
 
+
+    /**
+     * The onCreate method of this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +77,7 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
 
 
 
-        //search button
+        //search button and onClickListener to send searchText to GuardianList activity.
         searchButton = findViewById(R.id.searchB);
         searchButton.setOnClickListener((click) -> {
             //add base url and search item
@@ -74,14 +93,22 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
 
     }
 
+    /**
+     * OnCreateOptionsMenu method that inflate the menu items for use in the tool bar.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.guardiantoolbarmenu, menu);
 
         return true;
     }
+
+    /**
+     * onOptionsItemSelected method add function to each item from the toolBar.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,6 +148,9 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
     }
 
 
+    /**
+     * onNavigationItemSelected method set functions for each menu item.
+     */
 
     @Override
     public boolean onNavigationItemSelected( MenuItem item) {
