@@ -8,12 +8,17 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.finalproject.R;
@@ -41,8 +46,16 @@ public class SearchResult extends AppCompatActivity {
     String lonInfo;
     String latInfo;
 
+
+    String imageId = "";
+    Bitmap pic = null;
+    String imageDate = "";
+    String imageResource = "";
+    String imageServiceVersion = "";
+    String imageUrl = "";
+
     private ArrayList<ImageInfo> elements = new ArrayList<>();
- //   private MyListAdapter myAdapter;
+    private MyListAdapter myAdapter;
     SQLiteDatabase db;
 
     public static final String ITEM_SELECTED = "ITEM";
@@ -75,25 +88,75 @@ public class SearchResult extends AppCompatActivity {
 
         Button addToFavourite = (Button)findViewById(R.id.addToFavoriteBtnChang);
         addToFavourite.setOnClickListener(click -> {
+            ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,pic,0);
+
+            elements.add(imageInfo);
 
         });
-
         Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
         showFavourite.setOnClickListener(click -> {
-            Intent nextPage = new Intent(this, FavouriteList.class);
-            startActivity(nextPage);
+            myAdapter.notifyDataSetChanged();
+        });
+        ListView myList = (ListView) findViewById(R.id.theListViewChang);
+        myList.setAdapter(myAdapter = new MyListAdapter());
+        myList.setOnItemLongClickListener( (p, b, pos, id) -> {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            String diaMessage =  (SearchResult.this).getResources().getString(R.string.dialogMessage);
+            String deleteMessage = (SearchResult.this).getResources().getString(R.string.deleteMessage);
+            alertDialogBuilder.setTitle(deleteMessage.toString())
+
+                    //What is the message:
+                    .setMessage(diaMessage.toString()+ pos +" id " +id + "?")
+
+                    //what the Yes button does:
+                    .setPositiveButton("Yes", (click, arg) -> {
+                        elements.remove(pos);
+                        myAdapter.notifyDataSetChanged();
+                    })
+                    //What the No button does:
+                    .setNegativeButton("No", (click, arg) -> { })
+
+
+                    //You can add extra layout elements:
+            //        .setView(getLayoutInflater().inflate(R.layout.view_of_list_chang, null) )
+
+                    //Show the dialog
+                    .create().show();
+            return true;
         });
 
+    }
+    private class MyListAdapter extends BaseAdapter {
 
+        public int getCount() {
+            return elements.size();
+        }
+
+        public Bitmap getItem(int position) {
+            return elements.get(position).getPic();
+        }
+
+        public long getItemId(int position) {
+            return (long) elements.get(position).getId();
+        }
+
+        public View getView(int position, View old, ViewGroup parent) {
+            LayoutInflater inflater = getLayoutInflater();
+            View newView;
+            //make a new row:
+
+            newView = inflater.inflate(R.layout.view_of_list_chang, parent, false);
+            ImageView iView = newView.findViewById(R.id.receiveImageChang);
+            iView.setImageBitmap(getItem(position));
+
+
+            //return it to be put in the table
+            return newView;
+        }
     }
     private class ImageQuery extends AsyncTask<String, Integer, String> {
 
-        String imageId = "";
-        Bitmap pic = null;
-        String imageDate = "";
-        String imageResource = "";
-        String imageServiceVersion = "";
-        String imageUrl = "";
+
 
         @Override                       //Type 1
         protected String doInBackground(String... strings) {
@@ -159,6 +222,8 @@ public class SearchResult extends AppCompatActivity {
                         outputStream.close();
                     }
                 }
+
+
                 publishProgress(100);
 
                 return "Executed";
@@ -190,7 +255,7 @@ public class SearchResult extends AppCompatActivity {
             image.setImageBitmap(pic);
 
             TextView dateInfo = findViewById(R.id.dateInfoChang);
-            dateInfo.setText("Date: " + this.imageDate);
+            dateInfo.setText("Date: " + imageDate);
 
             TextView idInformation = findViewById(R.id.idInfoChang);
             idInformation.setText("id: " + imageId);
@@ -202,7 +267,7 @@ public class SearchResult extends AppCompatActivity {
             serviceVersionInformation.setText("Service Version: " + imageServiceVersion);
 
             TextView imageUrlInformation = findViewById(R.id.urlInfoChang);
-            serviceVersionInformation.setText("URL: " + imageUrl);
+            imageUrlInformation.setText("URL: " + imageUrl);
 
             progressBar.setVisibility(View.INVISIBLE);
 

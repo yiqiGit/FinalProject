@@ -38,6 +38,8 @@
     <string name="searchButtonChang">Search</string>
     <string name="addToFavoriteButtonChang">Add to Favorite</string>
     <string name="showFavoriteButtonChang">Show Favorite List</string>
+    <string name="dialogMessage">Do you want to delete index </string>
+    <string name="deleteMessage">Delete </string>
 
     //Guardian string
     <string name="guardian_open">open</string>

@@ -30,4 +30,12 @@
     <string name="bbc_message1">The selected row is: </string>
     <string name="bbc_message2">The database id:</string>
     <string name="bbc_back">Back to front</string>
+
+    <string name="lonTextChang">type lon info</string>
+    <string name="latTextChang">type lat info</string>
+    <string name="searchButtonChang">Search</string>
+    <string name="addToFavoriteButtonChang">Add to Favorite</string>
+    <string name="showFavoriteButtonChang">Show Favorite List</string>
+    <string name="dialogMessage">Do you want to delete index </string>
+    <string name="deleteMessage">Delete </string>
 </resources>

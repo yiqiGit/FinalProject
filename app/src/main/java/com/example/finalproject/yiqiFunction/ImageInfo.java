@@ -68,4 +68,14 @@ public class ImageInfo {
     public String getLon() {return  this.lon;}
 
     public  String getImageUrl() {return  this.imageUrl;}
+
+    public void setLat(String lat){this.lat = lat;}
+    public void setLon(String lon) {this.lon = lon;}
+    public void setDateInfo(String dateInfo) {this.dateInfo = dateInfo;}
+    public void setId(long id) {this.id = id;}
+    public void setIdInfo(String idInfo) {this.idInfo = idInfo;}
+    public void setSourceInfo(String sourceInfo) {this.sourceInfo = sourceInfo;}
+    public void setServiceVersionInfo(String serviceVersionInfo) {this.serviceVersionInfo = serviceVersionInfo;}
+    public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
+    public void setPic(Bitmap pic) {this.pic = pic;}
 }
