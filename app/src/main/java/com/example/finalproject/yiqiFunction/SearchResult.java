@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,6 +92,7 @@ public class SearchResult extends AppCompatActivity {
             ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,pic,0);
 
             elements.add(imageInfo);
+            Toast.makeText(this, "The image has been add to Favourite List", Toast.LENGTH_LONG).show();
 
         });
         Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
