@@ -202,7 +202,7 @@ public class SearchResult extends AppCompatActivity {
             serviceVersionInformation.setText("Service Version: " + imageServiceVersion);
 
             TextView imageUrlInformation = findViewById(R.id.urlInfoChang);
-            serviceVersionInformation.setText("Service Version: " + imageUrlInformation);
+            serviceVersionInformation.setText("URL: " + imageUrl);
 
             progressBar.setVisibility(View.INVISIBLE);
 
