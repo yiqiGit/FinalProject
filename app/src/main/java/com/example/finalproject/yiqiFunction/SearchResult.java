@@ -1,7 +1,5 @@
 package com.example.finalproject.yiqiFunction;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,13 +10,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.finalproject.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -99,9 +99,7 @@ public class SearchResult extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             String ret = null;
-        //    String queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389";
-         //   String queryURL = "https://api.nasa.gov/planetary/earth/imagery/?lon=100.75&lat=1.5&date=2014-02-01&api_key=DEMO_KEY";
-           String queryURL = "https://api.nasa.gov/planetary/earth/imagery/?lon=" + lonInfo + "&lat=" + latInfo + "&date=2014-02-01&api_key=DEMO_KEY";// will fix later
+            String queryURL = "https://dev.virtualearth.net/REST/V1/Imagery/Metadata/Aerial/"+lonInfo+ "," + latInfo + "?zl=15&o=&key=AqkcFSd4wmvahPZTWKXDTZkpcRJxS7urDdfPOwpEY7BHJWqXIqjGXF4xrbAaf5rP";// will fix later
 
             try {
                 URL queryLink = new URL(queryURL);
@@ -123,13 +121,22 @@ public class SearchResult extends AppCompatActivity {
                 //become JSON Object
                 JSONObject json = new JSONObject(result);
                 //get uv from value
-                 imageDate = json.getString("date");
-                 imageId = json.getString("id");
-                 imageResource = json.getString("resource");
-                 imageServiceVersion = json.getString("service_version");
-                 imageUrl = json.getString("url");
+                JSONArray arrayResult = json.getJSONArray("resourceSets");
+                imageId = json.getString("traceId");
+                imageServiceVersion = json.getString("statusCode");
+                for (int i = 0; i < arrayResult.length(); i++) {
 
-                String imageName = imageUrl.substring(imageUrl.length() - 7);// last six digit as image name
+                    JSONArray index = arrayResult.getJSONObject(i).getJSONArray("resources");
+
+                    for (int j = 0; j < index.length(); j++) {
+                        imageDate = index.getJSONObject(j).getString("vintageEnd");
+                        imageResource = index.getJSONObject(j).getString("__type");
+                        imageUrl = index.getJSONObject(j).getString("imageUrl");
+
+                    }
+                }
+                imageUrl.replaceAll("/\"","");
+                String imageName = imageUrl.substring(imageUrl.length() - 20);// last six digit as image name
                 Log.i("file", "this is the url name we are looking for: " + imageUrl);
 
                 FileInputStream fis = null;
@@ -193,6 +200,9 @@ public class SearchResult extends AppCompatActivity {
 
             TextView serviceVersionInformation = findViewById(R.id.serviceInfoChang);
             serviceVersionInformation.setText("Service Version: " + imageServiceVersion);
+
+            TextView imageUrlInformation = findViewById(R.id.urlInfoChang);
+            serviceVersionInformation.setText("Service Version: " + imageUrlInformation);
 
             progressBar.setVisibility(View.INVISIBLE);
 
