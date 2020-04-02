@@ -136,7 +136,7 @@ public class SearchResult extends AppCompatActivity {
            myList.setVisibility(View.VISIBLE);
         });
 
- /*       myList.setOnItemClickListener((list, item, position, id) -> {
+        myList.setOnItemClickListener((list, item, position, id) -> {
             //Create a bundle to pass data to the new fragment
             Bundle dataToPass = new Bundle();
             dataToPass.putString(ITEM_LON, elements.get(position).getLon() );
@@ -156,7 +156,7 @@ public class SearchResult extends AppCompatActivity {
             startActivity(nextActivity); //make the transition
 
         });
-*/
+
         myList.setOnItemLongClickListener( (p, b, pos, id) -> {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             String diaMessage =  (SearchResult.this).getResources().getString(R.string.dialogMessage);
