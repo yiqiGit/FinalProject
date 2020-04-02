@@ -1,7 +1,10 @@
 package com.example.finalproject.yiqiFunction;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,6 +43,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class SearchResult extends AppCompatActivity {
@@ -59,10 +64,16 @@ public class SearchResult extends AppCompatActivity {
     private MyListAdapter myAdapter;
     SQLiteDatabase db;
 
-    public static final String ITEM_SELECTED = "ITEM";
+
+    public static final String ITEM_LAT = "LAT";
+    public static final String ITEM_LON = "LON";
+    public static final String ITEM_DATE = "DATE";
+    public static final String ITEM_IMAGE_ID = "IMAGE_ID";
+    public static final String ITEM_IMAGE_SOURCE_INFO = "IMAGE_SOURCE_INFO";
+    public static final String ITEM_IMAGE_VERSION_INFO = "IMAGE_SERVICE_VERSION_INFO";
+    public static final String ITEM_IMAGE_URL = "IMAGE_URL";
     public static final String ITEM_POSITION = "POSITION";
     public static final String ITEM_ID = "ID";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,21 +97,66 @@ public class SearchResult extends AppCompatActivity {
         }
         fetchImage = new ImageQuery();
         fetchImage.execute();
+        ListView myList = (ListView) findViewById(R.id.theListViewChang);
+        loadDataFromDatabase();
+        myList.setAdapter(myAdapter = new MyListAdapter());
 
         Button addToFavourite = (Button)findViewById(R.id.addToFavoriteBtnChang);
         addToFavourite.setOnClickListener(click -> {
-            ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,pic,0);
 
+            ContentValues newRowValues = new ContentValues();
+
+            //Now provide a value for every database column defined in MyOpener.java:
+            //put string message in  column:
+            newRowValues.put(MyOpener.COL_DATE, imageDate);
+            newRowValues.put(MyOpener.COL_LON, lonInfo);
+            newRowValues.put(MyOpener.COL_LAT, latInfo);
+            newRowValues.put(MyOpener.COL_RESOURCE, imageResource);
+            newRowValues.put(MyOpener.COL_VERSION, imageServiceVersion);
+            newRowValues.put(MyOpener.COL_IMAGEURL, imageUrl);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            pic.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] bArray = bos.toByteArray();
+            newRowValues.put(MyOpener.COL_PIC, bArray);
+            newRowValues.put(MyOpener.COL_IMAGEID, imageId);
+
+
+            //Now insert in the database:
+            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            //now you have the newId, you can create the Contact object
+            ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,pic,newId);
             elements.add(imageInfo);
+            myAdapter.notifyDataSetChanged();
             Toast.makeText(this, "The image has been add to Favourite List", Toast.LENGTH_LONG).show();
 
         });
         Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
         showFavourite.setOnClickListener(click -> {
-            myAdapter.notifyDataSetChanged();
+           myList.setVisibility(View.VISIBLE);
         });
-        ListView myList = (ListView) findViewById(R.id.theListViewChang);
-        myList.setAdapter(myAdapter = new MyListAdapter());
+
+ /*       myList.setOnItemClickListener((list, item, position, id) -> {
+            //Create a bundle to pass data to the new fragment
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(ITEM_LON, elements.get(position).getLon() );
+            dataToPass.putString(ITEM_LAT, elements.get(position).getLat() );
+            dataToPass.putString(ITEM_DATE, elements.get(position).getDateInfo() );
+            dataToPass.putString(ITEM_IMAGE_ID, elements.get(position).getIdInfo() );
+            dataToPass.putString(ITEM_IMAGE_SOURCE_INFO, elements.get(position).getSourceInfo() );
+            dataToPass.putString(ITEM_IMAGE_VERSION_INFO, elements.get(position).getServiceVersionInfo() );
+            dataToPass.putString(ITEM_IMAGE_URL, elements.get(position).getImageUrl() );
+
+            dataToPass.putInt(ITEM_POSITION, position);
+            dataToPass.putLong(ITEM_ID, id);
+
+            Intent nextActivity = new Intent(SearchResult.this, EmptyActivityChang.class);
+            nextActivity.putExtra("image",elements.get(position).getPic());
+            nextActivity.putExtras(dataToPass); //send data to next activity
+            startActivity(nextActivity); //make the transition
+
+        });
+*/
         myList.setOnItemLongClickListener( (p, b, pos, id) -> {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             String diaMessage =  (SearchResult.this).getResources().getString(R.string.dialogMessage);
@@ -108,10 +164,12 @@ public class SearchResult extends AppCompatActivity {
             alertDialogBuilder.setTitle(deleteMessage.toString())
 
                     //What is the message:
-                    .setMessage(diaMessage.toString()+ pos +" id " +id + "?")
+                    .setMessage(diaMessage.toString()+ pos +" id " +id + "\n" +
+                            "?")
 
                     //what the Yes button does:
                     .setPositiveButton("Yes", (click, arg) -> {
+                        deleteMessage(elements.get(pos));
                         elements.remove(pos);
                         myAdapter.notifyDataSetChanged();
                     })
@@ -128,6 +186,79 @@ public class SearchResult extends AppCompatActivity {
         });
 
     }
+
+    protected void deleteMessage(ImageInfo c)
+    {
+        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
+    }
+
+    private void loadDataFromDatabase(){
+
+        //get a database connection:
+        MyOpener dbOpener = new MyOpener(this);
+        db = dbOpener.getWritableDatabase();
+
+
+        // We want to get all of the columns. Look at MyOpener.java for the definitions:
+        String [] columns = {MyOpener.COL_LON, MyOpener.COL_LAT, MyOpener.COL_DATE,MyOpener.COL_ID, MyOpener.COL_RESOURCE, MyOpener.COL_VERSION, MyOpener.COL_IMAGEID, MyOpener.COL_IMAGEURL, MyOpener.COL_PIC };
+        //query all the results from the database:
+        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+        //Now the results object has rows of results that match the query.
+        //find the column indices:
+        int lonColumnIndex = results.getColumnIndex(MyOpener.COL_LON);
+        int latColumnIndex = results.getColumnIndex(MyOpener.COL_LAT);
+        int dateColumnIndex = results.getColumnIndex(MyOpener.COL_DATE);
+        int idColumnIndex = results.getColumnIndex(MyOpener.COL_ID);
+        int resourceColumnIndex = results.getColumnIndex(MyOpener.COL_RESOURCE);
+        int versionColumnIndex = results.getColumnIndex(MyOpener.COL_VERSION);
+        int imageIdColumnIndex = results.getColumnIndex(MyOpener.COL_IMAGEID);
+        int imageUrlColumnIndex = results.getColumnIndex(MyOpener.COL_IMAGEURL);
+        int picColumnIndex = results.getColumnIndex(MyOpener.COL_PIC);
+
+        //iterate over the results, return true if there is a next item:
+        while(results.moveToNext())
+        {
+            String lonData = results.getString(lonColumnIndex);
+            String latData = results.getString(latColumnIndex);
+            String dateData = results.getString(dateColumnIndex);
+            String resourceData = results.getString(resourceColumnIndex);
+            String versionData = results.getString(versionColumnIndex);
+            String imageIdData = results.getString(imageIdColumnIndex);
+            String imageUrlData = results.getString(imageUrlColumnIndex);
+            //boolean messageFromIdentifier;
+            long id = results.getLong(idColumnIndex);
+
+            byte[] imageData = results.getBlob(picColumnIndex);
+            Bitmap stitchBmp = Bitmap.createBitmap(100,100,Bitmap.Config.ARGB_8888);
+            stitchBmp.copyPixelsFromBuffer(ByteBuffer.wrap(imageData));
+
+            //add the new Contact to the array list:
+            elements.add(new ImageInfo(latData, lonData,dateData, imageIdData, resourceData,versionData,imageUrlData,stitchBmp,id));
+        }
+
+        //At this point, the contactsList array has loaded every row from the cursor.
+  //      printCursor(results,db.getVersion());
+    }
+
+    private void printCursor(Cursor c, int version){
+        Log.i("Version Number",Integer.toString(version));
+        Log.i("Number of column",Integer.toString(c.getColumnCount()) );
+        Log.i("Number of results", Integer.toString(c.getCount()));
+        Log.i("Results", DatabaseUtils.dumpCursorToString(c));
+        for(int n=0; n<c.getColumnCount();n++){
+            c.moveToFirst();
+            for(int m=0;m<c.getCount();m++){
+                Log.i("Content of column" + c.getColumnName(n), c.getString(n));
+                c.moveToNext();
+            }
+        }
+        //•	The number of columns in the cursor.
+        //•	The name of the columns in the cursor.
+        //•	The number of results in the cursor
+        //•	Each row of results in the cursor.
+        // System.out
+    }
+
     private class MyListAdapter extends BaseAdapter {
 
         public int getCount() {

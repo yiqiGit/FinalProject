@@ -78,4 +78,9 @@ public class ImageInfo {
     public void setServiceVersionInfo(String serviceVersionInfo) {this.serviceVersionInfo = serviceVersionInfo;}
     public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
     public void setPic(Bitmap pic) {this.pic = pic;}
+
+    public String toString(){
+        return     "lat: "+ lat +"\nlon: "+ lon +"\nimageId: " + idInfo + "\nimageDate: " + dateInfo +
+                "\nimageResource: " + sourceInfo + "\nimageServiceVersion: " + serviceVersionInfo + "\nimageUrl: "+ imageUrl;
+    }
 }
