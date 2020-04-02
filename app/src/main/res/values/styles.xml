@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+
+    </style>
+    <style name="MyOverflowButtonStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tint">#FFFFFF</item>
     </style>
 
 </resources>

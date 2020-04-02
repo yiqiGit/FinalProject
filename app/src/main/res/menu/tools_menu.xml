@@ -4,12 +4,11 @@
 
 
 
-    <item android:id="@+id/search_item"
+    <item android:id="@+id/about"
         android:orderInCategory="10"
-        android:icon="@android:drawable/ic_search_category_default"
-        app:showAsAction="always"
-        android:title="search"
-        android:visible="false"/>
+        app:showAsAction="never"
+        android:title="About"
+        />
 
 
 
@@ -17,6 +16,8 @@
         android:orderInCategory="20"
         app:showAsAction="never"
         android:title="Help"
-        android:iconTint="@color/white"
+
+
+
         />
 </menu>

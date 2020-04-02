@@ -24,5 +24,7 @@
     <string name="favBtn">Ver Favoritos</string>
     <string name="close">Fechar</string>
     <string name="back">Voltar para inicio</string>
-
+    <string name="wrongDate">A data deve ser igual ou anterior a data atual!</string>
+    <string name="emptyDate">Date nao pode estar vazia!</string>
+    <string name="about">Nasa Image of The Day\nAutor: Guilherme Jardim\nVersao: 1.0\nAno: 2020</string>
 </resources>

@@ -27,5 +27,8 @@
     <string name="close">Close</string>
     <string name="back">Back to Main</string>
     <string name="open" translatable="false">open</string>
+    <string name="wrongDate">Your must pick a date equal or prior to the current date!</string>
+    <string name="emptyDate">Date cannot be blank!</string>
+    <string name="about">Nasa Image of The Day\nAuthor: Guilherme Jardim\nVersion: 1.0\nYear: 2020</string>
 
 </resources>

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -64,6 +65,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -178,7 +180,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         clearButton = (Button) findViewById(R.id.clearBtn);
         favoritesButton = (Button) findViewById(R.id.goToFavBtn);
         imageTitle = (TextView) findViewById(R.id.imageTitle);
-        urlLink = (TextView) findViewById(R.id.hd_url) ;
+        urlLink = (TextView) findViewById(R.id.hd_url_result) ;
         imagePreview = (ImageView) findViewById(R.id.preview);
         results = (RelativeLayout) findViewById(R.id.resultsContainer);
         nasaLogo = (ImageView) findViewById(R.id.nasaLogo);
@@ -206,27 +208,48 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         searchBtn = findViewById(R.id.searchBtn);
         /*This button will make the app connect and download the image*/
         searchBtn.setOnClickListener(click->{
-            myImage = null;
-            nasaLogo.setVisibility(View.INVISIBLE);
-            ImageQuery imageQuery = new ImageQuery();
-            imageQuery.execute(URL_PATH+getSelectedDate());
+            if(dateBox.getText()!=null && !(dateBox.getText().equals(""))) {
+
+                if(image!=null) clearScreen();
+
+                Calendar currentDate = Calendar.getInstance();
+                LocalDate date = LocalDate.now();
+
+                //Get a current date as reference
+                Calendar userDate = (Calendar) currentDate.clone();
+                currentDate.set(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+                //Parse the selected date to Calendar object
+
+                int year = Integer.parseInt(selectedDate.substring(0, 4));
+                int month = Integer.parseInt(selectedDate.substring(5, 7));
+                int day = Integer.parseInt(selectedDate.substring(8, 10));
+                userDate.set(year, month, day);
+                //Compare the two dates, since a future date is not accepted by the Nasa api
+                if (userDate.after(currentDate)) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(NasaImageOfTheDay.this);
+                    String message = getString(R.string.wrongDate);
+                    dialog.setTitle("Warning:").setMessage(message)
+                            .setPositiveButton("Ok", (c, arg) -> {
+                            })
+                            .create().show();
+                } else {
+                    myImage = null;
+                    nasaLogo.setVisibility(View.INVISIBLE);
+                    ImageQuery imageQuery = new ImageQuery();
+                    imageQuery.execute(URL_PATH + getSelectedDate());
+                }
+            }
+            else{
+                Toast.makeText(this,R.string.emptyDate, Toast.LENGTH_LONG);
+            }
+
 
         });
 
 
 
         clearButton.setOnClickListener(click->{
-            dateBox.setText("");
-            if(myImage!=null) {
-
-                imageTitle.setText("");
-                imagePreview.setImageBitmap(null);
-                myImage = null;
-                image = null;
-                results.setVisibility(View.INVISIBLE);
-                nasaLogo.setVisibility(View.VISIBLE);
-
-            }
+            clearScreen();
         });
 
         saveButton.setOnClickListener(click->{
@@ -266,6 +289,20 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             startActivity(goToFavorites);
 
         });
+    }
+
+    private void clearScreen(){
+        dateBox.setText("");
+        if(myImage!=null) {
+
+            imageTitle.setText("");
+            imagePreview.setImageBitmap(null);
+            myImage = null;
+            image = null;
+            results.setVisibility(View.INVISIBLE);
+            nasaLogo.setVisibility(View.VISIBLE);
+
+        }
     }
 
     /**
@@ -316,11 +353,18 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             case R.id.help:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 String message = getString(R.string.info);
-                dialog.setTitle("Dialog").setMessage(message)
+                dialog.setTitle("Help").setMessage(message)
                         .setPositiveButton("Ok", (c, arg) -> {
                         })
                         .create().show();
                 break;
+            case R.id.about:
+                AlertDialog.Builder dialogAbout = new AlertDialog.Builder(this);
+                String messageAbout = getString(R.string.about);
+                dialogAbout.setTitle("Info").setMessage(messageAbout)
+                        .setPositiveButton("Ok", (c, arg) -> {
+                        })
+                        .create().show();
         }
 
         return true;
@@ -406,19 +450,22 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v){
         final Calendar cldr = Calendar.getInstance();
-        int day = cldr.get(Calendar.DAY_OF_MONTH);
-        int month = cldr.get(Calendar.MONTH);
-        int year = cldr.get(Calendar.YEAR);
+        int currDay = cldr.get(Calendar.DAY_OF_MONTH);
+        int currMonth = cldr.get(Calendar.MONTH);
+        int currYear = cldr.get(Calendar.YEAR);
+        setSelectedDate("");
+        dateBox.setText("");
 
         // date picker dialog
         datePicker = new DatePickerDialog(NasaImageOfTheDay.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
                         dateBox.setText(dayOfMonth + "/" + (monthOfYear+1) + "/" + year);
                         setSelectedDate(String.format("%d-%02d-%02d",year,monthOfYear+1,dayOfMonth));
                     }
-                }, year, month, day);
+                }, currYear, currMonth, currDay);
         datePicker.show();
     }
 
