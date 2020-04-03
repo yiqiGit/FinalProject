@@ -429,7 +429,7 @@ public class SearchResult extends AppCompatActivity {
             // path to /data/data/yourapp/app_data/imageDir
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
-            File myPath=new File(directory,"profile.jpg");
+            File myPath=new File(directory,name);
 
             FileOutputStream fos = null;
             try {
