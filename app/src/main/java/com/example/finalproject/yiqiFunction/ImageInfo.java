@@ -1,7 +1,5 @@
 package com.example.finalproject.yiqiFunction;
 
-import android.graphics.Bitmap;
-
 public class ImageInfo {
 
     private String lat;
@@ -11,10 +9,10 @@ public class ImageInfo {
     private String idInfo;
     private String sourceInfo;
     private String serviceVersionInfo;
-    private Bitmap pic;
+    private String pic;
     private String imageUrl;
 
-    public ImageInfo(String lat, String lon, String dateInfo, String idInfo, String sourceInfo, String serviceVersionInfo, String imageUrl, Bitmap pic){
+    public ImageInfo(String lat, String lon, String dateInfo, String idInfo, String sourceInfo, String serviceVersionInfo, String imageUrl, String pic){
         this.dateInfo = dateInfo;
         this.idInfo = idInfo;
         this.sourceInfo = sourceInfo;
@@ -26,7 +24,7 @@ public class ImageInfo {
         this.lat = lat;
 
     }
-    public ImageInfo(String lat, String lon, String dateInfo, String idInfo, String sourceInfo, String serviceVersionInfo, String imageUrl, Bitmap pic, long id){
+    public ImageInfo(String lat, String lon, String dateInfo, String idInfo, String sourceInfo, String serviceVersionInfo, String imageUrl, String pic, long id){
         this.dateInfo = dateInfo;
         this.idInfo = idInfo;
         this.sourceInfo = sourceInfo;
@@ -55,7 +53,7 @@ public class ImageInfo {
         return this.serviceVersionInfo;
     }
 
-    public Bitmap getPic(){
+    public String getPic(){
         return this.pic;
     }
 
@@ -77,7 +75,7 @@ public class ImageInfo {
     public void setSourceInfo(String sourceInfo) {this.sourceInfo = sourceInfo;}
     public void setServiceVersionInfo(String serviceVersionInfo) {this.serviceVersionInfo = serviceVersionInfo;}
     public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
-    public void setPic(Bitmap pic) {this.pic = pic;}
+    public void setPic(String pic) {this.pic = pic;}
 
     public String toString(){
         return     "lat: "+ lat +"\nlon: "+ lon +"\nimageId: " + idInfo + "\nimageDate: " + dateInfo +

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyOpener extends SQLiteOpenHelper {
 
-    protected final static String DATABASE_NAME = "ImageDB";
-    protected final static int VERSION_NUM = 1;
+    protected final static String DATABASE_NAME = "ImageDB1";
+    protected final static int VERSION_NUM = 2;
     public final static String TABLE_NAME = "Image";
     public final static String COL_LON= "Lon";
     public final static String COL_LAT= "Lat";
@@ -38,7 +38,7 @@ public class MyOpener extends SQLiteOpenHelper {
                 + COL_VERSION + " text,"
                 + COL_IMAGEID + " text,"
                 + COL_IMAGEURL + " text,"
-                + COL_PIC  + " blob);"); // add or remove columns
+                + COL_PIC  + " text);"); // add or remove columns
     }
 
 

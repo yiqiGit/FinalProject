@@ -1,6 +1,8 @@
 package com.example.finalproject.yiqiFunction;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.finalproject.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 
 public class DetailsFragmentChang extends Fragment {
@@ -71,9 +77,17 @@ public class DetailsFragmentChang extends Fragment {
 
         ImageView imageView = (ImageView)result.findViewById(R.id.picFragChang);
 
- //       byte[] imageData = dataFromActivity.getByteArray(SearchResult.)
- //       Bitmap stitchBmp = Bitmap.createBitmap(100,100,Bitmap.Config.ARGB_8888);
-  //      stitchBmp.copyPixelsFromBuffer(ByteBuffer.wrap(imageData));
+        try {
+            String str = dataFromActivity.getString(SearchResult.ITEM_PIC);
+            String[] arrOfStr = str.split("&");
+            File f=new File(arrOfStr[0],arrOfStr[1]);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            imageView.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
 
 
         // get the delete button, and add a click listener:

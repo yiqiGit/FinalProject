@@ -2,6 +2,7 @@ package com.example.finalproject.yiqiFunction;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -32,7 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,7 +43,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class SearchResult extends AppCompatActivity {
@@ -55,10 +54,12 @@ public class SearchResult extends AppCompatActivity {
 
     String imageId = "";
     Bitmap pic = null;
+    String picDirectory = "";
     String imageDate = "";
     String imageResource = "";
     String imageServiceVersion = "";
     String imageUrl = "";
+    long idDatabase = 0;
 
     private ArrayList<ImageInfo> elements = new ArrayList<>();
     private MyListAdapter myAdapter;
@@ -74,6 +75,7 @@ public class SearchResult extends AppCompatActivity {
     public static final String ITEM_IMAGE_URL = "IMAGE_URL";
     public static final String ITEM_POSITION = "POSITION";
     public static final String ITEM_ID = "ID";
+    public static final String ITEM_PIC = "PICTURE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,18 +116,15 @@ public class SearchResult extends AppCompatActivity {
             newRowValues.put(MyOpener.COL_RESOURCE, imageResource);
             newRowValues.put(MyOpener.COL_VERSION, imageServiceVersion);
             newRowValues.put(MyOpener.COL_IMAGEURL, imageUrl);
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            pic.compress(Bitmap.CompressFormat.PNG, 100, bos);
-            byte[] bArray = bos.toByteArray();
-            newRowValues.put(MyOpener.COL_PIC, bArray);
+            newRowValues.put(MyOpener.COL_PIC, picDirectory);
             newRowValues.put(MyOpener.COL_IMAGEID, imageId);
 
 
             //Now insert in the database:
             long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+            idDatabase = newId;
             //now you have the newId, you can create the Contact object
-            ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,pic,newId);
+            ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,picDirectory,newId);
             elements.add(imageInfo);
             myAdapter.notifyDataSetChanged();
             Toast.makeText(this, "The image has been add to Favourite List", Toast.LENGTH_LONG).show();
@@ -146,12 +145,12 @@ public class SearchResult extends AppCompatActivity {
             dataToPass.putString(ITEM_IMAGE_SOURCE_INFO, elements.get(position).getSourceInfo() );
             dataToPass.putString(ITEM_IMAGE_VERSION_INFO, elements.get(position).getServiceVersionInfo() );
             dataToPass.putString(ITEM_IMAGE_URL, elements.get(position).getImageUrl() );
+            dataToPass.putString(ITEM_PIC, elements.get(position).getPic() );
 
             dataToPass.putInt(ITEM_POSITION, position);
             dataToPass.putLong(ITEM_ID, id);
 
             Intent nextActivity = new Intent(SearchResult.this, EmptyActivityChang.class);
-            nextActivity.putExtra("image",elements.get(position).getPic());
             nextActivity.putExtras(dataToPass); //send data to next activity
             startActivity(nextActivity); //make the transition
 
@@ -228,12 +227,10 @@ public class SearchResult extends AppCompatActivity {
             //boolean messageFromIdentifier;
             long id = results.getLong(idColumnIndex);
 
-            byte[] imageData = results.getBlob(picColumnIndex);
-            Bitmap stitchBmp = Bitmap.createBitmap(100,100,Bitmap.Config.ARGB_8888);
-            stitchBmp.copyPixelsFromBuffer(ByteBuffer.wrap(imageData));
+            String picDir = results.getString(picColumnIndex);
 
             //add the new Contact to the array list:
-            elements.add(new ImageInfo(latData, lonData,dateData, imageIdData, resourceData,versionData,imageUrlData,stitchBmp,id));
+            elements.add(new ImageInfo(latData, lonData,dateData, imageIdData, resourceData,versionData,imageUrlData,picDir,id));
         }
 
         //At this point, the contactsList array has loaded every row from the cursor.
@@ -265,7 +262,7 @@ public class SearchResult extends AppCompatActivity {
             return elements.size();
         }
 
-        public Bitmap getItem(int position) {
+        public String getItem(int position) {
             return elements.get(position).getPic();
         }
 
@@ -280,12 +277,22 @@ public class SearchResult extends AppCompatActivity {
 
             newView = inflater.inflate(R.layout.view_of_list_chang, parent, false);
             ImageView iView = newView.findViewById(R.id.receiveImageChang);
-            iView.setImageBitmap(getItem(position));
-
+            try {
+                String str = elements.get(position).getPic();
+                String[] arrOfStr = str.split("&");
+                File f=new File(arrOfStr[0],arrOfStr[1]);
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                iView.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
 
             //return it to be put in the table
             return newView;
         }
+
     }
     private class ImageQuery extends AsyncTask<String, Integer, String> {
 
@@ -340,6 +347,8 @@ public class SearchResult extends AppCompatActivity {
                 if (fileExistance(imageName)) {
                     fis = openFileInput(imageName + ".png");
                     pic = BitmapFactory.decodeStream(fis);
+                    picDirectory = saveToInternalStorage(pic,imageName);
+                    picDirectory = picDirectory+"&"+imageName;
                     Log.i("file", "this file is from local.");
                 } else {
                     URL urlPic = new URL(imageUrl);
@@ -349,10 +358,13 @@ public class SearchResult extends AppCompatActivity {
                     if (responseCode == 200) {
                         pic = BitmapFactory.decodeStream(connection.getInputStream());
                         Log.i("file", "this file is from url or online.");
-                        FileOutputStream outputStream = openFileOutput(imageName + ".png", Context.MODE_PRIVATE);
-                        pic.compress(Bitmap.CompressFormat.PNG, 40, outputStream);
-                        outputStream.flush();
-                        outputStream.close();
+ //                       FileOutputStream outputStream = openFileOutput(imageName + ".png", Context.MODE_PRIVATE);
+//                        pic.compress(Bitmap.CompressFormat.PNG, 40, outputStream);
+                        String picDir = saveToInternalStorage(pic,imageName);
+                        picDirectory = picDir+"&"+imageName;
+ //                       picDirectory = imageName;
+ //                       outputStream.flush();
+//                        outputStream.close();
                     }
                 }
 
@@ -410,6 +422,30 @@ public class SearchResult extends AppCompatActivity {
         public boolean fileExistance(String fname) {
             File file = getBaseContext().getFileStreamPath(fname);
             return file.exists();
+        }
+
+        private String saveToInternalStorage(Bitmap bitmapImage, String name){
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            // Create imageDir
+            File myPath=new File(directory,"profile.jpg");
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(myPath);
+                // Use the compress method on the BitMap object to write image to the OutputStream
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 40, fos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return directory.getAbsolutePath();
         }
     }
 
