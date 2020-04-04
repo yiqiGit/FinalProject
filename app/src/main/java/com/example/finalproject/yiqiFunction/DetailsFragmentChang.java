@@ -53,23 +53,23 @@ public class DetailsFragmentChang extends Fragment {
 
 
         TextView dataInfo = (TextView)result.findViewById(R.id.dateFragChang);
-        dataInfo.setText("Date: " + dataFromActivity.getString(SearchResult.ITEM_DATE));
+        dataInfo.setText(getResources().getString(R.string.dateTextChang) + dataFromActivity.getString(SearchResult.ITEM_DATE));
 
 
         TextView imageIdInfo = (TextView)result.findViewById(R.id.idInfoFragChang);
-        imageIdInfo.setText("Image ID = " + dataFromActivity.getString(SearchResult.ITEM_IMAGE_ID));
+        imageIdInfo.setText(getResources().getString(R.string.imageIdChang) + dataFromActivity.getString(SearchResult.ITEM_IMAGE_ID));
 
         //show the message
         TextView imageSource = (TextView)result.findViewById(R.id.sourceInfoFragChang);
-        imageSource.setText("Image Source = " + dataFromActivity.getString(SearchResult.ITEM_IMAGE_SOURCE_INFO));
+        imageSource.setText(getResources().getString(R.string.sourceTextChang) + dataFromActivity.getString(SearchResult.ITEM_IMAGE_SOURCE_INFO));
 
         //show the id:
         TextView imageVersion = (TextView)result.findViewById(R.id.serviceInfoFragChang);
-        imageVersion.setText("Service Version: " + dataFromActivity.getString(SearchResult.ITEM_IMAGE_VERSION_INFO));
+        imageVersion.setText(getResources().getString(R.string.versionTextChang) + dataFromActivity.getString(SearchResult.ITEM_IMAGE_VERSION_INFO));
 
         //show the message
         TextView imageUrl = (TextView)result.findViewById(R.id.imageUrlFragChang);
-        imageUrl.setText("Image URL: " + dataFromActivity.getString(SearchResult.ITEM_IMAGE_URL));
+        imageUrl.setText("URL: " + dataFromActivity.getString(SearchResult.ITEM_IMAGE_URL));
 
         //show the id:
         TextView idView = (TextView)result.findViewById(R.id.idFragChang);

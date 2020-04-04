@@ -38,11 +38,12 @@ public class ImageSearch extends AppCompatActivity implements NavigationView.OnN
         //For NavigationDrawer:
         DrawerLayout drawer = findViewById(R.id.drawerImageSearchChang);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                drawer, myToolbar, R.string.guardian_open, R.string.guardian_close);
+                drawer, myToolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.navigationImageSearchChang);
+        navigationView.setItemIconTintList(null);//this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
         navigationView.setNavigationItemSelectedListener(this);
 
         Button searchBtn = (Button) findViewById(R.id.searchBtnChang);
@@ -64,14 +65,12 @@ public class ImageSearch extends AppCompatActivity implements NavigationView.OnN
         });
 
         helpBtn.setOnClickListener(click->{
-            Snackbar.make(findViewById(R.id.helpButtonChang),"You click help",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.helpButtonChang),R.string.snackbarChang,Snackbar.LENGTH_LONG).show();
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Activity Manual")
+            alertDialogBuilder.setTitle(R.string.activityMenu)
 
                     //What is the message:
-                    .setMessage("Type in lat and lon of image, then a new page will be loaded and all information will be present." +
-                            "There are 2 buttons on next page, the add button can add the image into the database, the show button can show the full" +
-                            "list of image. If you click on the item, detial informaiton of that item will be shown up.")
+                    .setMessage(R.string.detailInstruction)
 
 
                     .setPositiveButton("OK", (click2, arg) -> {
@@ -125,7 +124,6 @@ public class ImageSearch extends AppCompatActivity implements NavigationView.OnN
     @Override
     public boolean onNavigationItemSelected( MenuItem item) {
 
-        String message = null;
 
         switch(item.getItemId())
         {

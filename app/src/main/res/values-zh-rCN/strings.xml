@@ -33,25 +33,25 @@
     <string name="bbc_message2">The database id:</string>
     <string name="bbc_back">Back to front</string>
 
-    <string name="lonTextChang">type lon info</string>
-    <string name="latTextChang">type lat info</string>
-    <string name="searchButtonChang">Search</string>
-    <string name="addToFavoriteButtonChang">Add to Favorite</string>
-    <string name="showFavoriteButtonChang">Show Favorite List</string>
-    <string name="dialogMessage">Do you want to delete index </string>
-    <string name="deleteMessage">Delete </string>
-    <string name="helpBtnChang">Help </string>
-    <string name="hideFavoriteButtonChang">Hide List </string>
-    <string name="activityMenu">Activity Menu </string>
-    <string name="detailInstruction">Type in lat and lon of image, then a new page will be loaded and all information will be present. There are 3 buttons on next page, the add button can add the image into the database, the show button can show the full list of image. If you click on the item, detial informaiton of that item will be shown up, hide button will hide list.</string>
-    <string name="toastChang">The image has been add to Favourite List</string>
-    <string name="snackbarChang">You click help</string>
-    <string name="dateTextChang">Date: </string>
-    <string name="sourceTextChang">source: </string>
-    <string name="versionTextChang">Service Version: </string>
-    <string name="imageInformationChang">Image Information: </string>
-    <string name="imageIdChang">Image ID: </string>
-    <string name="hideButtonChang">HIDE</string>
+    <string name="lonTextChang">输入lon</string>
+    <string name="latTextChang">输入lat</string>
+    <string name="searchButtonChang">搜索</string>
+    <string name="addToFavoriteButtonChang">加入喜欢列表</string>
+    <string name="showFavoriteButtonChang">展示喜欢列表</string>
+    <string name="dialogMessage">你是否想删除index </string>
+    <string name="deleteMessage">删除 </string>
+    <string name="helpBtnChang">帮助 </string>
+    <string name="hideFavoriteButtonChang">隐藏喜欢列表 </string>
+    <string name="activityMenu">用法简介 </string>
+    <string name="detailInstruction">输入希望寻找图片的lat和lon，然后一个填写全部图片信息的新页面会载入，在新页面会有三个按钮，添加按钮可以把图片加入列表，展示按钮可以展示整个列表，隐藏按钮可以隐藏列表</string>
+    <string name="toastChang">图片已加入列表</string>
+    <string name="snackbarChang">你点击了帮助</string>
+    <string name="dateTextChang">日期： </string>
+    <string name="sourceTextChang">资源:  </string>
+    <string name="versionTextChang">版本号： </string>
+    <string name="imageInformationChang">图片信息: </string>
+    <string name="imageIdChang">图片ID: </string>
+    <string name="hideButtonChang">隐藏</string>
 
     //Guardian string
     <string name="guardian_open">open</string>

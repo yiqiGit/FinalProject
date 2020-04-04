@@ -13,6 +13,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,10 +26,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.finalproject.BBCNews.BbcNews;
+import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.nasaImage.NasaImageOfTheDay;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +56,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class SearchResult extends AppCompatActivity {
+public class SearchResult extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     AsyncTask<String, Integer, String> fetchImage;
     ProgressBar progressBar;
     String lonInfo;
@@ -81,6 +92,20 @@ public class SearchResult extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+
+        Toolbar myToolbar = findViewById(R.id.toolbarSearchResultChang);
+        setSupportActionBar(myToolbar);
+
+        //For NavigationDrawer:
+        DrawerLayout drawer = findViewById(R.id.drawerSearchResultChang);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.navigationSearchResultChang);
+        navigationView.setItemIconTintList(null);//this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
+        navigationView.setNavigationItemSelectedListener(this);
 
         Intent fromMain = getIntent();
         lonInfo = fromMain.getStringExtra("lonInfo");
@@ -127,12 +152,17 @@ public class SearchResult extends AppCompatActivity {
             ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,picDirectory,newId);
             elements.add(imageInfo);
             myAdapter.notifyDataSetChanged();
-            Toast.makeText(this, "The image has been add to Favourite List", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.toastChang, Toast.LENGTH_LONG).show();
 
         });
         Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
         showFavourite.setOnClickListener(click -> {
            myList.setVisibility(View.VISIBLE);
+        });
+
+        Button hideFavorite = (Button)findViewById(R.id.hideFavoriteBtnChang);
+        hideFavorite.setOnClickListener(click -> {
+            myList.setVisibility(View.INVISIBLE);
         });
 
         myList.setOnItemClickListener((list, item, position, id) -> {
@@ -184,6 +214,60 @@ public class SearchResult extends AppCompatActivity {
             return true;
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.bbc:
+                startActivity(new Intent(SearchResult.this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(SearchResult.this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(SearchResult.this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(SearchResult.this, NasaImageOfTheDay.class));
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.bbc:
+                startActivity(new Intent(SearchResult.this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(SearchResult.this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(SearchResult.this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(SearchResult.this, NasaImageOfTheDay.class));
+                break;
+        }
+
+        return false;
     }
 
     protected void deleteMessage(ImageInfo c)
@@ -400,16 +484,16 @@ public class SearchResult extends AppCompatActivity {
             image.setImageBitmap(pic);
 
             TextView dateInfo = findViewById(R.id.dateInfoChang);
-            dateInfo.setText("Date: " + imageDate);
+            dateInfo.setText(getResources().getString(R.string.dateTextChang) + imageDate);
 
             TextView idInformation = findViewById(R.id.idInfoChang);
-            idInformation.setText("id: " + imageId);
+            idInformation.setText(getResources().getString(R.string.imageIdChang) + imageId);
 
             TextView sourceInformation = findViewById(R.id.resourceInfoChang);
-            sourceInformation.setText("source:  " + imageResource);
+            sourceInformation.setText(getResources().getString(R.string.sourceTextChang) + imageResource);
 
             TextView serviceVersionInformation = findViewById(R.id.serviceInfoChang);
-            serviceVersionInformation.setText("Service Version: " + imageServiceVersion);
+            serviceVersionInformation.setText(getResources().getString(R.string.versionTextChang) + imageServiceVersion);
 
             TextView imageUrlInformation = findViewById(R.id.urlInfoChang);
             imageUrlInformation.setText("URL: " + imageUrl);
