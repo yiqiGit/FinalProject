@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //bbc news
+    <string name="bbc_title">帮助菜单</string>
+    <string name="bbc_message1">选中行： </string>
+    <string name="bbc_message2">数据库ID:</string>
+    <string name="bbc_back">返回</string>
+    <string name="bbc_yes">是</string>
+    <string name="bbc_no">否</string>
+    <string name="bbc_checkinfo">查看</string>
+    <string name="bbc_intro">页面使用介绍</string>
+    <string name="bbc_homepage">主页</string>
+    <string name="bbc_favouriteList">收藏夹</string>
+    <string name="bbc_refresh">刷新</string>
+    <string name="bbc_delete">确认删除？ </string>
+    <string name="bbc_addToFavour">加入收藏</string>
+    <string name="bbc_search">搜索</string>
+    <string name="bbc_type">输入</string>
+
+    //Guardian News
+    <string name="G_MainTitle">卫报</string>
+    <string name="G_MainHint">请输入关键字</string>
+    <string name="G_Search">搜索</string>
+    <string name="G_UrlTitle">请点击以下链接阅读新闻： </string>
+    <string name="G_SectionTitle">文章类别： </string>
+    <string name="G_AddToFav">加入收藏</string>
+    <string name="G_FavTitle">收藏列表</string>
+    <string name="G_DrawerHeader">欢迎来到卫报阅读器</string>
+
+    <string name="G_OverFlowMenu">点击浮云</string>
+    <string name="G_QuestionIcon">点击问号</string>
+    <string name="G_Instruction1">1. 搜寻想要查询的信息</string>
+    <string name="G_Instruction2">2. 在新闻列表点击查看全部</string>
+    <string name="G_Instruction3">3. 在新闻详细内容，点击链接看新闻，点击加入收藏来收藏</string>
+    <string name="G_Instruction4">4. 主页面有个小心心，点击查看收藏</string>
+    <string name="G_Instruction5">5. 收藏页面快击查看新闻，长按选择删除</string>
+
+    <string name="G_Yes">是</string>
+    <string name="G_No">否</string>
+    <string name="G_Dismiss">取消</string>
+
+    <!-- Strings for nasa earth imagery Chang -->
+    <string name="lonTextChang">输入lon</string>
+    <string name="latTextChang">输入lat</string>
+    <string name="searchButtonChang">搜索</string>
+    <string name="addToFavoriteButtonChang">加入喜欢列表</string>
+    <string name="showFavoriteButtonChang">展示喜欢列表</string>
+    <string name="dialogMessage">你是否想删除index </string>
+    <string name="deleteMessage">删除 </string>
+    <string name="helpBtnChang">帮助 </string>
+    <string name="hideFavoriteButtonChang">隐藏喜欢列表 </string>
+    <string name="activityMenu">用法简介 </string>
+    <string name="detailInstruction">输入希望寻找图片的lat和lon，然后一个填写全部图片信息的新页面会载入，在新页面会有三个按钮，添加按钮可以把图片加入列表，展示按钮可以展示整个列表，隐藏按钮可以隐藏列表</string>
+    <string name="toastChang">图片已加入列表</string>
+    <string name="snackbarChang">你点击了帮助</string>
+    <string name="dateTextChang">日期： </string>
+    <string name="sourceTextChang">资源:  </string>
+    <string name="versionTextChang">版本号： </string>
+    <string name="imageInformationChang">图片信息: </string>
+    <string name="imageIdChang">图片ID: </string>
+    <string name="hideButtonChang">隐藏</string>
+
+</resources>

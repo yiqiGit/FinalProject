@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 public class DbHandler extends SQLiteOpenHelper {
 
     protected final static String DATABASE_NAME = "NewsTable";
-    protected final static int VERSION_NUM = 2;
+    protected final static int VERSION_NUM = 1;
     public final static String TABLE_NAME = "BBC_NEWS";
     public final static String COL_ID = "_id";
     public final static String COL_TITLE = "title";

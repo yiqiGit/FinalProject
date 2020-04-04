@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">FinalProject</string>
-    <string name="button1">button 1</string>
-    <string name="button2">button 2</string>
-    <string name="button3">button 3</string>
-    <string name="button4">button 4</string>
 
     <!-- Strings for nasa image of the day app -->
     <string name="datePicker">Select a date</string>
@@ -28,11 +24,24 @@
     <string name="back">Back to Main</string>
     <string name="open" translatable="false">open</string>
 
+     //bbcnews
     <string name="bbc_title">Help menu</string>
     <string name="bbc_message1">The selected row is: </string>
     <string name="bbc_message2">The database id:</string>
     <string name="bbc_back">Back to front</string>
+    <string name="bbc_yes">Yes</string>
+    <string name="bbc_no">No</string>
+    <string name="bbc_checkinfo">Check information</string>
+    <string name="bbc_intro">Introduction for this page: </string>
+    <string name="bbc_homepage">Home page</string>
+    <string name="bbc_favouriteList">Favourite list</string>
+    <string name="bbc_refresh">Refresh</string>
+    <string name="bbc_delete">Do you want to delete? </string>
+    <string name="bbc_addToFavour">Added to favourite list</string>
+    <string name="bbc_search">Search</string>
+    <string name="bbc_type">Type here </string>
 
+    <!-- Strings for nasa earth imagary Chang -->
     <string name="lonTextChang">type lon info</string>
     <string name="latTextChang">type lat info</string>
     <string name="searchButtonChang">Search</string>
@@ -57,6 +66,31 @@
     <string name="guardian_open">open</string>
     <string name="guardian_close">close</string>
 
+    <string name="G_MainTitle">The Guardian News</string>
+    <string name="G_MainHint">Enter key word without space</string>
+    <string name="G_Search">Search</string>
+    <string name="G_UrlTitle">Click on the following link to access the news: </string>
+    <string name="G_SectionTitle">Section Name of this article: </string>
+    <string name="G_AddToFav">Add to Favorite</string>
+    <string name="G_FavTitle">Favorite List</string>
+    <string name="G_DrawerHeader">Welcome to The Guardian News</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="G_OverFlowMenu">You clicked on the overflow menu</string>
+    <string name="G_QuestionIcon">You clicked on question icon</string>
+    <string name="G_Instruction1">1. Enter a key word in the search area, then click on "Search" button to search for news with the key words.</string>
+    <string name="G_Instruction2">2. In the News list, click on one item to see details about a news.</string>
+    <string name="G_Instruction3">3. In the detailed news page, click on the Url to read the news. Click on "Add to Favorite" to add this news to the favorite list.</string>
+    <string name="G_Instruction4">4. In the main menu, there is a favorite button on the toolbar, click on it to see the list of favorite news.</string>
+    <string name="G_Instruction5">5. In the Favorite list, short click to see details about the news, and long click to delete the news from favorite list.</string>
+
+    <string name="G_Yes">Yes</string>
+    <string name="G_No">No</string>
+    <string name="G_Dismiss">Dismiss</string>
+
+
+
+
+
+
+
 </resources>

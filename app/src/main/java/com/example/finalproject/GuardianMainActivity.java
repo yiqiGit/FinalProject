@@ -16,16 +16,36 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.finalproject.GuardianNews.GuardianFavoriteList;
 import com.example.finalproject.GuardianNews.GuardianList;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import android.os.Bundle;
 
+/**
+ * This is the main activity for The Guardian News app.
+ *
+ *@author Pei Lun Zou
+ *@version 1.0
+ */
+
+
 public class GuardianMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    /**
+     * The searchButton is a Button when clicked, the content in the EditText will be sent to the GuardianList activity, and go to GuardianList.
+     */
     Button searchButton;
+
+    /**
+     * searchText is the user input that is typed into the EditText field.
+     */
     String searchText = "";
 
+
+    /**
+     * The onCreate method of this activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +77,7 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
 
 
 
-        //search button
+        //search button and onClickListener to send searchText to GuardianList activity.
         searchButton = findViewById(R.id.searchB);
         searchButton.setOnClickListener((click) -> {
             //add base url and search item
@@ -73,46 +93,60 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
 
     }
 
+    /**
+     * OnCreateOptionsMenu method that inflate the menu items for use in the tool bar.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.guardiantoolbarmenu, menu);
 
         return true;
     }
 
+    /**
+     * onOptionsItemSelected method add function to each item from the toolBar.
+     */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String message = null;
+
         //Look at your menu XML file. Put a case for every id in that file:
         switch(item.getItemId())
         {
             //what to do when the menu item is selected:
             case R.id.overflowMenu:
-                Toast.makeText(this,"You clicked on the overflow menu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.G_OverFlowMenu), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.questionIcon:
-                Toast.makeText(this,"You clicked on question icon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.G_QuestionIcon), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.infoIcon:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("The Guardian news Reader instruction")
-                        .setMessage("Here is the instruction for the reader")
-                        .setPositiveButton("Yes", (click, b) -> {
+                        .setMessage((getString(R.string.G_Instruction1)) +"\n\n"
+                                +(getString(R.string.G_Instruction2)) + "\n\n"
+                                +(getString(R.string.G_Instruction3)) + "\n\n"
+                                +(getString(R.string.G_Instruction4)) + "\n\n"
+                                +(getString(R.string.G_Instruction5)) +"\n\n")
+
+
+                        .setPositiveButton(getString(R.string.G_Yes), (click, b) -> {
                             Toast.makeText(this,"Yes", Toast.LENGTH_SHORT).show();
                         })
-                        .setNegativeButton("No" ,(click, b) -> {
+                        .setNegativeButton(getString(R.string.G_No) ,(click, b) -> {
                             Toast.makeText(this,"No", Toast.LENGTH_SHORT).show();
                         })
-                        .setNeutralButton("dismiss", (click, b) -> {
+                        .setNeutralButton(getString(R.string.G_Dismiss), (click, b) -> {
 
                         })
                         .create().show();
                 break;
             case R.id.checkIcon:
-                Snackbar.make(findViewById(R.id.checkIcon), "You clicked on check icon",Snackbar.LENGTH_SHORT).show();
-                message = "You clicked on check icon";
+                Intent intent = new Intent (this, GuardianFavoriteList.class);
+                startActivity(intent);
                 break;
         }
 
@@ -120,6 +154,9 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
     }
 
 
+    /**
+     * onNavigationItemSelected method set functions for each menu item.
+     */
 
     @Override
     public boolean onNavigationItemSelected( MenuItem item) {
@@ -129,14 +166,14 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         switch(item.getItemId())
         {
             //what to do when the menu item is selected:
-            case R.id.questionIcon:
+            case R.id.item1:
                 message="Question";
                 break;
-            case R.id.infoIcon:
+            case R.id.item2:
 
                 message="Info";
                 break;
-            case R.id.checkIcon:
+            case R.id.item3:
                 this.finish();
                 message="Check";
                 break;
