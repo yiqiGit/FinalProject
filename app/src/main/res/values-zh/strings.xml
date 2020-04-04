@@ -11,10 +11,9 @@
     <string name="bbc_intro">页面使用介绍</string>
     <string name="bbc_homepage">主页</string>
     <string name="bbc_favouriteList">收藏夹</string>
-    <string name="bbc_refresh">刷新</string>
     <string name="bbc_delete">确认删除？ </string>
     <string name="bbc_addToFavour">加入收藏</string>
-    <string name="bbc_search">搜索</string>
+    <string name="bbc_refresh">刷新</string>
     <string name="bbc_type">输入</string>
 
     //Guardian News

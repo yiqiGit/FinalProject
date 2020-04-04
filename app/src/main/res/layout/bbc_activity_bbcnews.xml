@@ -38,25 +38,15 @@
                 android:layout_marginBottom="45dp"></ListView>
 
 
-<!--                <EditText-->
-<!--                    android:id="@+id/bbc_Type"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="43dp"-->
-<!--                    android:hint = "@string/bbc_type"-->
-<!--                    android:gravity="center"-->
-<!--                    android:background="@color/colorPrimary"-->
-<!--                    android:layout_toLeftOf="@+id/bbc_search"-->
-<!--                    android:layout_alignParentLeft="true"-->
-<!--                    android:layout_alignParentBottom="true"/>-->
-
-            <!--    <Button-->
-            <!--        android:id="@+id/bbc_search"-->
-            <!--        android:layout_width="wrap_content"-->
-            <!--        android:layout_height="wrap_content"-->
-            <!--        android:text="@string/bbc_search"-->
-            <!--        android:layout_alignParentBottom="true"-->
-            <!--        android:layout_alignParentRight="true"-->
-            <!--        />-->
+                <Button
+                    android:id="@+id/bbc_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/bbc_refresh"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    />
 
         </RelativeLayout>
 

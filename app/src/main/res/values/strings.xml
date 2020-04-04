@@ -35,10 +35,9 @@
     <string name="bbc_intro">Introduction for this page: </string>
     <string name="bbc_homepage">Home page</string>
     <string name="bbc_favouriteList">Favourite list</string>
-    <string name="bbc_refresh">Refresh</string>
     <string name="bbc_delete">Do you want to delete? </string>
     <string name="bbc_addToFavour">Added to favourite list</string>
-    <string name="bbc_search">Search</string>
+    <string name="bbc_refresh">Refresh</string>
     <string name="bbc_type">Type here </string>
 
     <string name="lonTextChang">type lon info</string>

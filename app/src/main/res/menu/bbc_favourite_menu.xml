@@ -45,10 +45,4 @@
         android:title="Favourtite List"/>    <!-- This uses showAsAction=always, so look at icon= parameter -->
 
 
-    <item android:id="@+id/item4"
-        android:orderInCategory="150"
-        android:icon="@drawable/bbc_icon4"
-        app:showAsAction="never"
-        android:title="Refresh"/>
-
 </menu>

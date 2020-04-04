@@ -169,21 +169,14 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             }
         });
 
-//        Button bt1_bbc = findViewById(R.id.bbc_search);
-//        EditText etx_bbc = findViewById(R.id.bbc_Type);
-//        String exts_bbc = etx_bbc.getText().toString();
-//
-//        bt1_bbc.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                List<News> newsList_new = new ArrayList<>();
-//                for(int i = 0 ;i<newsList.size();i++){
-//                    if(newsList.get(i).getTitle().contains(exts_bbc)){
-//                        newsList_new.add(newsList.get(i));
-//                    }
-//                }
-//            }
-//        });
+        Button btn1 = (Button)findViewById(R.id.bbc_refresh);
+        btn1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                finish();
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+            }
+        });
     }
 
     /**
@@ -287,6 +280,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             // what to do when the menu item is selected:
             case R.id.bbc_bbc:
                 startActivity(new Intent(BbcNews.this, BbcNews.class));
+                finish();
                 break;
             case R.id.bbc_guardian:
                 startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
@@ -315,12 +309,6 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             case R.id.item3:
                 message = (BbcNews.this).getResources().getString(R.string.bbc_favouriteList);
                 startActivity(new Intent(BbcNews.this, FavouriteList.class));
-                break;
-            case R.id.item4:
-                //Do something here
-                message = (BbcNews.this).getResources().getString(R.string.bbc_refresh);
-                finish();
-                startActivity(new Intent(BbcNews.this, BbcNews.class));
                 break;
         }
 
