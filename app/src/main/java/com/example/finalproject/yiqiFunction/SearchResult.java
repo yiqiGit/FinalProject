@@ -245,6 +245,23 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
             case R.id.nasaImage:
                 startActivity(new Intent(SearchResult.this, NasaImageOfTheDay.class));
                 break;
+            case R.id.mainHelp:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(R.string.activityMenu)
+
+                        //What is the message:
+                        .setMessage(R.string.detailInstruction)
+
+
+                        .setPositiveButton("OK", (click2, arg) -> {
+
+                        })
+                        //You can add extra layout elements:
+                        //            .setView(getLayoutInflater().inflate(R.layout.row_layout, null))
+
+                        //Show the dialog
+                        .create().show();
+                break;
         }
 
         return true;
@@ -264,6 +281,23 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(SearchResult.this, NasaImageOfTheDay.class));
+                break;
+            case R.id.mainHelp:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(R.string.activityMenu)
+
+                        //What is the message:
+                        .setMessage(R.string.detailInstruction)
+
+
+                        .setPositiveButton("OK", (click2, arg) -> {
+
+                        })
+                        //You can add extra layout elements:
+                        //            .setView(getLayoutInflater().inflate(R.layout.row_layout, null))
+
+                        //Show the dialog
+                        .create().show();
                 break;
         }
 
