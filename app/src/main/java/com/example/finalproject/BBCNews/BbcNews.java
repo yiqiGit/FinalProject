@@ -26,12 +26,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.nasaImage.NasaImageOfTheDay;
+import com.example.finalproject.yiqiFunction.ImageSearch;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -52,7 +59,7 @@ import java.util.List;
  * @author Xiaoting Kong
  * @version 1.0
  */
-public class BbcNews extends AppCompatActivity {
+public class BbcNews extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     /**
      * An ArrayList of News representing news.
      */
@@ -99,6 +106,18 @@ public class BbcNews extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+//        navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
+        navigationView.setNavigationItemSelectedListener(this);
+
+
 
         // Do AsyncTask work
         downloadNews.execute();
@@ -246,6 +265,10 @@ public class BbcNews extends AppCompatActivity {
             }
         }
     }
+    public static class ViewHolder {
+        ImageButton mBtn;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -255,12 +278,25 @@ public class BbcNews extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         String message = null;
 
         switch (item.getItemId()) {
             // what to do when the menu item is selected:
+            case R.id.bbc_bbc:
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+                break;
+            case R.id.bbc_guardian:
+                startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
+                break;
+            case R.id.bbc_earth:
+                startActivity(new Intent(BbcNews.this, ImageSearch.class));
+                break;
+            case R.id.bbc_nasaImage:
+                startActivity(new Intent(BbcNews.this, NasaImageOfTheDay.class));
+                break;
             case R.id.item1:
 //                message = "Introduction for this page";
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BbcNews.this);
@@ -275,11 +311,6 @@ public class BbcNews extends AppCompatActivity {
                     }
                 });
                 alertDialogBuilder.show();
-                break;
-            case R.id.item2:
-                message = (BbcNews.this).getResources().getString(R.string.bbc_homepage);
-                startActivity(new Intent(BbcNews.this, MainActivity.class));
-                finish();
                 break;
             case R.id.item3:
                 message = (BbcNews.this).getResources().getString(R.string.bbc_favouriteList);
@@ -297,8 +328,24 @@ public class BbcNews extends AppCompatActivity {
         return true;
     }
 
-    static class ViewHolder {
-        ImageButton mBtn;
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.bbc:
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(BbcNews.this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(BbcNews.this, NasaImageOfTheDay.class));
+                break;
+        }
+
+        return false;
     }
 
 

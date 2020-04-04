@@ -24,7 +24,7 @@
     <string name="back">Back to Main</string>
     <string name="open" translatable="false">open</string>
 
-     //bbcnews
+    //bbcnews
     <string name="bbc_title">Help menu</string>
     <string name="bbc_message1">The selected row is: </string>
     <string name="bbc_message2">The database id:</string>
@@ -71,11 +71,6 @@
     <string name="G_Yes">Yes</string>
     <string name="G_No">No</string>
     <string name="G_Dismiss">Dismiss</string>
-
-
-
-
-
 
 
 </resources>

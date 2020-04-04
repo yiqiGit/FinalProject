@@ -2,32 +2,53 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/bbc_bbc"
+        android:orderInCategory="10"
+        app:showAsAction="always"
+        android:icon="@drawable/bbc"
+        android:title="BBC News"
 
+        />
+    <item android:id="@+id/bbc_earth"
+        android:orderInCategory="30"
+        app:showAsAction="always"
+        android:icon="@drawable/earth"
+        android:title="Nasa Earth Imagery"
+
+        />
+    <item android:id="@+id/bbc_guardian"
+        android:orderInCategory="40"
+        app:showAsAction="always"
+        android:icon="@drawable/the_guardian_icon"
+        android:title="The Guardian News"
+
+        />
+
+
+    <item android:id="@+id/bbc_nasaImage"
+        android:orderInCategory="20"
+        app:showAsAction="always"
+        android:icon="@drawable/nasa_logo"
+        android:title="Nasa Image of the Day"
+
+        />
     <item android:id="@+id/item1"
-        android:title=""
+        android:title="Help Menu"
         android:icon="@drawable/bbc_icon1"
         android:orderInCategory="70"
-        app:showAsAction="always"/>
-
-
-    <item android:id="@+id/item2"
-        android:orderInCategory="80"
-        android:icon="@drawable/bbc_icon2"
-        app:showAsAction="always|collapseActionView"
-        android:title=""/>
-
+        app:showAsAction="never"/>
 
     <item android:id="@+id/item3"
         android:orderInCategory="100"
         android:icon="@drawable/bbc_icon3"
-        app:showAsAction="always|collapseActionView"
-        android:title=""/>    <!-- This uses showAsAction=always, so look at icon= parameter -->
+        app:showAsAction="never"
+        android:title="Favourtite List"/>    <!-- This uses showAsAction=always, so look at icon= parameter -->
 
 
     <item android:id="@+id/item4"
         android:orderInCategory="150"
         android:icon="@drawable/bbc_icon4"
-        app:showAsAction="always|collapseActionView"
-        android:title=""/>
+        app:showAsAction="never"
+        android:title="Refresh"/>
 
 </menu>
