@@ -96,7 +96,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:headerLayout="@layout/guardian_drawer_header"
+            app:headerLayout="@layout/drawer_header_chang"
             app:menu="@menu/main_toolbar"
             android:id="@+id/navigationSearchResultChang"/>
     </androidx.drawerlayout.widget.DrawerLayout>
