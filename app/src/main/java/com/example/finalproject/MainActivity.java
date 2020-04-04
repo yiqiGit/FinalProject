@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nasaImage:
                 startActivity(new Intent(MainActivity.this, NasaImageOfTheDay.class));
                 break;
+            case R.id.mainHelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+                break;
         }
 
         return true;
@@ -90,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(MainActivity.this, NasaImageOfTheDay.class));
+                break;
+            case R.id.mainHelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
                 break;
         }
 
