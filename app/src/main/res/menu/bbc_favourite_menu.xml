@@ -26,7 +26,7 @@
 
 
     <item android:id="@+id/bbc_nasaImage"
-        android:orderInCategory="50"
+        android:orderInCategory="20"
         app:showAsAction="always"
         android:icon="@drawable/nasa_logo"
         android:title="Nasa Image of the Day"
