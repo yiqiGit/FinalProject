@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +31,8 @@ import java.util.List;
 public class FavouriteList extends AppCompatActivity {
     List<News> favouriteList= new ArrayList<>();
     SQLiteDatabase db;
+    EditText bbc_edit;
+    TextView bbc_fav_title;
     /**
      * Value representing "item information".
      *
@@ -48,11 +53,26 @@ public class FavouriteList extends AppCompatActivity {
 
         loadDataFromDatabase();
 
+
         // Set the whole list in MyListAdapter
         MyListAdapter myListAdapter = new MyListAdapter(this, favouriteList);
         ListView theList = findViewById(R.id.favour_list);
         theList.setAdapter(myListAdapter);
 
+        bbc_edit = findViewById(R.id.bbc_text_input);
+        bbc_fav_title = findViewById(R.id.favour_news_title);
+        loadLogoutInformation();
+        Button btn_change = (Button)findViewById(R.id.bbc_changeButton);
+
+        btn_change.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                String edit = bbc_edit.getText().toString();
+                if(edit !=null){
+                    bbc_fav_title.setText(edit);
+                }
+            }
+        });
 
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,6 +115,27 @@ public class FavouriteList extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveLoginInformation(bbc_edit.getText().toString());
+    }
+
+
+    public void saveLoginInformation(String name_favor) {
+        Context context = FavouriteList.this;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavourTitle", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Title", name_favor);
+        editor.commit();
+    }
+    public void loadLogoutInformation() {
+        SharedPreferences sharedPreferences= getSharedPreferences("FavourTitle", Context .MODE_PRIVATE);
+        String title = sharedPreferences.getString("Title","");
+        bbc_edit.setText(title);
+        bbc_fav_title.setText(title);
     }
 
 

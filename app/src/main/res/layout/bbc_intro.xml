@@ -6,5 +6,5 @@
         android:id="@+id/bbc_ImageView"
         android:src="@drawable/bbc_intro"
         android:layout_width="match_parent"
-        android:layout_height="450dp" />
+        android:layout_height="390dp" />
 </LinearLayout>
