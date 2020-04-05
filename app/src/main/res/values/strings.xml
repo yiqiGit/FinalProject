@@ -43,6 +43,11 @@
     <string name="bbc_change_name">Change name</string>
 
 
+    <string name="snackbarChang">BBCNews---News scrapper from BBC\n
+        Nasa Image of the Day---Catch the pictures from Nasa\n
+        Nasa Earth Imagery---Earth Image from Nasa\n
+        The Guardian News---Find articles from The Guardian newspaper
+    </string>
 
     <!-- Strings for nasa earth imagary Chang -->
     <string name="lonTextChang">type lon info</string>
@@ -57,7 +62,6 @@
     <string name="activityMenu">Activity Menu </string>
     <string name="detailInstruction">Type in lat and lon of image, then a new page will be loaded and all information will be present. There are 3 buttons on next page, the add button can add the image into the database, the show button can show the full list of image. If you click on the item, detial informaiton of that item will be shown up, hide button will hide list.</string>
     <string name="toastChang">The image has been add to Favourite List</string>
-    <string name="snackbarChang">You click help</string>
     <string name="dateTextChang">Date: </string>
     <string name="sourceTextChang">source: </string>
     <string name="versionTextChang">Service Version: </string>
