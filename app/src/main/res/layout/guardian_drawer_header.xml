@@ -5,11 +5,48 @@
     android:layout_height="match_parent">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BBC News \n Author: Xiaoting Kong \n Version: 1.0 \n"
+        android:textSize="13dp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:textAlignment="viewStart"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Nasa Image of the Day  \n Author: Guilherme Jardim \n Version: 1.0 \n"
+        android:textSize="13dp"
+        android:textStyle="italic"
+        android:layout_centerVertical="true"
+        android:textAlignment="viewStart"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Drawer Header"/>
+        android:textColor="@color/black"
+        android:text="Nasa Earth Imagery\n Author: Yiqi Chang \n Version: 1.0 \n"
+        android:textSize="13dp"
+        android:textStyle="italic"
+        android:layout_centerVertical="true"
+        android:textAlignment="viewStart"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="The Guardian News\n Author: Peilun Zou \n Version: 1.0 "
+        android:textSize="13dp"
+        android:textStyle="italic"
+        android:layout_centerVertical="true"
+        android:textAlignment="viewStart"
+        />
 
 
 

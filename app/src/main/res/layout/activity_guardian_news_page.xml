@@ -52,7 +52,14 @@
         android:id="@+id/favButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="@string/G_AddToFav"/>
+
+    <Button
+        android:id="@+id/goToMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/G_GoToMain"/>
 
 
 </LinearLayout>

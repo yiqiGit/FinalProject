@@ -39,4 +39,6 @@
     <string name="G_No">否</string>
     <string name="G_Dismiss">取消</string>
 
+    <string name="G_GoToMain">返回主页</string>
+
 </resources>
