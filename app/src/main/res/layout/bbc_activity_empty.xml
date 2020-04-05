@@ -1,5 +1,5 @@
 <FrameLayout
-    android:id="@+id/frameLayout1"
+    android:id="@+id/frameLayout_bbc"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="10dp"
