@@ -11,13 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+        <activity android:name=".yiqiFunction.EmptyActivityChang" />
         <activity android:name=".yiqiFunction.ImageSearch" />
         <activity android:name=".yiqiFunction.FavouriteList" />
         <activity android:name=".yiqiFunction.SearchResult" />
         <activity android:name=".BBCNews.DetailsFragment" />
         <activity android:name=".BBCNews.EmptyActivity" />
         <activity android:name=".BBCNews.BbcNews" />
-        <activity android:name=".BBCNews.FavouriteList" />
+        <activity android:name=".BBCNews.FavouriteList"/>
         <activity android:name=".nasaImage.EmptyActivity" />
         <activity android:name=".nasaImage.FavouriteImages" />
         <activity android:name=".nasaImage.NasaImageOfTheDay" />

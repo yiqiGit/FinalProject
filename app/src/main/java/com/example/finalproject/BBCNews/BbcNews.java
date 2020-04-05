@@ -65,8 +65,8 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
      */
     List<News> newsList = new ArrayList<>();
     List<News> favouriteList1 = new ArrayList<>();
-    ;
-
+    MyListAdapter myListAdapter;
+    ListView theList;
     /**
      * A ProgressBar representing progress bar.
      */
@@ -91,16 +91,22 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
      */
     public static final String ITEM_LINK = "LINK";
 
-    long M;
+    public void onDownloadComplete(){
+        myListAdapter = new MyListAdapter(this, newsList);
+        theList.setAdapter(myListAdapter);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bbc_activity_bbcnews);
+
+        loadDataFromDatabase();
+
         progressBar = (ProgressBar) findViewById(R.id.ProgressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        loadDataFromDatabase();
 
         DownloadNews downloadNews = new DownloadNews();
 
@@ -118,25 +124,22 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         // Do AsyncTask work
+        Log.i("INFO", "before, "+ newsList.size());
         downloadNews.execute();
-        newsList = downloadNews.getNewsList();
-
+        Log.i("INFO", "after, "+ newsList.size());
         if (favouriteList1 != null) {
             for (int i = 0; i < favouriteList1.size(); i++) {
                 newsList.add(favouriteList1.get(i));
             }
         }
-
+        Log.i("INFO", "after add, "+ newsList.size());
         // Get the Data Repository in write mode
         DbHandler dbOpener = new DbHandler(BbcNews.this);
         db = dbOpener.getWritableDatabase();
 
         // Set the whole list in MyListAdapter
-        MyListAdapter myListAdapter = new MyListAdapter(this, newsList);
-        ListView theList = findViewById(R.id.news_list);
-        theList.setAdapter(myListAdapter);
+        theList = findViewById(R.id.news_list);
 
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -202,7 +205,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         }  //This returns the string at position p
 
         public long getItemId(int p) {
-            return newsList.get(p).getId();
+            return lists.get(p).getId();
         } //This returns the database id of the item at position p
 
         public View getView(int p, View recycled, ViewGroup parent) {
@@ -280,7 +283,6 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             // what to do when the menu item is selected:
             case R.id.bbc_bbc:
                 startActivity(new Intent(BbcNews.this, BbcNews.class));
-                finish();
                 break;
             case R.id.bbc_guardian:
                 startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
@@ -344,7 +346,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         /**
          * An ArrayList of News representing news.
          */
-        private List<News> newsList1 = new ArrayList<>();
+        //private List<News> newsList1 = new ArrayList<>();
 
         @Override
         protected List<News> doInBackground(String... params) {
@@ -403,20 +405,26 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
                                 isLinkInDb = true;
                                 break;
                             }
-                            ;
                         }
+
+//                        for (int i = 0; i < newsList.size(); i++) {
+//                            if ((newsList.get(i).getLink()).equals(link)) {
+//                                isLinkInDb = true;
+//                                break;
+//                            }
+//                        }
 
                         if (!isLinkInDb) {
-                            newsList1.add(new News(0, title, description, date, link, false));
+                            /*newsList1*/ newsList.add(new News(0, title, description, date, link, false));
                         }
 
-                        publishProgress(100);
+
                     }
 
                     xpp.next(); // move the pointer to next XML element
                 }
-                return newsList1;
-
+                Log.i("INFO", "success, "+newsList.size());
+                return /*newsList1*/ newsList;
             } catch (MalformedURLException mfe) {
                 ret = "Malformed URL exception";
             } catch (IOException ioe) {
@@ -424,7 +432,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             } catch (XmlPullParserException pe) {
                 ret = "XML Pull exception. The XML is not properly formed";
             }
-            return null;
+            Log.i("INFO", "failure, "+ ret + "   "+ newsList.size());
+            publishProgress(100);
+            return newsList;
         }
 
         protected void onProgressUpdate(Integer... values) {
@@ -435,13 +445,13 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
 
         protected void onPostExecute(List<News> s) {
             super.onPostExecute(s);
-            progressBar.setVisibility(View.VISIBLE);
-//            progressBar.setVisibility(View.INVISIBLE);
+            onDownloadComplete();
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
-        public List<News> getNewsList() {
-            return newsList1;
-        }
+//        public List<News> getNewsList() {
+//            return newsList1;
+//        }
     }
 
     private void loadDataFromDatabase() {

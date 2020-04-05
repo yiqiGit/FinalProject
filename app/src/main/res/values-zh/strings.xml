@@ -15,6 +15,9 @@
     <string name="bbc_addToFavour">加入收藏</string>
     <string name="bbc_refresh">刷新</string>
     <string name="bbc_type">输入</string>
+    <string name="favour_news_title">收藏夹</string>
+    <string name="bbc_change_name">更改名字</string>
+
 
     //Guardian News
     <string name="G_MainTitle">卫报</string>
@@ -37,5 +40,26 @@
     <string name="G_Yes">是</string>
     <string name="G_No">否</string>
     <string name="G_Dismiss">取消</string>
+
+    <!-- Strings for nasa earth imagery Chang -->
+    <string name="lonTextChang">输入lon</string>
+    <string name="latTextChang">输入lat</string>
+    <string name="searchButtonChang">搜索</string>
+    <string name="addToFavoriteButtonChang">加入喜欢列表</string>
+    <string name="showFavoriteButtonChang">展示喜欢列表</string>
+    <string name="dialogMessage">你是否想删除index </string>
+    <string name="deleteMessage">删除 </string>
+    <string name="helpBtnChang">帮助 </string>
+    <string name="hideFavoriteButtonChang">隐藏喜欢列表 </string>
+    <string name="activityMenu">用法简介 </string>
+    <string name="detailInstruction">输入希望寻找图片的lat和lon，然后一个填写全部图片信息的新页面会载入，在新页面会有三个按钮，添加按钮可以把图片加入列表，展示按钮可以展示整个列表，隐藏按钮可以隐藏列表</string>
+    <string name="toastChang">图片已加入列表</string>
+    <string name="snackbarChang">你点击了帮助</string>
+    <string name="dateTextChang">日期： </string>
+    <string name="sourceTextChang">资源:  </string>
+    <string name="versionTextChang">版本号： </string>
+    <string name="imageInformationChang">图片信息: </string>
+    <string name="imageIdChang">图片ID: </string>
+    <string name="hideButtonChang">隐藏</string>
 
 </resources>
