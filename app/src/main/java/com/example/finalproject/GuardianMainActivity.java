@@ -67,6 +67,7 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
         navigationView.setNavigationItemSelectedListener(this);
 
 
