@@ -14,7 +14,6 @@
         <activity android:name=".nasaImage.EmptyActivity"></activity>
         <activity android:name=".nasaImage.FavouriteImages" />
         <activity android:name=".ImageSearch" />
-        <activity android:name=".BbcNews" />
         <activity android:name=".GuardianMainActivity" />
         <activity android:name=".nasaImage.NasaImageOfTheDay" />
         <activity android:name=".MainActivity">
