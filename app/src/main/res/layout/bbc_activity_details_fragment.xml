@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Link website to this news"
+            android:autoLink="all"
             android:textSize="15dp" />
         <Button
             android:id="@+id/hide_button"

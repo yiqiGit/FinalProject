@@ -24,7 +24,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="5dp"
         android:textSize="20dp"
-        android:text="Click on the following link to access the news:"/>
+        android:text="@string/G_UrlTitle"/>
     <TextView
         android:id="@+id/newsPUrl"
         android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:textSize="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
-        android:text="Article section:"/>
+        android:text="@string/G_SectionTitle"/>
 
     <TextView
         android:id="@+id/newsPSN"
@@ -47,5 +47,19 @@
         android:layout_height="wrap_content"
         android:textSize="15dp"
         android:text="Section Name"/>
+
+    <Button
+        android:id="@+id/favButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/G_AddToFav"/>
+
+    <Button
+        android:id="@+id/goToMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/G_GoToMain"/>
+
 
 </LinearLayout>

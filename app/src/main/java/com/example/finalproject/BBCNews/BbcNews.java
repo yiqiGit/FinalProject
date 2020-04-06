@@ -1,5 +1,7 @@
 package com.example.finalproject.BBCNews;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,18 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.nasaImage.NasaImageOfTheDay;
+import com.example.finalproject.yiqiFunction.ImageSearch;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -44,20 +56,17 @@ import java.util.List;
 /**
  * This class is the main activity class for BBC News.
  *
- *@author Xiaoting Kong
- *@version 1.0
+ * @author Xiaoting Kong
+ * @version 1.0
  */
-public class BbcNews extends AppCompatActivity {
+public class BbcNews extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     /**
      * An ArrayList of News representing news.
      */
-    List<News> newsList;
-
-    /**
-     * An ArrayList of News representing favourite news.
-     */
-    List<News> favouriteList;
-
+    List<News> newsList = new ArrayList<>();
+    List<News> favouriteList1 = new ArrayList<>();
+    MyListAdapter myListAdapter;
+    ListView theList;
     /**
      * A ProgressBar representing progress bar.
      */
@@ -70,38 +79,67 @@ public class BbcNews extends AppCompatActivity {
 
     /**
      * Value representing "item information".
-     *
+     * <p>
      * {@value #ITEM_INFORMATION}
      */
     public static final String ITEM_INFORMATION = "INFORMATION";
 
     /**
      * Value representing "item link".
-     *
+     * <p>
      * {@value #ITEM_LINK}
      */
     public static final String ITEM_LINK = "LINK";
+
+    public void onDownloadComplete(){
+        myListAdapter = new MyListAdapter(this, newsList);
+        theList.setAdapter(myListAdapter);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bbc_activity_bbcnews);
+
+        loadDataFromDatabase();
+
         progressBar = (ProgressBar) findViewById(R.id.ProgressBar);
         progressBar.setVisibility(View.VISIBLE);
+
 
         DownloadNews downloadNews = new DownloadNews();
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         // Do AsyncTask work
+        Log.i("INFO", "before, "+ newsList.size());
         downloadNews.execute();
-        newsList = downloadNews.getNewsList();
+        Log.i("INFO", "after, "+ newsList.size());
+        if (favouriteList1 != null) {
+            for (int i = 0; i < favouriteList1.size(); i++) {
+                newsList.add(favouriteList1.get(i));
+            }
+        }
+        Log.i("INFO", "after add, "+ newsList.size());
+        // Get the Data Repository in write mode
+        DbHandler dbOpener = new DbHandler(BbcNews.this);
+        db = dbOpener.getWritableDatabase();
 
         // Set the whole list in MyListAdapter
-        MyListAdapter myListAdapter = new MyListAdapter(this, newsList);
-        ListView theList = findViewById(R.id.news_list);
-        theList.setAdapter(myListAdapter);
+        theList = findViewById(R.id.news_list);
 
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -116,23 +154,32 @@ public class BbcNews extends AppCompatActivity {
             }
         });
 
-//        theList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder (BbcNews.this);
-//                alertDialogBuilder.setTitle((BbcNews.this).getResources().getString(R.string.title));
-//                alertDialogBuilder.setMessage((BbcNews.this).getResources().getString(R.string.message1) + position
-//                        +"\n"+ (BbcNews.this).getResources().getString(R.string.message2)+ id+"\n"+ newsList.get(position).getIsFavourite());
-//                alertDialogBuilder.setPositiveButton((BbcNews.this).getResources().getString(R.string.back), new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                alertDialogBuilder.show();
-//                return true;
-//            }
-//        });
+        theList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BbcNews.this);
+                alertDialogBuilder.setTitle((BbcNews.this).getResources().getString(R.string.bbc_checkinfo));
+                alertDialogBuilder.setMessage((BbcNews.this).getResources().getString(R.string.bbc_message1) + position
+                        + "\n" + (BbcNews.this).getResources().getString(R.string.bbc_message2) + id + "\n" + newsList.get(position).getIsFavourite());
+                alertDialogBuilder.setPositiveButton((BbcNews.this).getResources().getString(R.string.back), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialogBuilder.show();
+                return true;
+            }
+        });
+
+        Button btn1 = (Button)findViewById(R.id.bbc_refresh);
+        btn1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                finish();
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+            }
+        });
     }
 
     /**
@@ -182,28 +229,42 @@ public class BbcNews extends AppCompatActivity {
             return newView;
         }
 
-        // int count = 0;
         @Override
         public void onClick(View v) {
             int i = (int) v.getTag();
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.mBtn = (ImageButton) v.findViewById(R.id.add);
-//            if(v.getId()==R.id.add && count % 2 ==0){
-            if (v.getId() == R.id.add) {
-                Snackbar.make(viewHolder.mBtn, "Added to favourite list", Snackbar.LENGTH_SHORT).show();
+            if (v.getId() == R.id.add && newsList.get(i).getIsFavourite()==false) {
+                Snackbar.make(viewHolder.mBtn, (BbcNews.this).getResources().getString(R.string.bbc_addToFavour), Snackbar.LENGTH_SHORT).show();
                 viewHolder.mBtn.setImageResource(R.drawable.bbc_heart2);
                 isFavorite = true;
                 newsList.get(i).setIsFavourite(true);
+
+                if (newsList.get(i).getIsFavourite() == true) {
+                    //Create a new map of values, where column names are the keys
+                    ContentValues cValues = new ContentValues();
+
+                    String title_data = newsList.get(i).getTitle();
+                    String des_data = newsList.get(i).getDescription();
+                    String date_data = newsList.get(i).getDate();
+                    String link_data = newsList.get(i).getLink();
+
+                    cValues.put(DbHandler.COL_TITLE, title_data);
+                    cValues.put(DbHandler.COL_DESCRIPTION, des_data);
+                    cValues.put(DbHandler.COL_DATE, date_data);
+                    cValues.put(DbHandler.COL_LINK, link_data);
+                    cValues.put(DbHandler.COL_FAVOURITE, "true");
+                    long newRowId = db.insert(DbHandler.TABLE_NAME, null, cValues);
+                    newsList.get(i).setId(newRowId);
+
+                }
             }
-//            else if(v.getId()==R.id.add && count % 2 ==1){
-//                Snackbar.make(viewHolder.mBtn, "Moved  from favourite list", Snackbar.LENGTH_INDEFINITE).show();
-//                viewHolder.mBtn.setImageResource(R.drawable.bbc_heart1);
-//                isFavorite = false;
-//                newsList.get(i).setIsFavourite(false);
-//            }
-//            count= count +1;
         }
     }
+    public static class ViewHolder {
+        ImageButton mBtn;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -213,17 +274,32 @@ public class BbcNews extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         String message = null;
 
         switch (item.getItemId()) {
             // what to do when the menu item is selected:
+            case R.id.bbc_bbc:
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+                break;
+            case R.id.bbc_guardian:
+                startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
+                break;
+            case R.id.bbc_earth:
+                startActivity(new Intent(BbcNews.this, ImageSearch.class));
+                break;
+            case R.id.bbc_nasaImage:
+                startActivity(new Intent(BbcNews.this, NasaImageOfTheDay.class));
+                break;
             case R.id.item1:
 //                message = "Introduction for this page";
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BbcNews.this);
                 alertDialogBuilder.setTitle((BbcNews.this).getResources().getString(R.string.bbc_title));
-                alertDialogBuilder.setMessage("Introduction for this page,todo....");
+                alertDialogBuilder.setMessage((BbcNews.this).getResources().getString(R.string.bbc_intro));
+                LayoutInflater inflater = getLayoutInflater();
+                alertDialogBuilder.setView(inflater.inflate(R.layout.bbc_intro, null));
                 alertDialogBuilder.setPositiveButton((BbcNews.this).getResources().getString(R.string.bbc_back), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -232,16 +308,9 @@ public class BbcNews extends AppCompatActivity {
                 });
                 alertDialogBuilder.show();
                 break;
-            case R.id.item2:
-                message = "Home page";
-                startActivity(new Intent(BbcNews.this, MainActivity.class));
-                break;
             case R.id.item3:
-                message = "Favourite list";
-                break;
-            case R.id.item4:
-                //Do something here
-                message = "Refresh";
+                message = (BbcNews.this).getResources().getString(R.string.bbc_favouriteList);
+                startActivity(new Intent(BbcNews.this, FavouriteList.class));
                 break;
         }
 
@@ -249,45 +318,29 @@ public class BbcNews extends AppCompatActivity {
         return true;
     }
 
-    static class ViewHolder {
-        ImageButton mBtn;
-    }
-
-    private void loadDataFromDatabase() {
-        // get a database connection
-        DbHandler dbOpener = new DbHandler(this);
-        db = dbOpener.getWritableDatabase();
-
-        String[] columns = {DbHandler.COL_ID, DbHandler.COL_TITLE, DbHandler.COL_DESCRIPTION,
-                DbHandler.COL_DATE, DbHandler.COL_LINK, DbHandler.COL_FAVOURITE};
-        Cursor results = db.query(false, DbHandler.TABLE_NAME, columns, null, null, null,
-                null, null, null);
-        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
-        int Title_ColIndex = results.getColumnIndex(DbHandler.COL_TITLE);
-        int Description_ColIndex = results.getColumnIndex(DbHandler.COL_DESCRIPTION);
-        int Date_ColIndex = results.getColumnIndex(DbHandler.COL_DATE);
-        int Link_ColIndex = results.getColumnIndex(DbHandler.COL_LINK);
-        int IsFavourite_ColIndex = results.getColumnIndex(DbHandler.COL_FAVOURITE);
-//        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
-
-        //iterate over the results, return true if there is a next item:
-        while (results.moveToNext()) {
-            Boolean IsFavourite;
-            long id = results.getLong(idColIndex);
-            String title0 = results.getString(Title_ColIndex);
-            String description0 = results.getString(Description_ColIndex);
-            String date0 = results.getString(Date_ColIndex);
-            String link0 = results.getString(Link_ColIndex);
-            String IsFavourite0 = results.getString(IsFavourite_ColIndex);
-            if (IsFavourite0.equals("true")) {
-                IsFavourite = true;
-            } else IsFavourite = false;
-
-//            long id = results.getLong(idColIndex);
-            // add the news to the array list:
-            newsList.add(new News(id, title0, description0, date0, link0, IsFavourite));
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.bbc:
+                startActivity(new Intent(BbcNews.this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(BbcNews.this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(BbcNews.this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(BbcNews.this, NasaImageOfTheDay.class));
+                break;
+            case R.id.mainHelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+                break;
         }
+
+        return false;
     }
+
 
     /**
      * This inner class is the class to download BBC news.
@@ -296,7 +349,7 @@ public class BbcNews extends AppCompatActivity {
         /**
          * An ArrayList of News representing news.
          */
-        private List<News> newsList = new ArrayList<>();
+        //private List<News> newsList1 = new ArrayList<>();
 
         @Override
         protected List<News> doInBackground(String... params) {
@@ -348,14 +401,33 @@ public class BbcNews extends AppCompatActivity {
                         }
                     } else if (EVENT_TYPE == XmlPullParser.END_TAG && xpp.getName().equalsIgnoreCase("item")) {
                         inItem = false;
-                        newsList.add(new News(0, title, description, date, link, false));
-                        publishProgress(100);
+                        boolean isLinkInDb = false;
+
+                        for (int i = 0; i < favouriteList1.size(); i++) {
+                            if ((favouriteList1.get(i).getLink()).equals(link)) {
+                                isLinkInDb = true;
+                                break;
+                            }
+                        }
+
+//                        for (int i = 0; i < newsList.size(); i++) {
+//                            if ((newsList.get(i).getLink()).equals(link)) {
+//                                isLinkInDb = true;
+//                                break;
+//                            }
+//                        }
+
+                        if (!isLinkInDb) {
+                            /*newsList1*/ newsList.add(new News(0, title, description, date, link, false));
+                        }
+
+
                     }
 
                     xpp.next(); // move the pointer to next XML element
                 }
-                return newsList;
-
+                Log.i("INFO", "success, "+newsList.size());
+                return /*newsList1*/ newsList;
             } catch (MalformedURLException mfe) {
                 ret = "Malformed URL exception";
             } catch (IOException ioe) {
@@ -363,7 +435,9 @@ public class BbcNews extends AppCompatActivity {
             } catch (XmlPullParserException pe) {
                 ret = "XML Pull exception. The XML is not properly formed";
             }
-            return null;
+            Log.i("INFO", "failure, "+ ret + "   "+ newsList.size());
+            publishProgress(100);
+            return newsList;
         }
 
         protected void onProgressUpdate(Integer... values) {
@@ -374,13 +448,65 @@ public class BbcNews extends AppCompatActivity {
 
         protected void onPostExecute(List<News> s) {
             super.onPostExecute(s);
-            progressBar.setVisibility(View.VISIBLE);
-//            progressBar.setVisibility(View.INVISIBLE);
+            onDownloadComplete();
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
-        public List<News> getNewsList() {
-            return newsList;
+//        public List<News> getNewsList() {
+//            return newsList1;
+//        }
+    }
+
+    private void loadDataFromDatabase() {
+        // get a database connection
+        DbHandler dbOpener = new DbHandler(this);
+        db = dbOpener.getWritableDatabase();
+
+        String[] columns = {DbHandler.COL_ID, DbHandler.COL_TITLE, DbHandler.COL_DESCRIPTION,
+                DbHandler.COL_DATE, DbHandler.COL_LINK, DbHandler.COL_FAVOURITE};
+        Cursor results = db.query(false, DbHandler.TABLE_NAME, columns, null, null, null,
+                null, null, null);
+        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
+        int Title_ColIndex = results.getColumnIndex(DbHandler.COL_TITLE);
+        int Description_ColIndex = results.getColumnIndex(DbHandler.COL_DESCRIPTION);
+        int Date_ColIndex = results.getColumnIndex(DbHandler.COL_DATE);
+        int Link_ColIndex = results.getColumnIndex(DbHandler.COL_LINK);
+        int IsFavourite_ColIndex = results.getColumnIndex(DbHandler.COL_FAVOURITE);
+//        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
+
+        //iterate over the results, return true if there is a next item:
+        while (results.moveToNext()) {
+            Boolean IsFavourite;
+            long id = results.getLong(idColIndex);
+            String title0 = results.getString(Title_ColIndex);
+            String description0 = results.getString(Description_ColIndex);
+            String date0 = results.getString(Date_ColIndex);
+            String link0 = results.getString(Link_ColIndex);
+            String IsFavourite0 = results.getString(IsFavourite_ColIndex);
+            if (IsFavourite0.equals("true")) {
+                IsFavourite = true;
+            } else IsFavourite = false;
+
+            // add the news to the array list:
+            favouriteList1.add(new News(id, title0, description0, date0, link0, IsFavourite));
         }
     }
 
+    private boolean firstLanuch = false;
+
+    public void onResume() {
+        super.onResume();
+        if (firstLanuch)
+            restartActivity(BbcNews.this);
+        firstLanuch = true;
+        // use boolean varible ignore the first launch.
+    }
+
+    public static void restartActivity(Activity activity) {
+        Intent intent = new Intent();
+        intent.setClass(activity, activity.getClass());
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+        activity.finish();
+    }
 }
