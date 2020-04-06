@@ -106,7 +106,9 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         return false;
     }
 
-
+    /**
+     * This method loads the data from the database and stores it into the {@link ArrayList} images.
+     */
     private void loadDataFromDatabase()
     {
         //get a database connection:
@@ -148,6 +150,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
 
 
     }
+
+    /**
+     * Displays a dialog box and if the ok button is pressed, the item in the current position is deleted from the database
+     * and the adapter updates the {@link ListView}
+     */
     private void deleteItemDialog(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         String message = getString(R.string.popUpMessage);
