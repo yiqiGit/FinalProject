@@ -41,7 +41,6 @@ import android.widget.Toast;
 
 
 import com.example.finalproject.GuardianMainActivity;
-import com.example.finalproject.ImageSearch;
 import com.example.finalproject.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -377,7 +376,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 startActivity(new Intent(this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
-                startActivity(new Intent(this, ImageSearch.class));
+                //startActivity(new Intent(this, ImageSearch.class));
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(this, NasaImageOfTheDay.class));
@@ -498,7 +497,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 startActivity(new Intent(this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
-                startActivity(new Intent(this, ImageSearch.class));
+                //startActivity(new Intent(this, ImageSearch.class));
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(this, NasaImageOfTheDay.class));
