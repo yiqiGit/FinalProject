@@ -371,7 +371,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                         })
                         .create().show();
             case R.id.bbc:
-                startActivity(new Intent(this, BbcNews.class));
+                //startActivity(new Intent(this, BbcNews.class));
                 break;
             case R.id.guardian:
                 startActivity(new Intent(this, GuardianMainActivity.class));
@@ -492,7 +492,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         switch (menuItem.getItemId()){
             case R.id.bbc:
-                startActivity(new Intent(this, BbcNews.class));
+                //startActivity(new Intent(this, BbcNews.class));
                 break;
             case R.id.guardian:
                 startActivity(new Intent(this, GuardianMainActivity.class));
