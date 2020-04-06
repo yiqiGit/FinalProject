@@ -48,36 +48,39 @@
             />
 
 
+        <ImageView
+            android:id="@+id/preview"
+            android:layout_width="260dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/hd_url"
+            />
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hd_url"
+            android:layout_below="@id/preview"
+            android:layout_above="@id/footer"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
+
             >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/preview"
-                    android:layout_width="200dp"
-                    android:layout_height="240dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    />
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="315dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:text="TextView"
-                    android:textColor="@color/yellow"
-                    android:layout_below="@+id/preview"
-                    android:layout_centerHorizontal="true"/>
-
-
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/yellow"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_centerHorizontal="true"/>
 
         </ScrollView>
+
+
+
         <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
