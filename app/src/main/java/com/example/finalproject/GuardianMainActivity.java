@@ -121,10 +121,30 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         switch(item.getItemId())
         {
             //what to do when the menu item is selected:
-            case R.id.overflowMenu:
-               //Snackbar.make (findViewById(R.id.overflowMenu), getString(R.string.G_OverFlowMenu), Snackbar.LENGTH_SHORT).show();
-                Toast.makeText(this, getString(R.string.G_OverFlowMenu), Toast.LENGTH_SHORT).show();
+//            case R.id.overflowMenu:
+//               //Snackbar.make (findViewById(R.id.overflowMenu), getString(R.string.G_OverFlowMenu), Snackbar.LENGTH_SHORT).show();
+//                Toast.makeText(this, getString(R.string.G_OverFlowMenu), Toast.LENGTH_SHORT).show();
+//                break;
+
+            case R.id.bbc:
+                startActivity(new Intent(this, BbcNews.class));
                 break;
+            case R.id.guardian:
+                startActivity(new Intent(this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(this, NasaImageOfTheDay.class));
+                break;
+            case R.id.mainHelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.overflowhelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+
             case R.id.homeIcon:
 
                 Intent goHomeIntent = new Intent (this, MainActivity.class);
@@ -194,6 +214,12 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
                 startActivity(nasaEIntent);
                 message="Go to NASA Earth";
                 break;
+
+            case R.id.mainHelp:
+                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+                message ="Help Menu";
+                break;
+
 
         }
 
