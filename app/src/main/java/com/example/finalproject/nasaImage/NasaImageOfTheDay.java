@@ -3,10 +3,12 @@ package com.example.finalproject.nasaImage;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -44,6 +46,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.finalproject.BbcNews;
+import com.example.finalproject.GuardianMainActivity;
+import com.example.finalproject.ImageSearch;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.R;
 import com.google.android.material.navigation.NavigationView;
@@ -196,11 +201,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                 Toast.makeText(this, "HD url not available.", Toast.LENGTH_LONG).show();
             }
         });
-        Toolbar myToolbar = (Toolbar)findViewById(R.id.menuBar);
-        setSupportActionBar(myToolbar);
+
 
         //imagesArray = new ArrayList<NasaImage>();
         dateBox = findViewById(R.id.dateBox);
+        dateBox.setText("");
         db = new DbOpener(this).getWritableDatabase();
 
         /*when the date field is touched the method onClick is called for the user to pick a date*/
@@ -208,7 +213,10 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
         searchBtn = findViewById(R.id.searchBtn);
         /*This button will make the app connect and download the image*/
         searchBtn.setOnClickListener(click->{
-            if(dateBox.getText()!=null && !(dateBox.getText().equals(""))) {
+            if(dateBox.getText().toString().equals("")){
+                Toast.makeText(NasaImageOfTheDay.this, R.string.emptyDate,Toast.LENGTH_LONG).show();
+            }
+            else {
 
                 if(image!=null) clearScreen();
 
@@ -239,9 +247,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                     imageQuery.execute(URL_PATH + getSelectedDate());
                 }
             }
-            else{
-                Toast.makeText(this,R.string.emptyDate, Toast.LENGTH_LONG);
-            }
+
 
 
         });
@@ -289,6 +295,18 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             startActivity(goToFavorites);
 
         });
+        Toolbar myToolbar = (Toolbar)findViewById(R.id.mainMenuBar);
+        setSupportActionBar(myToolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nasa_mainNav);
+        navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void clearScreen(){
@@ -365,16 +383,29 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                         .setPositiveButton("Ok", (c, arg) -> {
                         })
                         .create().show();
+            case R.id.bbc:
+                startActivity(new Intent(this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(this, NasaImageOfTheDay.class));
+                break;
         }
 
         return true;
     }
 
-    /**
-     * This method saves a string to the project's {@link SharedPreferences}
-     * @param s String to be saved in the SharedPreferences
-     * @return true if successful, or false otherwise.
-     */
+
+        /**
+         * This method saves a string to the project's {@link SharedPreferences}
+         * @param s String to be saved in the SharedPreferences
+         * @return true if successful, or false otherwise.
+         */
     private boolean saveSharedPreferences(String s){
         //creates a SharedPreference object, referring to the file contained in the Strings file_key, using the mode MODE_PRIVATE
         //source of help: https://stackoverflow.com/questions/4531396/get-value-of-a-edit-text-field
@@ -471,7 +502,24 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+
+        switch (menuItem.getItemId()){
+            case R.id.bbc:
+                startActivity(new Intent(this, BbcNews.class));
+                break;
+            case R.id.guardian:
+                startActivity(new Intent(this, GuardianMainActivity.class));
+                break;
+            case R.id.earth:
+                startActivity(new Intent(this, ImageSearch.class));
+                break;
+            case R.id.nasaImage:
+                startActivity(new Intent(this, NasaImageOfTheDay.class));
+                break;
+        }
+
+
+        return true;
     }
 
 

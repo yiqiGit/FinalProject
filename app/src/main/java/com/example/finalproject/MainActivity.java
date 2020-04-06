@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()){
             case R.id.bbc:
-               startActivity(new Intent(MainActivity.this, Function2.class));
+               startActivity(new Intent(MainActivity.this, GuardianMainActivity.class));
                 break;
             case R.id.guardian:
-                startActivity(new Intent(MainActivity.this, Bbbnews.class));
+                startActivity(new Intent(MainActivity.this, BbcNews.class));
                 break;
             case R.id.earth:
                 startActivity(new Intent(MainActivity.this, ImageSearch.class));
@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.bbc:
-                startActivity(new Intent(MainActivity.this, Function2.class));
+                startActivity(new Intent(MainActivity.this, GuardianMainActivity.class));
                 break;
             case R.id.guardian:
-                startActivity(new Intent(MainActivity.this, Bbbnews.class));
+                startActivity(new Intent(MainActivity.this, BbcNews.class));
                 break;
             case R.id.earth:
                 startActivity(new Intent(MainActivity.this, ImageSearch.class));
