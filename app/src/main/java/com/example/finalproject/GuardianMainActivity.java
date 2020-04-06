@@ -16,8 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.finalproject.BBCNews.BbcNews;
 import com.example.finalproject.GuardianNews.GuardianFavoriteList;
 import com.example.finalproject.GuardianNews.GuardianList;
+import com.example.finalproject.nasaImage.NasaImageOfTheDay;
+import com.example.finalproject.yiqiFunction.ImageSearch;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import android.os.Bundle;
@@ -64,6 +67,7 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -118,10 +122,14 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         {
             //what to do when the menu item is selected:
             case R.id.overflowMenu:
-                Toast.makeText(this,getString(R.string.G_OverFlowMenu), Toast.LENGTH_SHORT).show();
+               //Snackbar.make (findViewById(R.id.overflowMenu), getString(R.string.G_OverFlowMenu), Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.G_OverFlowMenu), Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.questionIcon:
-                Toast.makeText(this,getString(R.string.G_QuestionIcon), Toast.LENGTH_SHORT).show();
+            case R.id.homeIcon:
+
+                Intent goHomeIntent = new Intent (this, MainActivity.class);
+                startActivity(goHomeIntent);
+
                 break;
             case R.id.infoIcon:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -166,16 +174,25 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
         switch(item.getItemId())
         {
             //what to do when the menu item is selected:
-            case R.id.item1:
-                message="Question";
-                break;
-            case R.id.item2:
+            case R.id.g_item1:
 
-                message="Info";
+                Intent bbcIntent = new Intent(this, BbcNews.class);
+                startActivity(bbcIntent);
+                message = "Go to BBC News";
+
                 break;
-            case R.id.item3:
-                this.finish();
-                message="Check";
+            case R.id.g_item2:
+
+                Intent nasaImgItent = new Intent(this, NasaImageOfTheDay.class);
+                startActivity(nasaImgItent);
+                message = "Go to NASA Image";
+                break;
+
+            case R.id.g_item3:
+
+                Intent nasaEIntent = new Intent (this, ImageSearch.class);
+                startActivity(nasaEIntent);
+                message="Go to NASA Earth";
                 break;
 
         }

@@ -308,9 +308,9 @@ public class GuardianList extends AppCompatActivity {
                         sb.append(line + "\n");
                     }
                     jsonStr = sb.toString(); //result is the whole string
-
+                    publishProgress(75);
                 }
-                publishProgress(75);
+
 
             } catch (Exception e) {
                 Log.e("AsyncError", e.getMessage());

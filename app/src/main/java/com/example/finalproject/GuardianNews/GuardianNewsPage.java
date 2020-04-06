@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.yiqiFunction.MyOpener;
 
@@ -116,6 +117,13 @@ public class GuardianNewsPage extends AppCompatActivity {
             Toast.makeText(this, "This page has been added to Favorite", Toast.LENGTH_SHORT).show();
 
 
+        });
+
+        Button goToMain = findViewById(R.id.goToMainButton);
+        goToMain.setOnClickListener( (click) -> {
+
+            Intent goMainIntent = new Intent (this, GuardianMainActivity.class);
+            startActivity(goMainIntent);
         });
 
     }

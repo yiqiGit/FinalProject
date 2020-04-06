@@ -3,26 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item
-        android:id="@+id/item1"
-        android:icon="@drawable/guardian_question"
-        android:title="Question"
+
+    <item android:id="@+id/g_item1"
+        android:orderInCategory="10"
         app:showAsAction="always"
-        android:orderInCategory="1"/>
+        android:icon="@drawable/bbc"
+        android:title="BBC News"
 
-    <item
-        android:id="@+id/item2"
-        android:icon="@drawable/guardian_info"
-        android:title="Info"
+        />
+
+
+    <item android:id="@+id/g_item2"
+        android:orderInCategory="20"
         app:showAsAction="always"
-        android:orderInCategory="2"/>
+        android:icon="@drawable/nasa_logo"
+        android:title="Nasa Image of the Day"
 
-    <item
-        android:id="@+id/item3"
-        android:icon="@drawable/guardian_check"
-        android:title="Check"
+        />
+
+    <item android:id="@+id/g_item3"
+        android:orderInCategory="30"
         app:showAsAction="always"
-        android:orderInCategory="3"/>
+        android:icon="@drawable/earth"
+        android:title="Nasa Earth Imagery"
 
-
+        />
 </menu>

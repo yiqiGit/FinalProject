@@ -7,8 +7,9 @@
         app:showAsAction="never"
         android:orderInCategory="1"/>
 
-    <item android:id="@+id/questionIcon"
-        android:icon="@drawable/guardian_question"
+
+    <item android:id="@+id/homeIcon"
+        android:icon="@drawable/guardian_home"
         android:title="Choice 1"
         app:showAsAction="always"
         android:orderInCategory="2"/>
