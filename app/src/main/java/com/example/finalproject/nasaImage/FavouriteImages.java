@@ -38,11 +38,29 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
     * https://www.tutlane.com/tutorial/android/android-popup-menu-with-examples
     * https://code.tutsplus.com/tutorials/android-sdk-implement-a-share-intent--mobile-8433
     * */
+    /**
+     * The object to handle connection with the database
+     */
     private static SQLiteDatabase db;
+    /**
+     * Array of {@link NasaImage} objects
+     */
     private List<NasaImage> images;
+    /**
+     * id returned from the SQLite insert statement, for every new row inserted.
+     */
     private long itemId;
+    /**
+     * The adapter that manages the ListView component
+     */
     private ImageAdapter imageAdapter;
+    /**
+     * This holds the position of each {@link NasaImage} object in the ListView
+     */
     private int itemPosition;
+    /**
+     * An intent that starts a function to share the image url with other applications
+     */
     private Intent sharingIntent;
 
     @Override
@@ -175,6 +193,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
                 .create().show();
     }
 
+    /**
+     * Deletes the record from the database corresponding to the id received as a parameter.
+     * @param id database id of the row to be deleted
+     * @return true if operation succeeds.
+     */
     private static boolean deleteFromDb(long id){
         try {
             db.delete(DbOpener.TABLE_NAME, DbOpener.COL_ID + "=?", new String[]{Long.toString(id)});
@@ -184,6 +207,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         return true;
     }
 
+    /**
+     * Takes a string with the image file name, searches it on the hard disk and loads into the memory
+     * @param fileName name of file to be loaded
+     * @return the Bitmap image file
+     */
     private Bitmap loadFile(String fileName){
         FileInputStream fis = null;
         try {
@@ -231,7 +259,7 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
             }
 
             Log.i("FavouriteImages. ", "List item position: "+ position);
-            //View newView = inflater.inflate(R.layout.image_item, parent, false);
+
 
             if(images !=null) {
                 TextView titleText = recycleView.findViewById(R.id.itemTitle);
@@ -247,15 +275,6 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
             return recycleView;
         }
 
-        private View setView(View view){
-            TextView titleText = view.findViewById(R.id.itemTitle);
 
-            TextView dateText = view.findViewById(R.id.itemDate);
-
-            TextView urlText = view.findViewById(R.id.itemUrl);
-
-            ImageView imageView = view.findViewById(R.id.itemWindow);
-            return view;
-        }
     }
 }

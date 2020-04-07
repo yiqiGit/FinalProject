@@ -84,6 +84,10 @@ public class ItemFragment extends Fragment {
         return detailView;
     }
 
+    /**
+     * Takes a string with the image file name, searches it on the hard disk and loads into the memory
+     * @param fileName name of file to be loaded
+     */
     private void loadFile(String fileName){
         FileInputStream fis = null;
         try {
