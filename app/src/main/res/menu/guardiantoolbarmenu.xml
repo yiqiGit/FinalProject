@@ -2,27 +2,61 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/overflowMenu"
-        android:title="Overflow Menu"
-        app:showAsAction="never"
+    <item android:id="@+id/bbc"
+        android:orderInCategory="10"
+        app:showAsAction="always"
+        android:icon="@drawable/bbc"
+        android:title="BBC News"
+
+        />
+    <item android:id="@+id/earth"
+        android:orderInCategory="30"
+        app:showAsAction="always"
+        android:icon="@drawable/earth"
+        android:title="Nasa Earth Imagery"
+
+        />
+    <item android:id="@+id/guardian"
+        android:orderInCategory="40"
+        app:showAsAction="always"
+        android:icon="@drawable/the_guardian_icon"
+        android:title="The Guardian News"
+
+        />
+
+
+    <item android:id="@+id/nasaImage"
+        android:orderInCategory="20"
+        app:showAsAction="always"
+        android:icon="@drawable/nasa_logo"
+        android:title="Nasa Image of the Day"
+
+        />
+
+    <item android:id="@+id/overflowhelp"
+        android:title="Help"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/help"
         android:orderInCategory="1"/>
 
-    <item android:id="@+id/questionIcon"
-        android:icon="@drawable/guardian_question"
-        android:title="Choice 1"
-        app:showAsAction="always"
+    <item android:id="@+id/homeIcon"
+        android:icon="@drawable/guardian_home"
+        android:title="Go to Main Menu"
+        app:showAsAction="ifRoom"
         android:orderInCategory="2"/>
 
     <item android:id="@+id/infoIcon"
         android:icon="@drawable/guardian_info"
-        android:title="Choice 2"
-        app:showAsAction="always"
+        android:title="User Instruction"
+        app:showAsAction="ifRoom"
         android:orderInCategory="3"/>
 
     <item android:id="@+id/checkIcon"
         android:icon="@drawable/guardian_fav"
-        android:title="Choice 3"
-        app:showAsAction="always"
+        android:title="Favorite List"
+        app:showAsAction="ifRoom"
         android:orderInCategory="4"/>
+
+
 
 </menu>

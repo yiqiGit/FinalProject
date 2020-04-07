@@ -56,7 +56,7 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/main_toolbar"
-            app:headerLayout="@layout/header_for_all"
+            app:headerLayout="@layout/header_for_bbc"
             android:id="@+id/nav_view"
             android:background="@color/space"
             app:itemTextColor="@color/white"
