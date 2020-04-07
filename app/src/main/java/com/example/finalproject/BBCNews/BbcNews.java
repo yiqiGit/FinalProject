@@ -91,24 +91,28 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
      */
     public static final String ITEM_LINK = "LINK";
 
+    /**
+     * onDownloadComplete method of BBC News activity.
+     * Initialize list adapter and use it for the listView after downloading news from BBC is complete.
+     */
     public void onDownloadComplete(){
         myListAdapter = new MyListAdapter(this, newsList);
         theList.setAdapter(myListAdapter);
     }
 
-
+    /**
+     * onCreate method of BBC News activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bbc_activity_bbcnews);
 
+        // Load favourites from database.
         loadDataFromDatabase();
 
         progressBar = (ProgressBar) findViewById(R.id.ProgressBar);
         progressBar.setVisibility(View.VISIBLE);
-
-
-        DownloadNews downloadNews = new DownloadNews();
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -123,17 +127,17 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         navigationView.setItemIconTintList(null); //this line avoids the icons to appear shaded gray. src: https://stackoverflow.com/questions/31394265/navigation-drawer-item-icon-not-showing-original-colour
         navigationView.setNavigationItemSelectedListener(this);
 
-
         // Do AsyncTask work
-        Log.i("INFO", "before, "+ newsList.size());
+        DownloadNews downloadNews = new DownloadNews();
         downloadNews.execute();
-        Log.i("INFO", "after, "+ newsList.size());
+
+        // Add favourites to the whole list
         if (favouriteList1 != null) {
             for (int i = 0; i < favouriteList1.size(); i++) {
                 newsList.add(favouriteList1.get(i));
             }
         }
-        Log.i("INFO", "after add, "+ newsList.size());
+
         // Get the Data Repository in write mode
         DbHandler dbOpener = new DbHandler(BbcNews.this);
         db = dbOpener.getWritableDatabase();
@@ -141,6 +145,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         // Set the whole list in MyListAdapter
         theList = findViewById(R.id.news_list);
 
+        /**
+         * setOnItemClickListener method of theList.
+         */
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -154,6 +161,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             }
         });
 
+        /**
+         * setOnItemLongClickListener method of theList.
+         */
         theList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
@@ -173,6 +183,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         });
 
         Button btn1 = (Button)findViewById(R.id.bbc_refresh);
+        /**
+         * setOnClickListener method of btn1.
+         */
         btn1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -190,24 +203,43 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         private List<News> lists;
         boolean isFavorite;
 
+        /**
+         * Constructor of this MyListAdapter inner class.
+         */
         public MyListAdapter(Context context, List<News> lists) {
             super();
             this.context = context;
             this.lists = lists;
         }
 
+        /**
+         * This function tells how many objects to show.
+         */
         public int getCount() {
             return lists.size();
-        } //This function tells how many objects to show
+        }
 
+        /**
+         * This returns the string at position p.
+         *
+         * @param position  an int representing position
+         */
         public Object getItem(int position) {
             return lists.get(position);
-        }  //This returns the string at position p
+        }
 
+        /**
+         * This returns the database id of the item at position p.
+         *
+         * @param p  an int representing position
+         */
         public long getItemId(int p) {
             return lists.get(p).getId();
-        } //This returns the database id of the item at position p
+        }
 
+        /**
+         * getView method of this MyListAdapter inner class.
+         */
         public View getView(int p, View recycled, ViewGroup parent) {
             TextView bnews;
             LayoutInflater inflater = getLayoutInflater();
@@ -229,6 +261,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             return newView;
         }
 
+        /**
+         * onClick method of this MyListAdapter inner class.
+         */
         @Override
         public void onClick(View v) {
             int i = (int) v.getTag();
@@ -261,11 +296,17 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             }
         }
     }
+
+    /**
+     * This inner class is the ViewHolder class.
+     */
     public static class ViewHolder {
         ImageButton mBtn;
     }
 
-
+    /**
+     * onCreateOptionsMenu method of this BBC News activity.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -274,7 +315,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         return true;
     }
 
-
+    /**
+     * onOptionsItemSelected method of this BBC News activity.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         String message = null;
@@ -318,6 +361,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         return true;
     }
 
+    /**
+     * onNavigationItemSelected method of this BBC News activity.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -346,11 +392,10 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
      * This inner class is the class to download BBC news.
      */
     public class DownloadNews extends AsyncTask<String, Integer, List<News>> {
-        /**
-         * An ArrayList of News representing news.
-         */
-        //private List<News> newsList1 = new ArrayList<>();
 
+        /**
+         * Download BBC news within doInBackground method.
+         */
         @Override
         protected List<News> doInBackground(String... params) {
             String ret = null;
@@ -418,7 +463,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
 //                        }
 
                         if (!isLinkInDb) {
-                            /*newsList1*/ newsList.add(new News(0, title, description, date, link, false));
+                            newsList.add(new News(0, title, description, date, link, false));
                         }
 
 
@@ -426,7 +471,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
 
                     xpp.next(); // move the pointer to next XML element
                 }
-                Log.i("INFO", "success, "+newsList.size());
+                Log.i("INFO", "Success, number of news pulled from BBC: " + newsList.size());
                 return /*newsList1*/ newsList;
             } catch (MalformedURLException mfe) {
                 ret = "Malformed URL exception";
@@ -435,28 +480,33 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
             } catch (XmlPullParserException pe) {
                 ret = "XML Pull exception. The XML is not properly formed";
             }
-            Log.i("INFO", "failure, "+ ret + "   "+ newsList.size());
+            Log.i("INFO", "Failure, "+ ret + ", number of news pulled from BBC: "+ newsList.size());
             publishProgress(100);
             return newsList;
         }
 
+        /**
+         * Set progress bar within onProgressUpdate method.
+         */
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(values[0]);
         }
 
+        /**
+         * Set progress bar within onPostExecute method and notify UI thread about download complete.
+         */
         protected void onPostExecute(List<News> s) {
             super.onPostExecute(s);
             onDownloadComplete();
             progressBar.setVisibility(View.INVISIBLE);
         }
-
-//        public List<News> getNewsList() {
-//            return newsList1;
-//        }
     }
 
+    /**
+     * Load favourite news from database.
+     */
     private void loadDataFromDatabase() {
         // get a database connection
         DbHandler dbOpener = new DbHandler(this);
@@ -474,7 +524,7 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         int IsFavourite_ColIndex = results.getColumnIndex(DbHandler.COL_FAVOURITE);
 //        int idColIndex = results.getColumnIndex(DbHandler.COL_ID);
 
-        //iterate over the results, return true if there is a next item:
+        // iterate over the results, return true if there is a next item:
         while (results.moveToNext()) {
             Boolean IsFavourite;
             long id = results.getLong(idColIndex);
@@ -494,6 +544,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
 
     private boolean firstLanuch = false;
 
+    /**
+     * onResume method of this BBC News activity.
+     */
     public void onResume() {
         super.onResume();
         if (firstLanuch)
@@ -502,6 +555,9 @@ public class BbcNews extends AppCompatActivity implements NavigationView.OnNavig
         // use boolean varible ignore the first launch.
     }
 
+    /**
+     * restartActivity method of this BBC News activity.
+     */
     public static void restartActivity(Activity activity) {
         Intent intent = new Intent();
         intent.setClass(activity, activity.getClass());
