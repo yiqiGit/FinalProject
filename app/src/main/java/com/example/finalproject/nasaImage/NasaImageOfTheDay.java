@@ -40,8 +40,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.finalproject.BBCNews.BbcNews;
 import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.yiqiFunction.ImageSearch;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -205,11 +207,11 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             else {
 
                 if(image!=null) clearScreen();
-
+                //Get a current date as reference
                 Calendar currentDate = Calendar.getInstance();
                 LocalDate date = LocalDate.now();
 
-                //Get a current date as reference
+
                 Calendar userDate = (Calendar) currentDate.clone();
                 currentDate.set(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
                 //Parse the selected date to Calendar object
@@ -230,7 +232,17 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                     myImage = null;
                     nasaLogo.setVisibility(View.INVISIBLE);
                     ImageQuery imageQuery = new ImageQuery();
-                    imageQuery.execute(URL_PATH + getSelectedDate());
+                    try{
+                        imageQuery.execute(URL_PATH + getSelectedDate());
+                    }
+                    catch (Exception ex){
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(NasaImageOfTheDay.this);
+                        String message = ex.getMessage();
+                        dialog.setTitle("Warning:").setMessage(message)
+                                .setPositiveButton("Ok", (c, arg) -> {
+                                })
+                                .create().show();
+                    }
                 }
             }
 
@@ -370,13 +382,13 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
                         })
                         .create().show();
             case R.id.bbc:
-                //startActivity(new Intent(this, BbcNews.class));
+                startActivity(new Intent(this, BbcNews.class));
                 break;
             case R.id.guardian:
                 startActivity(new Intent(this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
-                //startActivity(new Intent(this, ImageSearch.class));
+                startActivity(new Intent(this, ImageSearch.class));
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(this, NasaImageOfTheDay.class));
@@ -414,7 +426,7 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
     private void welcomeDialog(String date){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         String message = getString(R.string.welcomeMessage) + " " + date;
-        dialog.setTitle("Dialog").setMessage(message)
+        dialog.setTitle("Welcome").setMessage(message)
                 .setPositiveButton("Ok", (c, arg) -> {
 
                 })
@@ -491,13 +503,13 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
 
         switch (menuItem.getItemId()){
             case R.id.bbc:
-                //startActivity(new Intent(this, BbcNews.class));
+                startActivity(new Intent(this, BbcNews.class));
                 break;
             case R.id.guardian:
                 startActivity(new Intent(this, GuardianMainActivity.class));
                 break;
             case R.id.earth:
-                //startActivity(new Intent(this, ImageSearch.class));
+                startActivity(new Intent(this, ImageSearch.class));
                 break;
             case R.id.nasaImage:
                 startActivity(new Intent(this, NasaImageOfTheDay.class));
@@ -545,12 +557,15 @@ public class NasaImageOfTheDay extends AppCompatActivity implements View.OnClick
             }
             catch (MalformedURLException ex){
                 Log.e("URL error: ", ex.getMessage());
+                throw new RuntimeException("There was an error while processing the request.");
             }
             catch (IOException ex){
                 Log.e("Connection error: ", ex.getMessage());
+                throw new RuntimeException("There was an error while processing the request.");
             }
             catch (JSONException ex){
                 Log.e("JSON Object error:", ex.getMessage());
+                throw new RuntimeException("There was an error while processing the request.");
             }
 
             return null;
