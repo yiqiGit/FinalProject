@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent">
+
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The Guardian"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:id="@+id/TextV"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="invisible"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_below="@+id/TextV"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/guardianListView"
+        android:layout_below="@+id/progressBar"
+        android:layout_alignParentLeft="true"/>
+
+    <FrameLayout
+        android:id="@+id/fragmentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/guardianListView"/>
+
+
+
+</RelativeLayout>

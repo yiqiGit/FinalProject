@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">FinalProject</string>
-    <string name="button1">button 1</string>
-    <string name="button2">button 2</string>
-    <string name="button3">button 3</string>
-    <string name="button4">button 4</string>
 
     <!-- Strings for nasa image of the day app -->
     <string name="datePicker">Selecione uma data</string>

@@ -2,22 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <item android:id="@+id/bbc"
+    <item android:id="@+id/bbc_bbc"
         android:orderInCategory="10"
         app:showAsAction="always"
         android:icon="@drawable/bbc"
         android:title="BBC News"
 
         />
-    <item android:id="@+id/earth"
+    <item android:id="@+id/bbc_earth"
         android:orderInCategory="30"
         app:showAsAction="always"
         android:icon="@drawable/earth"
         android:title="Nasa Earth Imagery"
 
         />
-    <item android:id="@+id/guardian"
+    <item android:id="@+id/bbc_guardian"
         android:orderInCategory="40"
         app:showAsAction="always"
         android:icon="@drawable/the_guardian_icon"
@@ -26,19 +25,24 @@
         />
 
 
-    <item android:id="@+id/nasaImage"
+    <item android:id="@+id/bbc_nasaImage"
         android:orderInCategory="20"
         app:showAsAction="always"
         android:icon="@drawable/nasa_logo"
         android:title="Nasa Image of the Day"
 
         />
+    <item android:id="@+id/item1"
+        android:title="Help Menu"
+        android:icon="@drawable/bbc_icon1"
+        android:orderInCategory="70"
+        app:showAsAction="never"/>
 
-    <item android:id="@+id/mainHelp"
-        android:orderInCategory="50"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/help"
-        android:title="Help"
+    <item android:id="@+id/item3"
+        android:orderInCategory="100"
+        android:icon="@drawable/bbc_icon3"
+        app:showAsAction="never"
+        android:title="Favourtite List"/>    <!-- This uses showAsAction=always, so look at icon= parameter -->
 
-        />
+
 </menu>

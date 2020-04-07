@@ -1,18 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
     >
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mainBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        />
+        android:background="@color/colorPrimary"
+        app:title="BBC news"
+        android:id="@+id/toolbar"/>
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -24,15 +22,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
+            <ProgressBar
+                android:id="@+id/ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Final Project for Team Geek-four"
-                android:textSize="20dp"
-                android:layout_centerVertical="true"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleHorizontal"
                 />
+
+            <ListView
+                android:id="@+id/news_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ProgressBar"
+                android:layout_marginBottom="45dp"></ListView>
+
+
+                <Button
+                    android:id="@+id/bbc_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/bbc_refresh"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    />
+
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
@@ -41,13 +56,11 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/main_toolbar"
-            app:headerLayout="@layout/header_for_all"
+            app:headerLayout="@layout/header_for_bbc"
             android:id="@+id/nav_view"
             android:background="@color/space"
             app:itemTextColor="@color/white"
             />
     </androidx.drawerlayout.widget.DrawerLayout>
-
-
 
 </LinearLayout>

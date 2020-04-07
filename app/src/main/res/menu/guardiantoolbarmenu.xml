@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item android:id="@+id/bbc"
         android:orderInCategory="10"
         app:showAsAction="always"
@@ -34,11 +33,30 @@
 
         />
 
-    <item android:id="@+id/mainHelp"
-        android:orderInCategory="50"
+    <item android:id="@+id/overflowhelp"
+        android:title="Help"
         app:showAsAction="ifRoom"
         android:icon="@drawable/help"
-        android:title="Help"
+        android:orderInCategory="1"/>
 
-        />
+    <item android:id="@+id/homeIcon"
+        android:icon="@drawable/guardian_home"
+        android:title="Go to Main Menu"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="2"/>
+
+    <item android:id="@+id/infoIcon"
+        android:icon="@drawable/guardian_info"
+        android:title="User Instruction"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="3"/>
+
+    <item android:id="@+id/checkIcon"
+        android:icon="@drawable/guardian_fav"
+        android:title="Favorite List"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="4"/>
+
+
+
 </menu>
