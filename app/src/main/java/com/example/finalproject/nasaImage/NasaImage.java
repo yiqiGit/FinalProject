@@ -1,6 +1,6 @@
 package com.example.finalproject.nasaImage;
 
-public class NasaImage {
+public class NasaImage implements Comparable<NasaImage>{
 
     private long id;
     private String date;
@@ -79,4 +79,8 @@ public class NasaImage {
     }
 
 
+    @Override
+    public int compareTo(NasaImage o) {
+        return o.getDate().compareTo(this.getDate());
+    }
 }
