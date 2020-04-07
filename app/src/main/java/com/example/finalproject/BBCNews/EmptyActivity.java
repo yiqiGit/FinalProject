@@ -15,6 +15,9 @@ import com.example.finalproject.R;
  */
 public class EmptyActivity extends AppCompatActivity {
 
+    /**
+     * onCreate method of this DetailsFragment class.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

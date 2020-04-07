@@ -28,10 +28,28 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the FavouriteList class for BBC News.
+ *
+ * @author Xiaoting Kong
+ * @version 1.0
+ */
 public class FavouriteList extends AppCompatActivity {
+    /**
+     * An ArrayList of News representing favourite news.
+     */
     List<News> favouriteList= new ArrayList<>();
+    /**
+     * SQLite database storing favourite news.
+     */
     SQLiteDatabase db;
+    /**
+     * Edit text to allow user change name of the favourite list.
+     */
     EditText bbc_edit;
+    /**
+     * Text view to show name of the favourite list.
+     */
     TextView bbc_fav_title;
     /**
      * Value representing "item information".
@@ -46,13 +64,17 @@ public class FavouriteList extends AppCompatActivity {
      * {@value #ITEM_LINK}
      */
     public static final String ITEM_LINK = "LINK";
+
+    /**
+     * onCreate method of this FavouriteList class.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bbc_activity_favourite_list2);
 
+        // Load favourite news from database.
         loadDataFromDatabase();
-
 
         // Set the whole list in MyListAdapter
         MyListAdapter myListAdapter = new MyListAdapter(this, favouriteList);
@@ -64,6 +86,9 @@ public class FavouriteList extends AppCompatActivity {
         loadLogoutInformation();
         Button btn_change = (Button)findViewById(R.id.bbc_changeButton);
 
+        /**
+         * setOnClickListener method of btn_change.
+         */
         btn_change.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -74,6 +99,9 @@ public class FavouriteList extends AppCompatActivity {
             }
         });
 
+        /**
+         * setOnItemClickListener method of theList.
+         */
         theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,6 +115,9 @@ public class FavouriteList extends AppCompatActivity {
             }
         });
 
+        /**
+         * setOnItemLongClickListener method of theList.
+         */
         theList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
@@ -117,13 +148,18 @@ public class FavouriteList extends AppCompatActivity {
         });
     }
 
+    /**
+     * onPause method of this FavouriteList class.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveLoginInformation(bbc_edit.getText().toString());
     }
 
-
+    /**
+     * saveLoginInformation method of this FavouriteList class.
+     */
     public void saveLoginInformation(String name_favor) {
         Context context = FavouriteList.this;
         SharedPreferences sharedPreferences = context.getSharedPreferences("FavourTitle", Context.MODE_PRIVATE);
@@ -131,6 +167,10 @@ public class FavouriteList extends AppCompatActivity {
         editor.putString("Title", name_favor);
         editor.commit();
     }
+
+    /**
+     * loadLogoutInformation method of this FavouriteList class.
+     */
     public void loadLogoutInformation() {
         SharedPreferences sharedPreferences= getSharedPreferences("FavourTitle", Context .MODE_PRIVATE);
         String title = sharedPreferences.getString("Title","");
@@ -138,30 +178,51 @@ public class FavouriteList extends AppCompatActivity {
         bbc_fav_title.setText(title);
     }
 
-
+    /**
+     * This inner class is the class to set listView adapter.
+     */
     public class MyListAdapter extends BaseAdapter {
         private Context context;
         private List<News> lists;
         boolean isFavorite;
 
+        /**
+         * Constructor of this MyListAdapter inner class.
+         */
         public MyListAdapter(Context context, List<News> lists) {
             super();
             this.context = context;
             this.lists = lists;
         }
 
+        /**
+         * This function tells how many objects to show.
+         */
         public int getCount() {
             return lists.size();
-        } //This function tells how many objects to show
+        }
 
+        /**
+         * This returns the string at position p.
+         *
+         * @param position  an int representing position
+         */
         public Object getItem(int position) {
             return lists.get(position);
-        }  //This returns the string at position p
+        }
 
+        /**
+         * This returns the database id of the item at position p.
+         *
+         * @param p  an int representing position
+         */
         public long getItemId(int p) {
             return lists.get(p).getId();
-        } //This returns the database id of the item at position p
+        }
 
+        /**
+         * getView method of this MyListAdapter inner class.
+         */
         public View getView(int p, View recycled, ViewGroup parent) {
             TextView bnews;
             LayoutInflater inflater = getLayoutInflater();
@@ -174,7 +235,9 @@ public class FavouriteList extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Load favourite news from database.
+     */
     private void loadDataFromDatabase() {
         // get a database connection
         DbHandler dbOpener = new DbHandler(this);
@@ -210,6 +273,11 @@ public class FavouriteList extends AppCompatActivity {
         }
     }
 
+    /**
+     * Delete favourite news from database.
+     *
+     * @param favour_news  favourite news to be deleted
+     */
     protected void deleteMessageFromDb(News favour_news)
     {
         db.delete(DbHandler.TABLE_NAME, DbHandler.COL_ID + "= ?", new String[] {Long.toString(favour_news.getId())});

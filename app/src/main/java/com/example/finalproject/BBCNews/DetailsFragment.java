@@ -25,10 +25,15 @@ public class DetailsFragment extends Fragment {
     private long id;
     private AppCompatActivity parentActivity;
 
+    /**
+     * Constructor of this DetailsFragment class.
+     */
     public DetailsFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * onCreateView method of this DetailsFragment class.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +56,9 @@ public class DetailsFragment extends Fragment {
         return result;
     }
 
+    /**
+     * onAttach method of this DetailsFragment class.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
