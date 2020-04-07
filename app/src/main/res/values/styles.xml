@@ -12,4 +12,12 @@
 
     </style>
 
+    <style name="MyOverflowButtonStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tint">#FFFFFF</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
 </resources>

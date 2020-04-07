@@ -14,7 +14,6 @@
         android:layout_marginStart="8dp"
         android:textAlignment="center"
         android:textSize="30dp"
-        android:layout_below="@+id/menuBar"
         android:text="@string/header"
         android:textColor="@color/yellow"
         android:textStyle="bold"

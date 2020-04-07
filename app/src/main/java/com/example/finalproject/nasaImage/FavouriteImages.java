@@ -1,11 +1,5 @@
 package com.example.finalproject.nasaImage;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -25,23 +19,48 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+
 import com.example.finalproject.R;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
     /*some resources were adapted from:
     * https://www.tutlane.com/tutorial/android/android-popup-menu-with-examples
+    * https://code.tutsplus.com/tutorials/android-sdk-implement-a-share-intent--mobile-8433
     * */
+    /**
+     * The object to handle connection with the database
+     */
     private static SQLiteDatabase db;
+    /**
+     * Array of {@link NasaImage} objects
+     */
     private List<NasaImage> images;
+    /**
+     * id returned from the SQLite insert statement, for every new row inserted.
+     */
     private long itemId;
+    /**
+     * The adapter that manages the ListView component
+     */
     private ImageAdapter imageAdapter;
+    /**
+     * This holds the position of each {@link NasaImage} object in the ListView
+     */
     private int itemPosition;
+    /**
+     * An intent that starts a function to share the image url with other applications
+     */
+    private Intent sharingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +73,14 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         goBackBtn.setOnClickListener(click-> finish());
 
         loadDataFromDatabase();
+        //Sorts the images by date from newest to oldest (See compareTo method in the NasaImage class)
+        Collections.sort(images);
         imageAdapter = new ImageAdapter();
         myList.setAdapter( imageAdapter);
+        sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
 
+        //This sets the action to be executed when one item from the list is clicked.
         myList.setOnItemClickListener(( parent, v,position, id) -> {
                 itemId = id;
                 itemPosition = position;
@@ -74,6 +98,9 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         switch (item.getItemId()){
             case R.id.share:
 
+                String imageToShare = images.get(itemPosition).getHdImageUrl();
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, imageToShare);
+                startActivity(Intent.createChooser(sharingIntent,"Share via"));
                 break;
             case R.id.delete:
                 deleteItemDialog();
@@ -96,7 +123,9 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         return false;
     }
 
-
+    /**
+     * This method loads the data from the database and stores it into the {@link ArrayList} images.
+     */
     private void loadDataFromDatabase()
     {
         //get a database connection:
@@ -138,6 +167,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
 
 
     }
+
+    /**
+     * Displays a dialog box and if the ok button is pressed, the item in the current position is deleted from the database
+     * and the adapter updates the {@link ListView}
+     */
     private void deleteItemDialog(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         String message = getString(R.string.popUpMessage);
@@ -158,6 +192,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
                 .create().show();
     }
 
+    /**
+     * Deletes the record from the database corresponding to the id received as a parameter.
+     * @param id database id of the row to be deleted
+     * @return true if operation succeeds.
+     */
     private static boolean deleteFromDb(long id){
         try {
             db.delete(DbOpener.TABLE_NAME, DbOpener.COL_ID + "=?", new String[]{Long.toString(id)});
@@ -167,6 +206,11 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
         return true;
     }
 
+    /**
+     * Takes a string with the image file name, searches it on the hard disk and loads into the memory
+     * @param fileName name of file to be loaded
+     * @return the Bitmap image file
+     */
     private Bitmap loadFile(String fileName){
         FileInputStream fis = null;
         try {
@@ -202,23 +246,34 @@ public class FavouriteImages extends AppCompatActivity implements PopupMenu.OnMe
 
         @Override
         public View getView(int position, View old, ViewGroup parent){
-            int rowLayout;
+            View recycleView;
             LayoutInflater inflater = getLayoutInflater();
-            //if (messagesArray.get(position).isSend()) rowLayout = R.layout.send_row_layout;
-            //else rowLayout = R.layout.receive_row_layout;
-            View newView = inflater.inflate(R.layout.image_item, parent, false);
+
+            if (old==null) {
+                recycleView = inflater.inflate(R.layout.image_item, parent, false);
+
+            }
+            else {
+                recycleView = old;
+            }
+
+            Log.i("FavouriteImages. ", "List item position: "+ position);
+
+
             if(images !=null) {
-                TextView titleText = newView.findViewById(R.id.itemTitle);
+                TextView titleText = recycleView.findViewById(R.id.itemTitle);
                 titleText.setText( getItem(position).getTitle());
-                TextView dateText = newView.findViewById(R.id.itemDate);
+                TextView dateText = recycleView.findViewById(R.id.itemDate);
                 dateText.setText(getItem(position).getDate());
-                TextView urlText = newView.findViewById(R.id.itemUrl);
+                TextView urlText = recycleView.findViewById(R.id.itemUrl);
                 urlText.setText(getItem(position).getImageUrl());
-                ImageView imageView = newView.findViewById(R.id.itemWindow);
+                ImageView imageView = recycleView.findViewById(R.id.itemWindow);
                 String fileName = getItem(position).getFileName();
                 imageView.setImageBitmap(loadFile(fileName));
             }
-            return newView;
+            return recycleView;
         }
+
+
     }
 }

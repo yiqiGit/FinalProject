@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name">Final Project CST2335</string>
 
     <!-- Strings for nasa image of the day app -->
     <string name="datePicker">Select a date</string>
@@ -13,7 +13,8 @@
     <string name="welcomeMessage">Welcome to Nasa Image of the Day! Your last login was on</string>
     <string name="appPref" translatable="false">NasaAppPrefs</string>
     <string name="dateKey" translatable="false">dateKey</string>
-    <string name="info">To search a new image, tap the date selector and pick a date.\nThen press "search" button</string>
+    <string name="info">To search a new image, tap the date selector and pick a date.\nThen press "search" button\n
+    After loading an image, you can save it to your favourites, see a description, and share it.</string>
     <string name="header">Nasa Image of the Day</string>
     <string name="searchBtn">Search</string>
     <string name="hdUrlLink">Open HD image on browser</string>
@@ -23,6 +24,9 @@
     <string name="close">Close</string>
     <string name="back">Back to Main</string>
     <string name="open" translatable="false">open</string>
+    <string name="wrongDate">Your must pick a date equal or prior to the current date!</string>
+    <string name="emptyDate">Date cannot be blank!</string>
+    <string name="about">Nasa Image of The Day\nAuthor: Guilherme Jardim\nVersion: 1.0\nYear: 2020</string>
 
     //bbcnews
     <string name="bbc_title">Help menu</string>
@@ -68,6 +72,8 @@
     <string name="imageInformationChang">Image Information: </string>
     <string name="imageIdChang">Image ID: </string>
     <string name="hideButtonChang">HIDE</string>
+    <string name="snackbarChang2">You click on Help button</string>
+    <string name="snackbarChang3">The list has been hided</string>
 
     //Guardian string
     <string name="guardian_open">open</string>

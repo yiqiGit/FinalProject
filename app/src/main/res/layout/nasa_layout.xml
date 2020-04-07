@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/myLayout"
     android:background="@drawable/stars"
+    android:orientation="vertical"
     >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/menuBar"
+        android:id="@+id/mainMenuBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         app:titleTextColor="@color/white"
-        android:background="@color/black"/>
+        android:background="@color/black"
+        android:theme="@style/MyOverflowButtonStyle"/>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="start"
+        android:theme="@style/DrawerArrowStyle"
+
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myLayout">
 
     <TextView
         android:id="@+id/text_home"
@@ -23,10 +38,10 @@
         android:layout_marginStart="8dp"
         android:textAlignment="center"
         android:textSize="30dp"
-        android:layout_below="@+id/menuBar"
         android:text="@string/header"
         android:textColor="@color/yellow"
         android:textStyle="bold"
+        android:layout_alignParentTop="true"
         />
     <LinearLayout
         android:id="@+id/dateContainer"
@@ -103,7 +118,7 @@
 
 
         <TextView
-            android:id="@+id/hd_url"
+            android:id="@+id/hd_url_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hdUrlLink"
@@ -121,7 +136,7 @@
             android:layout_height="240dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/hd_url"
+            android:layout_below="@id/hd_url_result"
             />
 
 
@@ -162,12 +177,26 @@
             android:textColor="@color/yellow"
             android:padding="6dp"
             />
-
     </LinearLayout>
+    </RelativeLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/main_toolbar"
+        android:id="@+id/nasa_mainNav"
+        android:background="@color/space"
+        app:itemTextColor="@color/white"
+
+        />
+    </androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>
 
 
 
 
 
 
-</RelativeLayout>
+
+
