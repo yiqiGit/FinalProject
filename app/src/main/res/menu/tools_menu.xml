@@ -4,12 +4,11 @@
 
 
 
-    <item android:id="@+id/search_item"
+    <item android:id="@+id/about"
         android:orderInCategory="10"
-        android:icon="@android:drawable/ic_search_category_default"
-        app:showAsAction="always"
-        android:title="search"
-        android:visible="false"/>
+        app:showAsAction="never"
+        android:title="About"
+        />
 
 
 
@@ -17,6 +16,36 @@
         android:orderInCategory="20"
         app:showAsAction="never"
         android:title="Help"
-        android:iconTint="@color/white"
+        />
+
+    <item android:id="@+id/bbc"
+        android:orderInCategory="10"
+        app:showAsAction="always"
+        android:icon="@drawable/bbc"
+        android:title="BBC News"
+
+        />
+    <item android:id="@+id/earth"
+        android:orderInCategory="30"
+        app:showAsAction="always"
+        android:icon="@drawable/earth"
+        android:title="Nasa Earth Imagery"
+
+        />
+    <item android:id="@+id/guardian"
+        android:orderInCategory="40"
+        app:showAsAction="always"
+        android:icon="@drawable/the_guardian_icon"
+        android:title="The Guardian News"
+
+        />
+
+
+    <item android:id="@+id/nasaImage"
+        android:orderInCategory="20"
+        app:showAsAction="always"
+        android:icon="@drawable/nasa_logo"
+        android:title="Nasa Image of the Day"
+
         />
 </menu>
