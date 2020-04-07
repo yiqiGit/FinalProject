@@ -138,12 +138,11 @@ public class GuardianMainActivity extends AppCompatActivity implements Navigatio
             case R.id.nasaImage:
                 startActivity(new Intent(this, NasaImageOfTheDay.class));
                 break;
-            case R.id.mainHelp:
-                Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
-                break;
+
 
             case R.id.overflowhelp:
                 Toast.makeText(this, R.string.snackbarChang, Toast.LENGTH_LONG).show();
+                break;
 
             case R.id.homeIcon:
 
