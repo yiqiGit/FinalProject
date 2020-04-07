@@ -57,15 +57,15 @@ public class ImageSearch extends AppCompatActivity implements NavigationView.OnN
         SharedPreferences shared2 = getSharedPreferences("latInfo",Context.MODE_PRIVATE);
         lonInfoET.setText(shared2.getString("latInfo",""));
 
-        searchBtn.setOnClickListener(click -> {
+        searchBtn.setOnClickListener(click -> {  //set search button function
             Intent nextPage = new Intent(this, SearchResult.class);
             nextPage.putExtra("lonInfo", lonInfoET.getText().toString());
             nextPage.putExtra("latInfo", latInfoET.getText().toString());
             startActivity(nextPage);
         });
 
-        helpBtn.setOnClickListener(click->{
-            Snackbar.make(findViewById(R.id.helpButtonChang),R.string.snackbarChang,Snackbar.LENGTH_LONG).show();
+        helpBtn.setOnClickListener(click->{  //set help button function
+            Snackbar.make(findViewById(R.id.helpButtonChang),R.string.snackbarChang2,Snackbar.LENGTH_LONG).show();
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(R.string.activityMenu)
 

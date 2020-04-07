@@ -77,7 +77,7 @@ public class DetailsFragmentChang extends Fragment {
 
         ImageView imageView = (ImageView)result.findViewById(R.id.picFragChang);
 
-        try {
+        try {  //show the image from local storage address
             String str = dataFromActivity.getString(SearchResult.ITEM_PIC);
             String[] arrOfStr = str.split("&");
             File f=new File(arrOfStr[0],arrOfStr[1]);

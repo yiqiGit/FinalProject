@@ -62,5 +62,7 @@
     <string name="imageInformationChang">图片信息: </string>
     <string name="imageIdChang">图片ID: </string>
     <string name="hideButtonChang">隐藏</string>
+    <string name="snackbarChang2">你点击了帮助键</string>
+    <string name="snackbarChang3">列表已隐藏</string>
 
 </resources>

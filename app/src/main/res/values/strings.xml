@@ -72,6 +72,8 @@
     <string name="imageInformationChang">Image Information: </string>
     <string name="imageIdChang">Image ID: </string>
     <string name="hideButtonChang">HIDE</string>
+    <string name="snackbarChang2">You click on Help button</string>
+    <string name="snackbarChang3">The list has been hided</string>
 
     //Guardian string
     <string name="guardian_open">open</string>

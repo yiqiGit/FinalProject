@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +37,7 @@ import com.example.finalproject.GuardianMainActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.nasaImage.NasaImageOfTheDay;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,7 +122,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
         if (fetchImage != null) {
             fetchImage.cancel(true);
         }
-        fetchImage = new ImageQuery();
+        fetchImage = new ImageQuery(); //capture image from url and save to database
         fetchImage.execute();
         ListView myList = (ListView) findViewById(R.id.theListViewChang);
         loadDataFromDatabase();
@@ -150,7 +150,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
             idDatabase = newId;
             //now you have the newId, you can create the Contact object
             ImageInfo imageInfo = new ImageInfo(latInfo,lonInfo,imageDate,imageId,imageResource,imageServiceVersion,imageUrl,picDirectory,newId);
-            elements.add(imageInfo);
+            elements.add(imageInfo);  //add to arraylist
             myAdapter.notifyDataSetChanged();
             Toast.makeText(this, R.string.toastChang, Toast.LENGTH_LONG).show();
 
@@ -158,11 +158,13 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
         Button showFavourite = (Button)findViewById(R.id.showFavoriteBtnChang);
         showFavourite.setOnClickListener(click -> {
            myList.setVisibility(View.VISIBLE);
+
         });
 
         Button hideFavorite = (Button)findViewById(R.id.hideFavoriteBtnChang);
         hideFavorite.setOnClickListener(click -> {
             myList.setVisibility(View.INVISIBLE);
+            Snackbar.make(findViewById(R.id.hideFavoriteBtnChang),R.string.snackbarChang3,Snackbar.LENGTH_LONG).show();
         });
 
         myList.setOnItemClickListener((list, item, position, id) -> {
@@ -186,7 +188,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
 
         });
 
-        myList.setOnItemLongClickListener( (p, b, pos, id) -> {
+        myList.setOnItemLongClickListener( (p, b, pos, id) -> {  //set on arraylist item click function (delete)
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             String diaMessage =  (SearchResult.this).getResources().getString(R.string.dialogMessage);
             String deleteMessage = (SearchResult.this).getResources().getString(R.string.deleteMessage);
@@ -217,6 +219,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    //this method is used to get the menu
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
@@ -304,11 +307,13 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    //delete the message from database
     protected void deleteMessage(ImageInfo c)
     {
         db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
     }
 
+    //load data from database, before show the list, we need load all information about the previous searched image in the list
     private void loadDataFromDatabase(){
 
         //get a database connection:
@@ -355,25 +360,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
   //      printCursor(results,db.getVersion());
     }
 
-    private void printCursor(Cursor c, int version){
-        Log.i("Version Number",Integer.toString(version));
-        Log.i("Number of column",Integer.toString(c.getColumnCount()) );
-        Log.i("Number of results", Integer.toString(c.getCount()));
-        Log.i("Results", DatabaseUtils.dumpCursorToString(c));
-        for(int n=0; n<c.getColumnCount();n++){
-            c.moveToFirst();
-            for(int m=0;m<c.getCount();m++){
-                Log.i("Content of column" + c.getColumnName(n), c.getString(n));
-                c.moveToNext();
-            }
-        }
-        //•	The number of columns in the cursor.
-        //•	The name of the columns in the cursor.
-        //•	The number of results in the cursor
-        //•	Each row of results in the cursor.
-        // System.out
-    }
-
+    //this is an inner class to setup the view of arraylist
     private class MyListAdapter extends BaseAdapter {
 
         public int getCount() {
@@ -395,7 +382,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
 
             newView = inflater.inflate(R.layout.view_of_list_chang, parent, false);
             ImageView iView = newView.findViewById(R.id.receiveImageChang);
-            try {
+            try {               //show the image from local storage address
                 String str = elements.get(position).getPic();
                 String[] arrOfStr = str.split("&");
                 File f=new File(arrOfStr[0],arrOfStr[1]);
@@ -412,6 +399,8 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    //this is an inner class to grab information about image from url.
     private class ImageQuery extends AsyncTask<String, Integer, String> {
 
 
@@ -457,7 +446,7 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
                     }
                 }
                 imageUrl.replaceAll("/\"","");
-                String imageName = imageUrl.substring(imageUrl.length() - 20);// last six digit as image name
+                String imageName = imageUrl.substring(imageUrl.length() - 20);// last 20 digit as image name
                 Log.i("file", "this is the url name we are looking for: " + imageUrl);
 
                 FileInputStream fis = null;
@@ -476,13 +465,9 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
                     if (responseCode == 200) {
                         pic = BitmapFactory.decodeStream(connection.getInputStream());
                         Log.i("file", "this file is from url or online.");
- //                       FileOutputStream outputStream = openFileOutput(imageName + ".png", Context.MODE_PRIVATE);
-//                        pic.compress(Bitmap.CompressFormat.PNG, 40, outputStream);
-                        String picDir = saveToInternalStorage(pic,imageName);
+                        String picDir = saveToInternalStorage(pic,imageName); //save image to local storage
                         picDirectory = picDir+"&"+imageName;
- //                       picDirectory = imageName;
- //                       outputStream.flush();
-//                        outputStream.close();
+
                     }
                 }
 
@@ -537,11 +522,13 @@ public class SearchResult extends AppCompatActivity implements NavigationView.On
 
         }
 
+        //check if it is a local file
         public boolean fileExistance(String fname) {
             File file = getBaseContext().getFileStreamPath(fname);
             return file.exists();
         }
 
+        // this method is used to save image into local storage and return an address string
         private String saveToInternalStorage(Bitmap bitmapImage, String name){
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
