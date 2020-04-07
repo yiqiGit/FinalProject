@@ -139,7 +139,7 @@ public class GuardianList extends AppCompatActivity {
         searchText = getInfo.getStringExtra("searchWord");
 
         mProgressBar = findViewById(R.id.progressBar);
-        //mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         // Fragment
         FrameLayout fl = findViewById(R.id.fragmentLocation);
@@ -285,15 +285,19 @@ public class GuardianList extends AppCompatActivity {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
 
                 publishProgress(25);
+                urlConnection.connect();
+
+                publishProgress(50);
 
                 //get response code
                 InputStream response = urlConnection.getInputStream();
-                int responsecode = urlConnection.getResponseCode();
 
-                publishProgress(50);
+
+                int responsecode = urlConnection.getResponseCode();
+                publishProgress(75);
+
 
                 //check code 200
 
@@ -308,7 +312,7 @@ public class GuardianList extends AppCompatActivity {
                         sb.append(line + "\n");
                     }
                     jsonStr = sb.toString(); //result is the whole string
-                    publishProgress(75);
+                    publishProgress(100);
                 }
 
 
@@ -316,7 +320,7 @@ public class GuardianList extends AppCompatActivity {
                 Log.e("AsyncError", e.getMessage());
             }
 
-            publishProgress(100);
+
             return jsonStr;
 
         }
@@ -327,9 +331,10 @@ public class GuardianList extends AppCompatActivity {
         public void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //Update GUI stuff only:
-            mProgressBar.setVisibility(View.VISIBLE);
-           // mProgressBar.setProgress(values[0]);
+//            mProgressBar.setVisibility(View.VISIBLE);
+
         }
+
 
         /**
          * onPostExecute returns the last string item of AsyncTask
@@ -338,6 +343,7 @@ public class GuardianList extends AppCompatActivity {
         public void onPostExecute(String fromDoInBackground) {
             //Log.i("HTTP", fromDoInBackground);
             super.onPostExecute(fromDoInBackground);
+            mProgressBar.setVisibility(View.VISIBLE);
 
 //            TextView t  = findViewById(R.id.temp);
 //            t.setText(baseURL+searchText);
