@@ -47,10 +47,10 @@
     <string name="bbc_change_name">Change name</string>
 
 
-    <string name="snackbarChang">BBCNews---News scrapper from BBC\n
-        Nasa Image of the Day---Catch the pictures from Nasa\n
-        Nasa Earth Imagery---Earth Image from Nasa\n
-        The Guardian News---Find articles from The Guardian newspaper
+    <string name="snackbarChang">BBCNews:\nNews scrapper from BBC\n\n
+        Nasa Image of the Day:\nCatch the pictures from Nasa\n\n
+        Nasa Earth Imagery:\nEarth Image from Nasa\n\n
+        The Guardian News:\nFind articles from The Guardian newspaper
     </string>
 
     <!-- Strings for nasa earth imagary Chang -->

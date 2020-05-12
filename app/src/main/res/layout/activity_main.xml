@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/main_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Final Project for Team Geek-four"
@@ -41,7 +42,6 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/main_toolbar"
-            app:headerLayout="@layout/header_for_all"
             android:id="@+id/nav_view"
             android:background="@color/space"
             app:itemTextColor="@color/white"

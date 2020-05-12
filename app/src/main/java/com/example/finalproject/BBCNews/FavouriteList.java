@@ -123,8 +123,8 @@ public class FavouriteList extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder (FavouriteList.this);
                 alertDialogBuilder.setTitle((FavouriteList.this).getResources().getString(R.string.bbc_delete));
-                alertDialogBuilder.setMessage( (FavouriteList.this).getResources().getString(R.string.bbc_message1)+ position
-                        +"\n"+ (FavouriteList.this).getResources().getString(R.string.bbc_message2)+ id+"\n"+ favouriteList.get(position).getIsFavourite());
+//                alertDialogBuilder.setMessage( (FavouriteList.this).getResources().getString(R.string.bbc_message1)+ position
+//                        +"\n"+ (FavouriteList.this).getResources().getString(R.string.bbc_message2)+ id+"\n"+ favouriteList.get(position).getIsFavourite());
                 alertDialogBuilder.setPositiveButton((FavouriteList.this).getResources().getString(R.string.bbc_yes), new DialogInterface.OnClickListener() {
                     News selected = favouriteList.get(position);
                     @Override
